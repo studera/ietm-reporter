@@ -2,261 +2,444 @@
 
 ## Detailed Prompts for Project Implementation
 
-### **Phase 1: Project Setup & Architecture**
+## ✅ Completed Phases
 
-#### Prompt 1: Initialize Project Structure
-"Create a Node.js/TypeScript project structure for an IETM Playwright client with the following:
-- Package.json with dependencies (playwright, axios, dotenv, winston for logging)
-- TypeScript configuration with strict mode
-- Folder structure: `/src`, `/config`, `/tests`, `/docs`, `/examples`
-- ESLint and Prettier configuration
-- Git repository with appropriate .gitignore"
+### **Phase 1: Project Setup & Architecture** ✅
 
-#### Prompt 2: Define Configuration Schema
-"Design a configuration system that supports:
-- IETM server connection details (base URL, project ID, context ID)
-- OAuth 1.0a credentials (consumer key, consumer secret, access token, access token secret)
-- Test plan and test case mapping configuration
-- Retry policies and timeout settings
-- Logging levels and output preferences
-- Support for multiple environments (dev, staging, production)
-- Configuration file format: JSON or YAML with schema validation"
+#### ✅ Prompt 1: Initialize Project Structure (COMPLETED)
+**Status:** Complete
+**Completed:** 2026-03-24
+
+Created complete project structure with:
+- ✅ Package.json with all dependencies
+- ✅ TypeScript configuration with strict mode
+- ✅ Folder structure: `/src`, `/config`, `/tests`, `/docs`, `/examples`
+- ✅ ESLint and Prettier configuration
+- ✅ Git repository with .gitignore
+
+#### ✅ Prompt 2: Define Configuration Schema (COMPLETED)
+**Status:** Complete - Updated to Basic Authentication
+**Completed:** 2026-03-24
+
+Configuration system supports:
+- ✅ IETM server connection (baseUrl, jtsUrl, projectName)
+- ✅ **Basic Authentication** (username, password) - Changed from OAuth
+- ✅ Auto-discovery of project IDs
+- ✅ Test plan and test case mapping configuration
+- ✅ Retry policies with exponential backoff
+- ✅ Logging levels and output preferences
+- ✅ Multiple environments via .env files
+- ✅ JSON configuration with validation
+
+**Key Change:** Migrated from OAuth 1.0a to Basic Authentication + form-based login (matching IBM's Java client pattern)
 
 ---
 
-### **Phase 2: IETM API Client Implementation**
+## 🚀 Current Phase
 
-#### Prompt 3: Implement OAuth 1.0a Authentication
-"Create an OAuth 1.0a authentication module for IETM that:
-- Generates OAuth signatures for API requests
-- Handles the three-legged OAuth flow (request token, authorization, access token)
-- Stores and manages access tokens securely
-- Implements token refresh logic
-- Provides helper methods for authenticated API calls
-- Includes error handling for authentication failures"
+### **Phase 2: IETM API Client Implementation** (IN PROGRESS)
 
-#### Prompt 4: Build IETM API Client Core
-"Implement a TypeScript class `IETMClient` that provides methods for:
-- Connecting to IETM server and validating credentials
-- Fetching test plans by ID or query
-- Fetching test cases by ID or query
-- Creating test execution records
-- Creating/updating test results (AutomationResult)
+---
+
+#### 🎯 Prompt 3: Implement Basic Authentication Module (NEXT)
+**Status:** Ready to implement
+**Priority:** HIGH
+**Dependencies:** Prompts 1-2 completed
+
+**Task:** Create a Basic Authentication module for IETM that:
+- Implements HTTP Basic Authentication with username/password
+- Implements form-based authentication at `/jts/j_security_check`
+- Manages session cookies using tough-cookie and axios-cookiejar-support
+- Handles 401 responses with automatic re-authentication
+- Implements retry logic with exponential backoff (max 3 retries)
+- Provides authenticated axios instance with cookie jar
+- Includes comprehensive error handling for auth failures
+
+**Reference Implementation:**
+- See `docs/java-implementation-analysis.md` for IBM's Java client pattern
+- See `docs/authentication-setup.md` for detailed auth flow
+
+**Key Files to Create:**
+- `src/auth/AuthManager.ts` - Main authentication manager
+- `src/auth/CookieJar.ts` - Cookie management wrapper
+- `src/auth/types.ts` - Authentication types
+
+**Expected Output:**
+```typescript
+class AuthManager {
+  async authenticate(): Promise<void>
+  async executeRequest<T>(config: AxiosRequestConfig): Promise<T>
+  private async formBasedAuth(): Promise<void>
+}
+```
+
+#### Prompt 4: Implement Service Discovery
+**Status:** Pending
+**Priority:** HIGH
+**Dependencies:** Prompt 3
+
+**Task:** Implement IETM service discovery following OSLC pattern:
+- Get root services from `/qm/rootservices`
+- Get service provider catalog URL
+- Get services URL for the project
+- Extract resource query URLs (TestCase, TestExecutionRecord, TestSuite)
+- Cache discovered URLs for session lifetime
+- Parse XML responses using fast-xml-parser
+
+**Reference:** See `docs/java-implementation-analysis.md` - Service Discovery section
+
+**Key Files to Create:**
+- `src/client/ServiceDiscovery.ts`
+- `src/utils/XmlParser.ts`
+
+#### Prompt 5: Build IETM API Client Core
+**Status:** Pending
+**Priority:** HIGH
+**Dependencies:** Prompts 3-4
+
+**Task:** Implement a TypeScript class `IETMClient` that provides methods for:
+- Service discovery and initialization
+- Fetching test cases by ID using OSLC queries
+- Fetching test execution records (TER) by test case
+- Creating execution results with XML payload
 - Uploading attachments (screenshots, videos, logs)
-- Querying resource shapes for validation
-- Implementing proper error handling and retry logic"
+- Proper error handling and retry logic via AuthManager
 
-#### Prompt 5: Create Resource Builders
-"Develop builder classes for IETM resources:
-- `TestExecutionRecordBuilder` - for creating execution records
-- `AutomationResultBuilder` - for creating test results with proper RDF/XML structure
-- `AttachmentBuilder` - for handling file attachments
-- Each builder should validate required fields and generate proper OSLC-compliant XML"
+**Reference:** See `docs/java-implementation-analysis.md` - Key API Patterns section
+
+**Key Files to Update:**
+- `src/client/IETMClient.ts` (replace skeleton)
+
+**Expected Methods:**
+```typescript
+class IETMClient {
+  async initialize(): Promise<void>
+  async getTestCase(testCaseId: string): Promise<TestCase>
+  async getTestExecutionRecords(testCaseId: string): Promise<TestExecutionRecord[]>
+  async createExecutionResult(result: ExecutionResult): Promise<string>
+  async uploadAttachment(file: Buffer, filename: string): Promise<string>
+}
+```
+
+#### Prompt 6: Create XML Templates and Builders
+**Status:** Pending
+**Priority:** HIGH
+**Dependencies:** Prompt 5
+
+**Task:** Develop XML builders for IETM resources:
+- Load `ExecutionResultTemplate.xml` from resources
+- `ExecutionResultBuilder` - builds execution result XML with proper RDF/XML structure
+- `TestExecutionRecordBuilder` - for creating execution records (if needed)
+- XML serialization and deserialization utilities
+- Validate required fields and generate OSLC-compliant XML
+
+**Reference:** See `docs/java-implementation-analysis.md` - Execution Result XML Structure
+
+**Key Files to Create:**
+- `src/builders/ExecutionResultBuilder.ts`
+- `src/builders/XmlBuilder.ts`
+- `src/resources/ExecutionResultTemplate.xml`
+- `src/models/ExecutionResult.ts`
+- `src/models/TestCase.ts`
+- `src/models/TestExecutionRecord.ts`
 
 ---
 
 ### **Phase 3: Playwright Integration**
 
-#### Prompt 6: Create Playwright Reporter
-"Implement a custom Playwright reporter that:
+#### Prompt 7: Create Playwright Reporter
+**Status:** Pending
+**Priority:** MEDIUM
+**Dependencies:** Prompts 3-6
+
+**Task:** Implement a custom Playwright reporter that:
 - Extends Playwright's Reporter interface
 - Captures test start, end, and result events
 - Collects test metadata (title, file, duration, status)
 - Captures screenshots on failure
 - Captures video recordings if enabled
 - Stores test artifacts in a structured format
-- Provides hooks for custom data collection"
+- Provides hooks for custom data collection
 
-#### Prompt 7: Implement Test Case Mapping
-"Create a mapping system that:
-- Links Playwright test cases to IETM test cases using annotations or configuration
-- Supports multiple mapping strategies (by test title, by custom ID, by tags)
-- Allows one-to-one and one-to-many mappings
+**Key Files to Update:**
+- `src/reporter/IETMReporter.ts` (replace skeleton)
+
+#### Prompt 8: Implement Test Case Mapping
+**Status:** Pending
+**Priority:** MEDIUM
+**Dependencies:** Prompt 7
+
+**Task:** Create a mapping system that:
+- Links Playwright test cases to IETM test cases using annotations
+- Supports mapping by test case ID in annotations
 - Validates that mapped IETM test cases exist
 - Provides clear error messages for unmapped tests
-- Example: `test.describe('Login Tests', { ietmTestCase: 'TC-2218' })`"
+- Example: `test('Login', { annotation: { type: 'ietm-test-case', description: '2218' } })`
 
-#### Prompt 8: Build Result Transformer
-"Develop a transformer that converts Playwright test results to IETM format:
-- Maps Playwright status (passed/failed/skipped/timedout) to OSLC verdict values
-- Converts test duration to start/end times
+**Key Files to Create:**
+- `src/mapper/TestCaseMapper.ts`
+
+#### Prompt 9: Build Result Transformer
+**Status:** Pending
+**Priority:** MEDIUM
+**Dependencies:** Prompts 7-8
+
+**Task:** Develop a transformer that converts Playwright test results to IETM format:
+- Maps Playwright status (passed/failed/skipped/timedout) to OSLC state values
+- Converts test duration to start/end times (ISO 8601 UTC format)
 - Formats error messages and stack traces
 - Handles test retries and flaky tests
-- Aggregates suite-level results
-- Preserves test hierarchy and grouping"
+- Creates ExecutionResult objects with step results
+- Preserves test hierarchy and grouping
+
+**Key Files to Create:**
+- `src/transformer/ResultTransformer.ts`
 
 ---
 
 ### **Phase 4: Result Reporting & Synchronization**
 
-#### Prompt 9: Implement Result Publisher
-"Create a `ResultPublisher` class that:
+#### Prompt 10: Implement Result Publisher
+**Status:** Pending
+**Priority:** HIGH
+**Dependencies:** Prompts 3-9
+
+**Task:** Create a `ResultPublisher` class that:
 - Batches test results for efficient API calls
-- Creates test execution records in IETM
-- Uploads test results with proper linking
-- Attaches screenshots and videos to results
+- Gets or creates test execution records (TER) in IETM
+- Creates execution results with proper linking to TER
+- Attaches screenshots and videos to step results
 - Handles partial failures gracefully
 - Provides progress feedback during upload
-- Implements idempotency to prevent duplicate results"
+- Implements idempotency to prevent duplicate results
 
-#### Prompt 10: Add Attachment Handler
-"Implement an attachment management system that:
-- Compresses large files before upload
+**Key Files to Create:**
+- `src/publisher/ResultPublisher.ts`
+
+#### Prompt 11: Add Attachment Handler
+**Status:** Pending
+**Priority:** MEDIUM
+**Dependencies:** Prompt 10
+
+**Task:** Implement an attachment management system that:
+- Uploads files using multipart/form-data
 - Supports multiple file types (images, videos, logs, JSON)
 - Generates proper MIME types
-- Implements chunked upload for large files
 - Provides upload progress tracking
-- Cleans up temporary files after upload
-- Handles attachment size limits"
+- Returns attachment URLs for linking in results
+- Handles attachment size limits
+
+**Key Files to Create:**
+- `src/attachments/AttachmentHandler.ts`
 
 ---
 
-### **Phase 5: Configuration & CLI**
+### **Phase 5: Configuration & CLI** (OPTIONAL - Can be deferred)
 
-#### Prompt 11: Create Configuration Manager
-"Develop a configuration management system that:
-- Loads configuration from multiple sources (file, environment variables, CLI args)
-- Validates configuration against schema
-- Provides sensible defaults
-- Supports configuration profiles (dev, staging, prod)
-- Encrypts sensitive data (tokens, passwords)
-- Provides a configuration wizard for first-time setup
-- Example config file: `ietm.config.json`"
+#### Prompt 12: Create Configuration Manager
+**Status:** Partially Complete (basic config exists)
+**Priority:** LOW
+**Dependencies:** None
 
-#### Prompt 12: Build CLI Interface
-"Create a command-line interface that supports:
+**Task:** Enhance configuration management system:
+- Already has: File and environment variable loading
+- Add: CLI argument support
+- Add: Configuration validation
+- Add: Configuration wizard for first-time setup
+
+**Key Files to Update:**
+- `src/config/ConfigManager.ts`
+
+#### Prompt 13: Build CLI Interface (OPTIONAL)
+**Status:** Not started
+**Priority:** LOW
+**Dependencies:** All previous prompts
+
+**Task:** Create a command-line interface that supports:
 - `ietm init` - Initialize configuration
 - `ietm test` - Run Playwright tests and report to IETM
-- `ietm report` - Report existing test results to IETM
 - `ietm validate` - Validate configuration and connectivity
-- `ietm map` - Interactive test case mapping tool
-- `ietm status` - Check status of reported results
 - Provide verbose and quiet modes
-- Support for dry-run mode"
+
+**Key Files to Create:**
+- `src/cli/index.ts`
 
 ---
 
 ### **Phase 6: Error Handling & Resilience**
 
-#### Prompt 13: Implement Error Handling
-"Create comprehensive error handling that:
-- Defines custom error types (AuthenticationError, NetworkError, ValidationError)
-- Implements retry logic with exponential backoff
-- Handles rate limiting from IETM API
-- Provides detailed error messages with troubleshooting hints
-- Logs errors with appropriate severity levels
-- Implements circuit breaker pattern for API calls
-- Allows graceful degradation (continue testing even if reporting fails)"
+#### Prompt 14: Implement Error Handling
+**Status:** Partially Complete (basic error handling exists)
+**Priority:** HIGH
+**Dependencies:** Prompt 3
 
-#### Prompt 14: Add Logging System
-"Implement a logging system using Winston that:
+**Task:** Enhance error handling:
+- Define custom error types (AuthenticationError, NetworkError, ValidationError)
+- Already has: Retry logic with exponential backoff in AuthManager
+- Add: Rate limiting handling
+- Add: Detailed error messages with troubleshooting hints
+- Add: Circuit breaker pattern for API calls
+- Add: Graceful degradation (continue testing even if reporting fails)
+
+**Key Files to Create:**
+- `src/errors/IETMError.ts`
+- `src/errors/AuthenticationError.ts`
+- `src/errors/NetworkError.ts`
+- `src/errors/ValidationError.ts`
+
+#### Prompt 15: Add Logging System
+**Status:** Skeleton exists
+**Priority:** MEDIUM
+**Dependencies:** None
+
+**Task:** Implement comprehensive logging using Winston:
 - Logs to console and file simultaneously
 - Supports multiple log levels (error, warn, info, debug, trace)
 - Includes timestamps and context information
 - Rotates log files to prevent disk space issues
-- Sanitizes sensitive data (tokens, passwords) from logs
+- Sanitizes sensitive data (passwords) from logs
 - Provides structured logging for easy parsing
-- Includes request/response logging for debugging"
+- Includes request/response logging for debugging
+
+**Key Files to Create:**
+- `src/logging/Logger.ts`
 
 ---
 
 ### **Phase 7: Testing & Validation**
 
-#### Prompt 15: Create Unit Tests
-"Develop comprehensive unit tests for:
-- OAuth authentication module
+#### Prompt 16: Create Unit Tests
+**Status:** Not started
+**Priority:** HIGH
+**Dependencies:** Prompts 3-15
+
+**Task:** Develop comprehensive unit tests for:
+- Basic Authentication module
 - IETM API client methods
-- Resource builders and validators
+- XML builders and validators
 - Result transformers
 - Configuration manager
-- Use Jest or Mocha with 80%+ code coverage
+- Use Jest with 80%+ code coverage
 - Mock IETM API responses
-- Test error scenarios and edge cases"
+- Test error scenarios and edge cases
 
-#### Prompt 16: Create Integration Tests
-"Implement integration tests that:
-- Test against a real or mock IETM server
+**Key Files to Create:**
+- `tests/unit/auth/AuthManager.test.ts`
+- `tests/unit/client/IETMClient.test.ts`
+- `tests/unit/builders/ExecutionResultBuilder.test.ts`
+
+#### Prompt 17: Create Integration Tests
+**Status:** Not started
+**Priority:** HIGH
+**Dependencies:** Prompts 3-16
+
+**Task:** Implement integration tests that:
+- Test against the real IETM sandbox server
 - Verify end-to-end workflow (test execution → result reporting)
 - Test with various Playwright test scenarios
 - Validate attachment uploads
 - Test error recovery and retry logic
-- Use Docker for consistent test environment
-- Include performance benchmarks"
+- Include performance benchmarks
+
+**Key Files to Create:**
+- `tests/integration/ietm-client.test.ts`
+- `tests/integration/end-to-end.test.ts`
 
 ---
 
-### **Phase 8: Documentation & Examples**
+### **Phase 8: Documentation & Examples** (Partially Complete)
 
-#### Prompt 17: Write Comprehensive Documentation
-"Create documentation including:
-- README.md with quick start guide
-- Installation instructions
-- Configuration guide with all options explained
-- API reference for programmatic usage
-- Troubleshooting guide with common issues
-- Architecture diagram showing component interactions
-- Contributing guidelines
-- Changelog and versioning strategy"
+#### Prompt 18: Update Documentation
+**Status:** Partially Complete
+**Priority:** MEDIUM
+**Dependencies:** All implementation prompts
 
-#### Prompt 18: Create Example Projects
-"Develop example projects demonstrating:
-- Basic Playwright test with IETM reporting
-- Advanced test suite with custom mappings
-- CI/CD integration (GitHub Actions, Jenkins)
-- Multi-environment configuration
-- Custom reporter with additional metadata
-- Handling of flaky tests and retries
-- Integration with existing test frameworks"
+**Task:** Update documentation with implementation details:
+- ✅ README.md with quick start guide (exists)
+- ✅ Installation instructions (exists)
+- ✅ Authentication setup guide (exists)
+- ✅ Java implementation analysis (exists)
+- Add: API reference for programmatic usage
+- Add: Troubleshooting guide with common issues
+- Add: Architecture diagram showing component interactions
+
+**Key Files to Update:**
+- `docs/api-reference.md` (create)
+- `docs/troubleshooting.md` (create)
+- `docs/architecture.md` (create)
+
+#### Prompt 19: Enhance Example Projects
+**Status:** Basic example exists
+**Priority:** LOW
+**Dependencies:** All implementation prompts
+
+**Task:** Enhance example projects:
+- ✅ Basic Playwright test with IETM reporting (exists)
+- Add: Advanced test suite with multiple test cases
+- Add: CI/CD integration example (GitHub Actions)
+- Add: Error handling examples
+
+**Key Files to Update:**
+- `examples/basic-example/` (enhance)
+- `examples/advanced-example/` (create)
+- `examples/ci-cd-example/` (create)
 
 ---
 
-### **Phase 9: Advanced Features (Optional)**
+### **Phase 9: Advanced Features (Optional - Future)**
 
-#### Prompt 19: Implement Dashboard & Reporting
-"Create a local dashboard that:
-- Shows test execution history
-- Displays sync status with IETM
-- Provides test case mapping visualization
-- Shows success/failure trends
-- Allows manual result submission
-- Provides export functionality (CSV, JSON)
-- Uses a simple web interface (Express + React)"
+#### Prompt 20: CI/CD Integration Templates
+**Status:** Not started
+**Priority:** LOW
+**Dependencies:** All core features complete
 
-#### Prompt 20: Add CI/CD Integration
-"Develop CI/CD integration helpers:
+**Task:** Create CI/CD integration templates:
 - GitHub Actions workflow template
 - Jenkins pipeline example
 - GitLab CI configuration
-- Azure DevOps pipeline
-- Environment variable injection
-- Artifact collection and upload
-- Status reporting back to CI system
-- Parallel execution support"
+- Environment variable injection examples
 
 ---
 
-## Implementation Order Recommendation
+## 📋 Updated Implementation Order
 
-1. **Start with:** Prompts 1-2 (Project setup and configuration)
-2. **Then:** Prompts 3-5 (IETM API client)
-3. **Next:** Prompts 6-8 (Playwright integration)
-4. **Follow with:** Prompts 9-10 (Result reporting)
-5. **Add:** Prompts 11-12 (Configuration and CLI)
-6. **Strengthen:** Prompts 13-14 (Error handling)
-7. **Validate:** Prompts 15-16 (Testing)
-8. **Document:** Prompts 17-18 (Documentation)
-9. **Enhance:** Prompts 19-20 (Advanced features - optional)
+### ✅ Completed (Prompts 1-2)
+1. Project setup and configuration
+2. Configuration schema with Basic Authentication
 
-## Key Technologies
+### 🎯 Next Steps (Priority Order)
+3. **Prompt 3** - Implement Basic Authentication Module (NEXT - HIGH PRIORITY)
+4. **Prompt 4** - Implement Service Discovery
+5. **Prompt 5** - Build IETM API Client Core
+6. **Prompt 6** - Create XML Templates and Builders
+7. **Prompt 7** - Create Playwright Reporter
+8. **Prompt 8** - Implement Test Case Mapping
+9. **Prompt 9** - Build Result Transformer
+10. **Prompt 10** - Implement Result Publisher
+11. **Prompt 11** - Add Attachment Handler
+12. **Prompt 14** - Implement Error Handling
+13. **Prompt 15** - Add Logging System
+14. **Prompt 16** - Create Unit Tests
+15. **Prompt 17** - Create Integration Tests
+
+### 🔮 Optional/Future
+- Prompt 12 - Configuration Manager enhancements
+- Prompt 13 - CLI Interface
+- Prompt 18 - Documentation updates
+- Prompt 19 - Example enhancements
+- Prompt 20 - CI/CD templates
+
+## 🔧 Updated Key Technologies
 
 - **Language:** TypeScript/Node.js
 - **Testing Framework:** Playwright
-- **HTTP Client:** Axios
-- **Authentication:** OAuth 1.0a
+- **HTTP Client:** Axios with cookie jar support
+- **Authentication:** Basic Authentication + Form-based login
+- **Session Management:** tough-cookie + axios-cookiejar-support
+- **XML Processing:** fast-xml-parser
 - **Logging:** Winston
-- **Configuration:** dotenv, JSON/YAML
-- **CLI:** Commander.js or Yargs
-- **Testing:** Jest or Mocha
+- **Configuration:** dotenv, JSON
+- **Testing:** Jest
 - **API Standard:** OSLC (Open Services for Lifecycle Collaboration)
 
 ## Success Criteria
@@ -271,5 +454,66 @@
 - ✅ CLI provides good user experience
 
 ## Notes
+
+Each prompt is designed to be a complete, actionable task that can be implemented independently while building toward the complete solution. The prompts can be used sequentially or adapted based on specific project needs and priorities.
+
+---
+
+## ✅ Success Criteria
+
+- ✅ Playwright tests execute and results are automatically reported to IETM
+- ✅ Configuration is flexible and supports multiple environments
+- ✅ Error handling is robust with clear error messages
+- ✅ Attachments (screenshots, videos) are uploaded successfully
+- ✅ Test case mapping is intuitive and maintainable
+- ✅ Documentation is comprehensive and examples are working
+- ✅ Unit and integration tests provide good coverage
+- ✅ Authentication works reliably with session management
+
+## 📝 Implementation Notes
+
+### Authentication Migration (2026-03-24)
+- **Changed from OAuth 1.0a to Basic Authentication** following IBM's Java client pattern
+- Analyzed `RQM_Query-1.0.3` Java implementation
+- Created comprehensive documentation:
+  - `docs/java-implementation-analysis.md` - Complete Java client analysis
+  - `docs/authentication-setup.md` - Authentication guide
+  - `docs/authentication-migration-summary.md` - Migration details
+- Updated all configuration files and dependencies
+- Ready to implement Prompt 3 (Basic Authentication Module)
+
+### Key Decisions
+1. **Basic Auth over OAuth**: Simpler, more reliable, native IETM support
+2. **Cookie-based sessions**: Automatic session management with tough-cookie
+3. **Form-based auth on 401**: Matches IBM's proven implementation
+4. **Retry with backoff**: Max 3 retries with exponential backoff (1s, 2s, 3s)
+
+### Reference Implementation
+- Java Client: `C:\Users\RobertStudera\Documents\xxx\RQM_Query-1.0.3.jar.src`
+- Server: `https://jazz.net/sandbox01-qm` (QM) and `https://jazz.net/sandbox01-jts` (JTS)
+- Test Credentials: username=studera, password=Modus1odus123##
+
+## 🎯 Next Prompt
+
+**Prompt 3: Implement Basic Authentication Module**
+
+This is the next task to implement. See the detailed requirements in the Phase 2 section above.
+
+**Quick Start:**
+```
+"Implement the Basic Authentication module for IETM following the pattern from 
+docs/java-implementation-analysis.md. Create AuthManager class that handles 
+Basic Auth, form-based authentication at /jts/j_security_check, cookie 
+management with tough-cookie, and automatic re-authentication on 401 responses. 
+Include retry logic with exponential backoff (max 3 retries)."
+```
+
+## 📚 Additional Resources
+
+- [IBM Jazz Form-Based Authentication](https://jazz.net/wiki/bin/view/Main/JazzFormBasedAuthentication)
+- [OSLC Authentication](https://open-services.net/specifications/authentication/)
+- [RQM API Documentation](https://jazz.net/wiki/bin/view/Main/RqmApi)
+
+---
 
 Each prompt is designed to be a complete, actionable task that can be implemented independently while building toward the complete solution. The prompts can be used sequentially or adapted based on specific project needs and priorities.
