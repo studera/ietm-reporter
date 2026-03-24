@@ -1,0 +1,39 @@
+{
+  "$schema": "./ietm.config.schema.json",
+  "server": {
+    "baseUrl": "https://jazz.net/sandbox01-qm",
+    "projectId": "_8_TkcFwFEfCGYIoRgUkqqw",
+    "contextId": "__GEcoFwFEfCGYIoRgUkqqw"
+  },
+  "auth": {
+    "consumerKey": "your_consumer_key",
+    "consumerSecret": "your_consumer_secret",
+    "accessToken": "your_access_token",
+    "accessTokenSecret": "your_access_token_secret"
+  },
+  "testPlan": {
+    "id": "987",
+    "name": "IT1-System Test"
+  },
+  "mapping": {
+    "strategy": "id",
+    "mappings": {
+      "login-test": "2218",
+      "logout-test": "2219"
+    }
+  },
+  "retry": {
+    "maxRetries": 3,
+    "retryDelay": 1000
+  },
+  "logging": {
+    "level": "info",
+    "file": "logs/ietm-client.log"
+  },
+  "attachments": {
+    "uploadScreenshots": true,
+    "uploadVideos": true,
+    "uploadLogs": true,
+    "maxFileSize": 10485760
+  }
+}
