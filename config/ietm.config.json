@@ -1,0 +1,47 @@
+{
+  "$schema": "./ietm.config.schema.json",
+  "server": {
+    "baseUrl": "https://jazz.net/sandbox01-qm",
+    "jtsUrl": "https://jazz.net/sandbox01-jts",
+    "projectName": "studera Project (Quality Management)",
+    "autoDiscoverIds": true
+  },
+  "auth": {
+    "type": "basic",
+    "username": "studera",
+    "password": "Modus1odus123##"
+  },
+  "testPlan": {
+    "id": "987",
+    "name": "IT1-System Test"
+  },
+  "mapping": {
+    "strategy": "id",
+    "annotationType": "ietm-test-case"
+  },
+  "retry": {
+    "maxRetries": 3,
+    "retryDelay": 1000,
+    "backoffMultiplier": 2
+  },
+  "logging": {
+    "level": "info",
+    "file": "logs/ietm-client.log",
+    "console": true,
+    "maxFiles": 7,
+    "maxSize": "10m"
+  },
+  "attachments": {
+    "uploadScreenshots": true,
+    "uploadVideos": true,
+    "uploadLogs": true,
+    "maxFileSize": 10485760,
+    "compressImages": true
+  },
+  "reporting": {
+    "batchSize": 10,
+    "reportOnlyMappedTests": true,
+    "createExecutionRecords": true,
+    "updateExistingResults": false
+  }
+}
