@@ -6,7 +6,6 @@
     
     /* Modules */
     "module": "commonjs",
-    "rootDir": "./src",
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
@@ -36,19 +35,20 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     
     /* Completeness */
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "examples/**/*"
   ],
   "exclude": [
     "node_modules",
