@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns2:executionresult xmlns:ns2="http://jazz.net/xmlns/alm/qm/v0.1/" 
+                     xmlns:ns1="http://schema.ibm.com/vega/2008/" 
+                     xmlns:ns3="http://purl.org/dc/elements/1.1/" 
+                     xmlns:ns4="http://jazz.net/xmlns/prod/jazz/process/0.6/" 
+                     xmlns:ns5="http://jazz.net/xmlns/alm/v0.1/" 
+                     xmlns:ns6="http://purl.org/dc/terms/" 
+                     xmlns:ns7="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+                     xmlns:ns8="http://jazz.net/xmlns/alm/qm/v0.1/executionresult/v0.1" 
+                     xmlns:ns9="http://jazz.net/xmlns/alm/qm/v0.1/catalog/v0.1" 
+                     xmlns:ns10="http://jazz.net/xmlns/alm/qm/v0.1/tsl/v0.1/" 
+                     xmlns:ns11="http://open-services.net/ns/core#" 
+                     xmlns:ns12="http://open-services.net/ns/qm#" 
+                     xmlns:ns13="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/" 
+                     xmlns:ns14="http://www.w3.org/2002/07/owl#" 
+                     xmlns:ns15="http://jazz.net/xmlns/prod/jazz/calm/1.0/" 
+                     xmlns:ns16="http://purl.org/dc/terms/" 
+                     xmlns:ns17="http://www.w3.org/1999/XSL/Transform">
+    <ns3:title>{{TITLE}}</ns3:title>
+    <ns3:creator>{{CREATOR}}</ns3:creator>
+    <ns3:description></ns3:description>
+    <ns2:owner>{{OWNER}}</ns2:owner>
+    <ns2:state>{{STATE}}</ns2:state>
+    <ns2:machine>{{MACHINE}}</ns2:machine>
+    <ns2:iterations>{{ITERATIONS}}</ns2:iterations>
+    <ns2:starttime>{{START_TIME}}</ns2:starttime>
+    <ns2:endtime>{{END_TIME}}</ns2:endtime>
+    <ns2:weight>{{WEIGHT}}</ns2:weight>
+    <ns2:testedby>
+        <ns2:tester>{{TESTER}}</ns2:tester>
+    </ns2:testedby>
+    {{TEST_SCRIPT}}
+    <ns2:testcase href="{{TEST_CASE_HREF}}" />
+    <ns2:executionworkitem href="{{EXECUTION_WORK_ITEM_HREF}}" />
+    {{VARIABLES}}
+    {{ADAPTER_ID}}
+    {{STEP_RESULTS}}
+</ns2:executionresult>
+
+<!-- Made with Bob -->

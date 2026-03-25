@@ -7,5 +7,7 @@ export { IETMClient } from './client/IETMClient';
 export { IETMReporter } from './reporter/IETMReporter';
 export { IETMConfig, loadConfig } from './config/ConfigManager';
 export * from './types';
+export * from './models';
+export * from './builders';
 
 // Made with Bob
