@@ -119,9 +119,9 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 ```typescript
 const client = new IETMClient({
   baseUrl: 'https://jazz.net/sandbox01-qm',
-  jtsUrl: 'https://jazz.net/sandbox01-jts',
-  username: 'studera',
-  password: 'your_password'
+  jtsUrl: process.env.IETM_JTS_URL || 'https://jazz.net/sandbox01-jts',
+  username: process.env.IETM_USERNAME || '',
+  password: process.env.IETM_PASSWORD || ''
 });
 ```
 

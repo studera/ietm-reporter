@@ -13,11 +13,17 @@ async function main() {
 
   // Step 1: Configure authentication
   const authConfig: AuthConfig = {
-    baseUrl: 'https://jazz.net/sandbox01-qm',
-    jtsUrl: 'https://jazz.net/sandbox01-jts',
-    username: 'studera',
-    password: 'Modus1odus123##',
+    baseUrl: process.env.IETM_BASE_URL || 'https://jazz.net/sandbox01-qm',
+    jtsUrl: process.env.IETM_JTS_URL || 'https://jazz.net/sandbox01-jts',
+    username: process.env.IETM_USERNAME || '',
+    password: process.env.IETM_PASSWORD || '',
   };
+
+  // Validate credentials
+  if (!authConfig.username || !authConfig.password) {
+    console.error('❌ Error: Missing credentials in .env file');
+    process.exit(1);
+  }
 
   console.log('1. Creating AuthManager...');
   const authManager = new AuthManager(authConfig);
@@ -31,7 +37,7 @@ async function main() {
     // Step 3: Configure service discovery
     const discoveryConfig: ServiceDiscoveryConfig = {
       baseUrl: authConfig.baseUrl,
-      projectName: 'studera Project (Quality Management)',
+      projectName: process.env.IETM_PROJECT_NAME || 'studera Project (Quality Management)',
     };
 
     console.log('3. Creating ServiceDiscovery...');

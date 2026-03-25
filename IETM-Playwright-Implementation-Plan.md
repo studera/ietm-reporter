@@ -74,53 +74,91 @@ class AuthManager {
 }
 ```
 
-#### 🎯 Prompt 4: Implement Service Discovery (NEXT)
-**Status:** Ready to implement
+#### ✅ Prompt 4: Implement Service Discovery (COMPLETED)
+**Status:** Complete
+**Completed:** 2026-03-24
 **Priority:** HIGH
 **Dependencies:** Prompt 3 (completed)
 
 **Task:** Implement IETM service discovery following OSLC pattern:
-- Get root services from `/qm/rootservices`
-- Get service provider catalog URL
-- Get services URL for the project
-- Extract resource query URLs (TestCase, TestExecutionRecord, TestSuite)
-- Cache discovered URLs for session lifetime
-- Parse XML responses using fast-xml-parser
+- ✅ Get root services from `/qm/rootservices`
+- ✅ Get service provider catalog URL
+- ✅ Get services URL for the project
+- ✅ Extract resource query URLs (TestCase, TestExecutionRecord, TestSuite)
+- ✅ Cache discovered URLs for session lifetime
+- ✅ Parse XML responses using fast-xml-parser
+- ✅ Comprehensive unit tests (36 tests passing)
 
 **Reference:** See `docs/java-implementation-analysis.md` - Service Discovery section
 
-**Key Files to Create:**
-- `src/client/ServiceDiscovery.ts`
-- `src/utils/XmlParser.ts`
+**Key Files Created:**
+- ✅ `src/client/ServiceDiscovery.ts` (237 lines) - Service discovery implementation
+- ✅ `src/utils/XmlParser.ts` (268 lines) - XML parsing utilities
+- ✅ `examples/service-discovery-example.ts` (107 lines) - Working example
+- ✅ `examples/debug-rootservices.ts` (51 lines) - Debug utility
+- ✅ `tests/unit/XmlParser.test.ts` (363 lines) - Comprehensive test suite
 
-#### Prompt 5: Build IETM API Client Core
-**Status:** Pending
+**Testing Results:**
+- ✅ Successfully tested against live IETM server (https://jazz.net/sandbox01-qm)
+- ✅ Discovered 15 query capabilities including TestResultQuery and TestCaseQuery
+- ✅ Context ID extraction working: `_8_TkcFwFEfCGYIoRgUkqqw`
+- ✅ All 36 unit tests passing
+
+**Expected Output:**
+```typescript
+class ServiceDiscovery {
+  async discover(): Promise<DiscoveredServices>
+  getQueryCapabilityUrl(name: string): string | undefined
+  getContextId(): string
+  buildTestCaseUrl(id: string): string
+  buildExecutionWorkItemUrl(id: string): string
+}
+```
+
+#### ✅ Prompt 5: Build IETM API Client Core (COMPLETED)
+**Status:** Complete
+**Completed:** 2026-03-24
 **Priority:** HIGH
-**Dependencies:** Prompts 3-4
+**Dependencies:** Prompts 3-4 (completed)
 
 **Task:** Implement a TypeScript class `IETMClient` that provides methods for:
-- Service discovery and initialization
-- Fetching test cases by ID using OSLC queries
-- Fetching test execution records (TER) by test case
-- Creating execution results with XML payload
-- Uploading attachments (screenshots, videos, logs)
-- Proper error handling and retry logic via AuthManager
+- ✅ Service discovery and initialization
+- ✅ Fetching test cases by ID using OSLC queries
+- ✅ Fetching test execution records (TER) by test case
+- ✅ Creating execution results with XML payload
+- ✅ Uploading attachments (screenshots, videos, logs)
+- ✅ Proper error handling and retry logic via AuthManager
 
 **Reference:** See `docs/java-implementation-analysis.md` - Key API Patterns section
 
-**Key Files to Update:**
-- `src/client/IETMClient.ts` (replace skeleton)
+**Key Files Created/Updated:**
+- ✅ `src/client/IETMClient.ts` (577 lines) - Complete implementation
+- ✅ `src/client/ServiceDiscovery.ts` - Added helper methods (buildTestCaseUrl, buildExecutionWorkItemUrl)
+- ✅ `examples/ietm-client-example.ts` (149 lines) - Working example
 
-**Expected Methods:**
+**Implemented Methods:**
 ```typescript
 class IETMClient {
   async initialize(): Promise<void>
   async getTestCase(testCaseId: string): Promise<TestCase>
   async getTestExecutionRecords(testCaseId: string): Promise<TestExecutionRecord[]>
   async createExecutionResult(result: ExecutionResult): Promise<string>
-  async uploadAttachment(file: Buffer, filename: string): Promise<string>
+  async uploadAttachment(resultId: string, attachment: Attachment): Promise<string>
+  getDiscoveredServices(): DiscoveredServices | undefined
+  getContextId(): string
+  async clearAuth(): Promise<void>
 }
 ```
+
+**Key Features:**
+- Complete OSLC-compliant API client
+- XML parsing and building for IETM resources
+- Test case retrieval with full metadata
+- Execution record querying with OSLC filters
+- Execution result creation with verdict mapping
+- Attachment upload with form-data
+- Comprehensive error handling
+- TypeScript type safety with proper interfaces
 
 #### Prompt 6: Create XML Templates and Builders
 **Status:** Pending
@@ -492,7 +530,7 @@ Each prompt is designed to be a complete, actionable task that can be implemente
 ### Reference Implementation
 - Java Client: `C:\Users\RobertStudera\Documents\xxx\RQM_Query-1.0.3.jar.src`
 - Server: `https://jazz.net/sandbox01-qm` (QM) and `https://jazz.net/sandbox01-jts` (JTS)
-- Test Credentials: username=studera, password=Modus1odus123##
+- Test Credentials: Stored in `.env` file (not committed to version control)
 
 ## 🎯 Next Prompt
 

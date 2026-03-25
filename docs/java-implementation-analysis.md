@@ -129,11 +129,13 @@ Returns: Attachment URL to reference in step results
 From `rqmapp.properties`:
 ```properties
 rqm_project=_VK-Zentral-Betrieb(CCM)
-rqm_user=studera
-rqm_password=Modus1odus123##
+rqm_user=${IETM_USERNAME}
+rqm_password=${IETM_PASSWORD}
 rqm_root_url=https://jazz.net/sandbox01-jts
-rqm_user_url=https://jazz.net/sandbox01-jts/jts/users/studera
+rqm_user_url=https://jazz.net/sandbox01-jts/jts/users/${IETM_USERNAME}
 rqm_project_area_url=https://jazz.net/sandbox01-qm/process/project-areas/_VK-Zentral-Betrieb(CCM)
+
+**Note:** Use environment variables for credentials. Never commit real credentials to version control.
 rqm_default_adapter_id=_zuba0D2nEeqdasL-v4nDNg
 rqm_default_remotescript_id=<not used in our case>
 ```

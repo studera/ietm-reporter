@@ -10,14 +10,21 @@ import { AuthManager, AuthConfig } from '../src/auth';
 async function main() {
   // Configuration
   const config: AuthConfig = {
-    baseUrl: 'https://jazz.net/sandbox01-qm',
-    jtsUrl: 'https://jazz.net/sandbox01-jts',
-    username: 'studera',
-    password: 'Modus1odus123##',
+    baseUrl: process.env.IETM_BASE_URL || 'https://jazz.net/sandbox01-qm',
+    jtsUrl: process.env.IETM_JTS_URL || 'https://jazz.net/sandbox01-jts',
+    username: process.env.IETM_USERNAME || '',
+    password: process.env.IETM_PASSWORD || '',
     maxRetries: 3,
     retryDelay: 1000,
     timeout: 30000,
   };
+
+  // Validate credentials
+  if (!config.username || !config.password) {
+    console.error('❌ Error: Missing credentials in .env file');
+    console.error('Please set IETM_USERNAME and IETM_PASSWORD in .env file');
+    process.exit(1);
+  }
 
   console.log('=== IETM Authentication Example ===\n');
 

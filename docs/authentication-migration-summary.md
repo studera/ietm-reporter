@@ -19,9 +19,11 @@ IETM_ACCESS_TOKEN_SECRET=YOUR_ACCESS_TOKEN_SECRET_HERE
 **After:**
 ```env
 IETM_JTS_URL=https://jazz.net/sandbox01-jts
-IETM_USERNAME=studera
-IETM_PASSWORD=Modus1odus123##
+IETM_USERNAME=your-username
+IETM_PASSWORD=your-password
 ```
+
+**⚠️ SECURITY NOTE:** Never commit the `.env` file with real credentials to version control!
 
 #### `config/ietm.config.json`
 **Before:**
@@ -44,9 +46,11 @@ IETM_PASSWORD=Modus1odus123##
   },
   "auth": {
     "type": "basic",
-    "username": "studera",
-    "password": "Modus1odus123##"
+    "username": "${IETM_USERNAME}",
+    "password": "${IETM_PASSWORD}"
   }
+
+**Note:** Use environment variable placeholders in config files for security.
 }
 ```
 
@@ -178,12 +182,12 @@ IETM_PASSWORD=Modus1odus123##
 **Server Configuration:**
 - QM Server: `https://jazz.net/sandbox01-qm`
 - JTS Server: `https://jazz.net/sandbox01-jts`
-- Project: "studera Project (Quality Management)"
+- Project: Configured in `.env` file
 - Test Plan ID: 987 ("IT1-System Test")
 
 **Authentication:**
-- Username: `studera`
-- Password: `Modus1odus123##`
+- Credentials stored securely in `.env` file (not committed to git)
+- Username and password loaded from environment variables
 
 ## Security Notes
 
