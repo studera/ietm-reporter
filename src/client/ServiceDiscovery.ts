@@ -244,6 +244,29 @@ export class ServiceDiscovery {
   }
 
   /**
+   * Build test case URL
+   *
+   * @param testCaseId Test case ID (numeric or URN)
+   * @returns Full test case URL
+   */
+  buildTestCaseUrl(testCaseId: string): string {
+    // If already a URN, use as-is, otherwise convert to URN
+    const id = testCaseId.startsWith('urn:') ? testCaseId : `urn:com.ibm.rqm:testcase:${testCaseId}`;
+    return `${this.getBasePath()}/testcase/${id}`;
+  }
+
+  /**
+   * Build execution work item URL
+   *
+   * @param executionWorkItemId Execution work item ID
+   * @returns Full execution work item URL
+   */
+  buildExecutionWorkItemUrl(executionWorkItemId: string): string {
+    const id = executionWorkItemId.startsWith('urn:') ? executionWorkItemId : `urn:com.ibm.rqm:executionworkitem:${executionWorkItemId}`;
+    return `${this.getBasePath()}/executionworkitem/${id}`;
+  }
+
+  /**
    * Clear cached discovery results
    */
   clearCache(): void {

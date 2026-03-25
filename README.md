@@ -88,7 +88,7 @@ Edit `.env` with your IETM server details:
 # IETM Server Configuration
 IETM_BASE_URL=https://jazz.net/sandbox01-qm
 IETM_JTS_URL=https://jazz.net/sandbox01-jts
-IETM_PROJECT_NAME=studera Project (Quality Management)
+IETM_PROJECT_NAME=Your Project Name
 
 # Basic Authentication
 IETM_USERNAME=your_username
@@ -109,7 +109,7 @@ Alternatively, create `ietm.config.json`:
   "server": {
     "baseUrl": "https://jazz.net/sandbox01-qm",
     "jtsUrl": "https://jazz.net/sandbox01-jts",
-    "projectName": "studera Project (Quality Management)",
+    "projectName": "Your Project Name",
     "autoDiscoverIds": true
   },
   "auth": {

@@ -8,11 +8,17 @@ import * as fs from 'fs';
 
 async function main() {
   const authConfig: AuthConfig = {
-    baseUrl: 'https://jazz.net/sandbox01-qm',
-    jtsUrl: 'https://jazz.net/sandbox01-jts',
-    username: 'studera',
-    password: 'Modus1odus123##',
+    baseUrl: process.env.IETM_BASE_URL || 'https://jazz.net/sandbox01-qm',
+    jtsUrl: process.env.IETM_JTS_URL || 'https://jazz.net/sandbox01-jts',
+    username: process.env.IETM_USERNAME || '',
+    password: process.env.IETM_PASSWORD || '',
   };
+
+  // Validate credentials
+  if (!authConfig.username || !authConfig.password) {
+    console.error('❌ Error: Missing credentials in .env file');
+    process.exit(1);
+  }
 
   const authManager = new AuthManager(authConfig);
   

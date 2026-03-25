@@ -8,8 +8,8 @@
   },
   "auth": {
     "type": "basic",
-    "username": "studera",
-    "password": "Modus1odus123##"
+    "username": "${IETM_USERNAME}",
+    "password": "${IETM_PASSWORD}"
   },
   "testPlan": {
     "id": "987",
