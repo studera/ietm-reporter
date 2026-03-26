@@ -9,5 +9,9 @@ export { IETMConfig, loadConfig } from './config/ConfigManager';
 export * from './types';
 export * from './models';
 export * from './builders';
+export * from './mapper';
+export * from './transformer';
+export * from './publisher';
+export * from './attachments';
 
 // Made with Bob
