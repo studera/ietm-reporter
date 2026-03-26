@@ -1,6 +1,6 @@
 /**
  * Example: Using TestCaseMapper
- * 
+ *
  * This example demonstrates how to use the TestCaseMapper to:
  * - Extract test case IDs from Playwright tests
  * - Validate test cases against IETM
@@ -9,8 +9,11 @@
 
 import { TestCaseMapper } from '../src/mapper/TestCaseMapper';
 import { IETMClient } from '../src/client/IETMClient';
-import { loadConfig } from '../src/config/ConfigManager';
 import type { TestCase } from '@playwright/test/reporter';
+import * as dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 // Mock test cases for demonstration
 function createMockTest(
@@ -62,7 +65,7 @@ async function main() {
   try {
     // Create IETM client from environment variables
     const client = new IETMClient({
-      qmServerUrl: process.env.IETM_QM_URL || 'https://jazz.net/sandbox01-qm',
+      qmServerUrl: process.env.IETM_BASE_URL || 'https://jazz.net/sandbox01-qm',
       jtsServerUrl: process.env.IETM_JTS_URL || 'https://jazz.net/sandbox01-jts',
       username: process.env.IETM_USERNAME || '',
       password: process.env.IETM_PASSWORD || '',
