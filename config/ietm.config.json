@@ -1,5 +1,5 @@
 {
-  "$schema": "ietm.config.schema.json",
+  "$schema": "./ietm.config.schema.json",
   "server": {
     "baseUrl": "https://jazz.net/sandbox01-qm",
     "jtsUrl": "https://jazz.net/sandbox01-jts",
