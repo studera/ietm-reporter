@@ -14,5 +14,6 @@ export * from './transformer';
 export * from './publisher';
 export * from './attachments';
 export * from './errors';
+export * from './logging';
 
 // Made with Bob
