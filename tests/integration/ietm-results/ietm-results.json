@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-26T14:35:13.860Z",
+  "timestamp": "2026-03-26T15:29:57.605Z",
   "totalTests": 2,
   "results": [
     {
@@ -7,7 +7,7 @@
       "file": "C:\\Users\\RobertStudera\\Documents\\DEVELOP\\bob\\mcp1\\tests\\integration\\specs\\login.spec.ts",
       "line": 18,
       "status": "passed",
-      "duration": 1473,
+      "duration": 1684,
       "testCaseId": "2218",
       "artifacts": {
         "screenshots": [],
@@ -20,7 +20,7 @@
       "file": "C:\\Users\\RobertStudera\\Documents\\DEVELOP\\bob\\mcp1\\tests\\integration\\specs\\login.spec.ts",
       "line": 51,
       "status": "passed",
-      "duration": 884,
+      "duration": 1045,
       "testCaseId": "7117",
       "artifacts": {
         "screenshots": [],

@@ -547,7 +547,7 @@ export class IETMReporter implements Reporter {
 
   /**
    * Upload execution result XML directly to IETM
-   * This bypasses the IETMClient's simplified interface and posts the full XML
+   * Uses POST-GET-PUT pattern to ensure state is set correctly
    */
   private async uploadExecutionResultXml(testCaseId: string, xml: string): Promise<string> {
     if (!this.client) {
@@ -564,7 +564,8 @@ export class IETMReporter implements Reporter {
     
     console.log(`Creating execution result at: ${executionResultUrl}`);
 
-    // Post execution result XML directly
+    // STEP 1: POST to create execution result
+    // Note: IETM ignores the state on POST and sets it to "inprogress" by default
     const response = await (this.client as any).authManager.executeRequest({
       method: 'POST',
       url: executionResultUrl,
@@ -576,46 +577,125 @@ export class IETMReporter implements Reporter {
       data: xml,
     }) as string;
 
-    // Extract created resource URL from response
-    const { parseXml, findFirstNodeByTag } = require('../utils/XmlParser');
+    // Extract created resource ID from response
+    const { parseXml, findFirstNodeByTag, getTextContent, buildXml } = require('../utils/XmlParser');
     
     try {
       const parsed = parseXml(response);
       
-      // IETM returns an Atom feed with resultId
-      const resultIdNode = findFirstNodeByTag(parsed, 'rqm:resultId') ||
-                           findFirstNodeByTag(parsed, 'resultId');
+      // IETM returns an Atom feed with resultId - try multiple possible node names
+      const resultIdNode = findFirstNodeByTag(parsed, 'ns2:resultId') ||
+                           findFirstNodeByTag(parsed, 'resultId') ||
+                           findFirstNodeByTag(parsed, 'rqm:resultId') ||
+                           findFirstNodeByTag(parsed, 'qm:resultId');
       
-      if (resultIdNode) {
-        // Extract the text content of the resultId node
-        const resultId = typeof resultIdNode === 'object' && '#text' in resultIdNode
-          ? resultIdNode['#text']
-          : resultIdNode;
-        
-        console.log(`[IETM Reporter] ✓ Execution result created with ID: ${resultId}`);
-        return String(resultId);
+      if (!resultIdNode) {
+        console.error('[IETM Reporter] Could not find resultId in response. Response structure:', JSON.stringify(parsed, null, 2).substring(0, 1000));
+        throw new Error('Failed to extract execution result ID from response');
       }
+
+      // Extract the text content of the resultId node
+      const resultId = getTextContent(resultIdNode);
       
-      // Fallback: try RDF format
-      const resultNode = findFirstNodeByTag(parsed, 'executionresult') ||
-                         findFirstNodeByTag(parsed, 'ns2:executionresult') ||
-                         findFirstNodeByTag(parsed, 'rqm:executionresult') ||
-                         findFirstNodeByTag(parsed, 'ExecutionResult');
+      if (!resultId) {
+        console.error('[IETM Reporter] resultId node found but has no text content:', resultIdNode);
+        throw new Error('Failed to extract execution result ID - node has no text content');
+      }
+      const resultUrl = `${services.basePath}/executionresult/urn:com.ibm.rqm:executionresult:${resultId}`;
       
-      if (resultNode) {
-        const resourceUrl = resultNode['@_rdf:about'] || resultNode['@_about'] || '';
-        if (resourceUrl) {
-          const resultId = resourceUrl.split('/').pop() || resourceUrl;
-          console.log(`[IETM Reporter] ✓ Execution result created with ID: ${resultId}`);
-          return resultId;
+      console.log(`[IETM Reporter] ✓ Execution result created with ID: ${resultId}`);
+
+      // STEP 2: GET the created execution result back from IETM
+      console.log(`[IETM Reporter] Fetching created execution result to update state...`);
+      const createdXml = await (this.client as any).authManager.executeRequest({
+        method: 'GET',
+        url: resultUrl,
+        headers: {
+          'Accept': 'application/xml',
+          'Content-Type': undefined, // Remove default Content-Type for GET request
+          'OSLC-Core-Version': '2.0',
+        },
+      }) as string;
+
+      // STEP 3: Modify the XML to set the correct state
+      const createdParsed = parseXml(createdXml);
+      const createdResultNode = findFirstNodeByTag(createdParsed, 'ns2:executionresult') ||
+                                findFirstNodeByTag(createdParsed, 'executionresult');
+      
+      if (!createdResultNode) {
+        console.warn('[IETM Reporter] Could not find execution result node in GET response, skipping state update');
+        return resultId;
+      }
+
+      // Helper function to set text content on a node (handles both string and object nodes)
+      const setTextContent = (parentNode: any, tagName: string, value: string) => {
+        const node = parentNode[tagName];
+        if (typeof node === 'string') {
+          // Node is a simple string, replace it
+          parentNode[tagName] = value;
+        } else if (node && typeof node === 'object') {
+          // Node is an object with #text property
+          node['#text'] = value;
         }
+      };
+      
+      // Extract the desired state and endtime from the original XML we sent
+      const originalParsed = parseXml(xml);
+      const originalResultNode = findFirstNodeByTag(originalParsed, 'ns2:executionresult') ||
+                                 findFirstNodeByTag(originalParsed, 'executionresult');
+      const originalStateNode = findFirstNodeByTag(originalResultNode, 'ns2:state') ||
+                                findFirstNodeByTag(originalResultNode, 'state');
+      const originalEndtimeNode = findFirstNodeByTag(originalResultNode, 'ns2:endtime') ||
+                                  findFirstNodeByTag(originalResultNode, 'endtime');
+      
+      if (originalStateNode) {
+        const desiredState = getTextContent(originalStateNode);
+        
+        // Update the state in the retrieved XML (try multiple namespace prefixes)
+        if (createdResultNode['ns6:state']) {
+          setTextContent(createdResultNode, 'ns6:state', desiredState);
+        } else if (createdResultNode['ns2:state']) {
+          setTextContent(createdResultNode, 'ns2:state', desiredState);
+        } else if (createdResultNode['state']) {
+          setTextContent(createdResultNode, 'state', desiredState);
+        }
+        
+        // Update endtime if we have it in original
+        if (originalEndtimeNode) {
+          const desiredEndtime = getTextContent(originalEndtimeNode);
+          if (createdResultNode['ns16:endtime']) {
+            setTextContent(createdResultNode, 'ns16:endtime', desiredEndtime);
+          } else if (createdResultNode['ns2:endtime']) {
+            setTextContent(createdResultNode, 'ns2:endtime', desiredEndtime);
+          } else if (createdResultNode['endtime']) {
+            setTextContent(createdResultNode, 'endtime', desiredEndtime);
+          }
+        }
+        
+        // STEP 4: PUT the modified XML back to update the execution result
+        const updatedXml = buildXml(createdParsed);
+        
+        console.log(`[IETM Reporter] Updating execution result state to: ${desiredState}`);
+        await (this.client as any).authManager.executeRequest({
+          method: 'PUT',
+          url: resultUrl,
+          headers: {
+            'Content-Type': 'application/rdf+xml',
+            'Accept': 'application/rdf+xml',
+            'OSLC-Core-Version': '2.0',
+          },
+          data: updatedXml,
+        });
+        
+        console.log(`[IETM Reporter] ✓ Execution result state updated successfully`);
+      } else {
+        console.warn('[IETM Reporter] Could not find state in original XML, skipping state update');
       }
       
-      console.log('[IETM Reporter] Response XML:', response.substring(0, 500));
-      throw new Error('Failed to parse execution result response - no resultId found');
-    } catch (error) {
-      console.error('[IETM Reporter] Failed to parse response:', error);
-      console.log('[IETM Reporter] Response (first 1000 chars):', response.substring(0, 1000));
+      return resultId;
+      
+    } catch (error: any) {
+      console.error('[IETM Reporter] Error in POST-GET-PUT workflow:', error);
       throw error;
     }
   }

@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ <id>https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult</id>
+ <title>QM V2 Test Result Query Results</title>
+ <entry>
+  <id>https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_gR_nQCkgEfGG4t7UU5gGkg</id>
+  <title>Positive Login Test - passed</title>
+  <updated>2026-03-26T14:31:40.786Z</updated>
+  <author>
+   <uri>https://jazz.net/sandbox01-jts/users/studera</uri>
+  </author>
+  <summary>Results of a QM V2 Test Result query.</summary>
+  <link rel="alternate" href="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_gR_nQCkgEfGG4t7UU5gGkg"/>
+  <content src="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_gR_nQCkgEfGG4t7UU5gGkg" type="application/xml">
+   <rdf:RDF
+        xmlns:rqm_auto="http://jazz.net/ns/auto/rqm#"
+        xmlns:lqe="http://jazz.net/ns/lqe#"
+        xmlns:acp="http://jazz.net/ns/acp#"
+        xmlns:calm="http://jazz.net/xmlns/prod/jazz/calm/1.0/"
+        xmlns:acc="http://open-services.net/ns/core/acc#"
+        xmlns:process="http://jazz.net/ns/process#"
+        xmlns:dcterms="http://purl.org/dc/terms/"
+        xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+        xmlns:jrs="http://jazz.net/ns/jrs#"
+        xmlns:oslc_auto="http://open-services.net/ns/auto#"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:bp="http://open-services.net/ns/basicProfile#"
+        xmlns:cmx="http://open-services.net/ns/cm-x#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+        xmlns:rqm_lm="http://jazz.net/ns/qm/rqm/labmanagement#"
+        xmlns:oslc="http://open-services.net/ns/core#"
+        xmlns:owl="http://www.w3.org/2002/07/owl#"
+        xmlns:rqm_process="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/"
+        xmlns:jazz="http://jazz.net/ns/jazz#"
+        xmlns:oslc_config="http://open-services.net/ns/config#"
+        xmlns:oslc_cm="http://open-services.net/ns/cm#"
+        xmlns:xml="http://www.w3.org/XML/1998/namespace"
+        xmlns:rqm_qm="http://jazz.net/ns/qm/rqm#"
+        xmlns:oslc_qm="http://open-services.net/ns/qm#"
+        xmlns:oslc_rm="http://open-services.net/ns/rm#"
+        xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    <oslc_qm:TestResult rdf:about="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_gR_nQCkgEfGG4t7UU5gGkg">
+     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:31:40.786Z</dcterms:modified>
+     <rqm_qm:scriptStepCountFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountFailed>
+     <rqm_qm:scriptStepCountAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountAttempted>
+     <rqm_qm:verdict rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult#com.ibm.rqm.execution.common.state.inprogress"/>
+     <rqm_qm:isCurrent rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrent>
+     <rqm_qm:totalPoints rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:totalPoints>
+     <rqm_qm:scriptStepCountInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountInconclusive>
+     <acp:accessControl rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/accessControl/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">adapterId=playwright-ietm-reporter</rqm_qm:executionCustomProperty>
+     <rqm_process:testplanWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testplan.workflow/com.ibm.rqm.planning.common.new"/>
+     <oslc_qm:reportsOnTestPlan rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestPlan/_LogiIVwJEfCGYIoRgUkqqw"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">testedby=studera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPermFailed>
+     <rqm_qm:scriptStepCountDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountDeferred>
+     <rqm_qm:testedBy rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=42026-03-26T14:31:31.021Z2026-03-26T14:31:31.387Zcom.ibm.rqm.execution.common.state.passedAfter Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:stepResultsUpdateStatus rdf:resource="http://jazz.net/ns/qm/rqm#NOMODIFICATION"/>
+     <acc:accessContext rdf:resource="https://jazz.net/sandbox01-qm/acclist#_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <oslc_qm:producedByTestExecutionRecord rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.TestcaseExecutionRecord/_fUv74CkgEfGG4t7UU5gGkg"/>
+     <rqm_qm:numberOfIterations rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</rqm_qm:numberOfIterations>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">weight=100</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endtime=2026-03-26T14:31:31.136Z</rqm_qm:executionCustomProperty>
+     <dcterms:relation rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/resources/_8_TkcFwFEfCGYIoRgUkqqw/executionresult/urn:com.ibm.rqm:executionresult:2861"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">machine=localhost</rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCount rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCount>
+     <rqm_qm:pointsSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsSkipped>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">iterations=1</rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPassed>
+     <rqm_qm:weight rdf:datatype="http://www.w3.org/2001/XMLSchema#long">100</rqm_qm:weight>
+     <rqm_qm:pointsDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsDeferred>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">starttime=2026-03-26T14:31:29.607Z</rqm_qm:executionCustomProperty>
+     <oslc:instanceShape rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=32026-03-26T14:31:30.801Z2026-03-26T14:31:31.021Zcom.ibm.rqm.execution.common.state.passedfill username with 'standard_user', fill password with 'secret_sauce', click Login buttoncom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=22026-03-26T14:31:30.009Z2026-03-26T14:31:30.800Zcom.ibm.rqm.execution.common.state.passedNavigate to https://www.saucedemo.com/com.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <process:projectArea rdf:resource="https://jazz.net/sandbox01-qm/process/project-areas/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:isCurrentForBuild rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrentForBuild>
+     <rqm_process:hasWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcaseresult.workflow/com.ibm.rqm.planning.common.new"/>
+     <dcterms:creator rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:isLocked rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isLocked>
+     <oslc:serviceProvider rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/services.xml"/>
+     <rqm_qm:shortIdentifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2861</rqm_qm:shortIdentifier>
+     <oslc_qm:reportsOnTestCase rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestCase/_VMrnEVwJEfCGYIoRgUkqqw"/>
+     <dcterms:contributor rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">_gR_nQCkgEfGG4t7UU5gGkg</dcterms:identifier>
+     <rqm_process:testcaseWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcase.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:scriptStepCountSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountSkipped>
+     <rqm_qm:pointsPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPassed>
+     <rqm_qm:scriptStepCountBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountBlocked>
+     <rqm_qm:pointsInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsInconclusive>
+     <oslc_qm:status rdf:datatype="http://www.w3.org/2001/XMLSchema#string">com.ibm.rqm.execution.common.state.inprogress</oslc_qm:status>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">owner=studera</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsAttempted>
+     <rqm_qm:pointsBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsBlocked>
+     <rqm_qm:scriptStepCountPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPermFailed>
+     <oslc:shortId rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2861</oslc:shortId>
+     <dcterms:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Positive Login Test - passed</dcterms:title>
+     <rqm_qm:pointsFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsFailed>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=12026-03-26T14:31:29.615Z2026-03-26T14:31:30.007Zcom.ibm.rqm.execution.common.state.passedBefore Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:31:40.727Z</dcterms:created>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">state=com.ibm.rqm.execution.common.state.passed</rqm_qm:executionCustomProperty>
+     <rqm_qm:isRollup rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isRollup>
+     <rqm_qm:startTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:31:40.731Z</rqm_qm:startTime>
+    </oslc_qm:TestResult>
+   </rdf:RDF>
+  </content>
+ </entry>
+ <entry>
+  <id>https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_gbPp4CkgEfGG4t7UU5gGkg</id>
+  <title>Login - should show error with invalid credentials - passed</title>
+  <updated>2026-03-26T14:31:41.747Z</updated>
+  <author>
+   <uri>https://jazz.net/sandbox01-jts/users/studera</uri>
+  </author>
+  <summary>Results of a QM V2 Test Result query.</summary>
+  <link rel="alternate" href="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_gbPp4CkgEfGG4t7UU5gGkg"/>
+  <content src="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_gbPp4CkgEfGG4t7UU5gGkg" type="application/xml">
+   <rdf:RDF
+        xmlns:rqm_auto="http://jazz.net/ns/auto/rqm#"
+        xmlns:lqe="http://jazz.net/ns/lqe#"
+        xmlns:acp="http://jazz.net/ns/acp#"
+        xmlns:calm="http://jazz.net/xmlns/prod/jazz/calm/1.0/"
+        xmlns:acc="http://open-services.net/ns/core/acc#"
+        xmlns:process="http://jazz.net/ns/process#"
+        xmlns:dcterms="http://purl.org/dc/terms/"
+        xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+        xmlns:jrs="http://jazz.net/ns/jrs#"
+        xmlns:oslc_auto="http://open-services.net/ns/auto#"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:bp="http://open-services.net/ns/basicProfile#"
+        xmlns:cmx="http://open-services.net/ns/cm-x#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+        xmlns:rqm_lm="http://jazz.net/ns/qm/rqm/labmanagement#"
+        xmlns:oslc="http://open-services.net/ns/core#"
+        xmlns:owl="http://www.w3.org/2002/07/owl#"
+        xmlns:rqm_process="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/"
+        xmlns:jazz="http://jazz.net/ns/jazz#"
+        xmlns:oslc_config="http://open-services.net/ns/config#"
+        xmlns:oslc_cm="http://open-services.net/ns/cm#"
+        xmlns:xml="http://www.w3.org/XML/1998/namespace"
+        xmlns:rqm_qm="http://jazz.net/ns/qm/rqm#"
+        xmlns:oslc_qm="http://open-services.net/ns/qm#"
+        xmlns:oslc_rm="http://open-services.net/ns/rm#"
+        xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    <oslc_qm:TestResult rdf:about="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_gbPp4CkgEfGG4t7UU5gGkg">
+     <rqm_qm:shortIdentifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2862</rqm_qm:shortIdentifier>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">iterations=1</rqm_qm:executionCustomProperty>
+     <dcterms:contributor rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <dcterms:creator rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:pointsDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsDeferred>
+     <oslc_qm:producedByTestExecutionRecord rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.TestcaseExecutionRecord/_f3SBMCkgEfGG4t7UU5gGkg"/>
+     <oslc:serviceProvider rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/services.xml"/>
+     <oslc_qm:reportsOnTestPlan rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestPlan/_LogiIVwJEfCGYIoRgUkqqw"/>
+     <rqm_qm:weight rdf:datatype="http://www.w3.org/2001/XMLSchema#long">100</rqm_qm:weight>
+     <rqm_qm:pointsInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsInconclusive>
+     <oslc:shortId rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2862</oslc:shortId>
+     <rqm_qm:pointsSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsSkipped>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=12026-03-26T14:31:31.389Z2026-03-26T14:31:31.506Zcom.ibm.rqm.execution.common.state.passedBefore Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPassed>
+     <rqm_qm:stepResultsUpdateStatus rdf:resource="http://jazz.net/ns/qm/rqm#NOMODIFICATION"/>
+     <oslc:instanceShape rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult"/>
+     <rqm_qm:scriptStepCountSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountSkipped>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">weight=100</rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPermFailed>
+     <dcterms:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Login - should show error with invalid credentials - passed</dcterms:title>
+     <dcterms:relation rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/resources/_8_TkcFwFEfCGYIoRgUkqqw/executionresult/urn:com.ibm.rqm:executionresult:2862"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">owner=studera</rqm_qm:executionCustomProperty>
+     <rqm_qm:startTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:31:41.700Z</rqm_qm:startTime>
+     <rqm_qm:pointsAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsAttempted>
+     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:31:41.747Z</dcterms:modified>
+     <oslc_qm:reportsOnTestCase rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestCase/_XVcR8CguEfGG4t7UU5gGkg"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=42026-03-26T14:31:32.107Z2026-03-26T14:31:32.374Zcom.ibm.rqm.execution.common.state.passedAfter Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsBlocked>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">starttime=2026-03-26T14:31:31.387Z</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPermFailed>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=32026-03-26T14:31:31.959Z2026-03-26T14:31:32.107Zcom.ibm.rqm.execution.common.state.passedfill username with 'standard_user', fill password with 'wrong_sauce', click Login buttoncom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountAttempted>
+     <rqm_qm:isRollup rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isRollup>
+     <oslc_qm:status rdf:datatype="http://www.w3.org/2001/XMLSchema#string">com.ibm.rqm.execution.common.state.inprogress</oslc_qm:status>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">state=com.ibm.rqm.execution.common.state.passed</rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountInconclusive>
+     <rqm_qm:isLocked rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isLocked>
+     <rqm_qm:isCurrentForBuild rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrentForBuild>
+     <rqm_qm:scriptStepCountFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountFailed>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">adapterId=playwright-ietm-reporter</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">machine=localhost</rqm_qm:executionCustomProperty>
+     <rqm_qm:isCurrent rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrent>
+     <rqm_process:testplanWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testplan.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:totalPoints rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:totalPoints>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">testedby=studera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPassed>
+     <process:projectArea rdf:resource="https://jazz.net/sandbox01-qm/process/project-areas/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:verdict rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult#com.ibm.rqm.execution.common.state.inprogress"/>
+     <rqm_qm:scriptStepCount rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCount>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endtime=2026-03-26T14:31:32.355Z</rqm_qm:executionCustomProperty>
+     <acc:accessContext rdf:resource="https://jazz.net/sandbox01-qm/acclist#_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_process:testcaseWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcase.workflow/com.ibm.rqm.planning.common.new"/>
+     <acp:accessControl rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/accessControl/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:pointsFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsFailed>
+     <rqm_qm:numberOfIterations rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</rqm_qm:numberOfIterations>
+     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">_gbPp4CkgEfGG4t7UU5gGkg</dcterms:identifier>
+     <rqm_qm:testedBy rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:31:41.697Z</dcterms:created>
+     <rqm_process:hasWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcaseresult.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:scriptStepCountDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountDeferred>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=22026-03-26T14:31:31.507Z2026-03-26T14:31:31.958Zcom.ibm.rqm.execution.common.state.passedNavigate to https://www.saucedemo.com/com.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountBlocked>
+    </oslc_qm:TestResult>
+   </rdf:RDF>
+  </content>
+ </entry>
+ <entry>
+  <id>https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_ALwOICkhEfGG4t7UU5gGkg</id>
+  <title>Positive Login Test - passed</title>
+  <updated>2026-03-26T14:35:14.886Z</updated>
+  <author>
+   <uri>https://jazz.net/sandbox01-jts/users/studera</uri>
+  </author>
+  <summary>Results of a QM V2 Test Result query.</summary>
+  <link rel="alternate" href="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_ALwOICkhEfGG4t7UU5gGkg"/>
+  <content src="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_ALwOICkhEfGG4t7UU5gGkg" type="application/xml">
+   <rdf:RDF
+        xmlns:rqm_auto="http://jazz.net/ns/auto/rqm#"
+        xmlns:lqe="http://jazz.net/ns/lqe#"
+        xmlns:acp="http://jazz.net/ns/acp#"
+        xmlns:calm="http://jazz.net/xmlns/prod/jazz/calm/1.0/"
+        xmlns:acc="http://open-services.net/ns/core/acc#"
+        xmlns:process="http://jazz.net/ns/process#"
+        xmlns:dcterms="http://purl.org/dc/terms/"
+        xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+        xmlns:jrs="http://jazz.net/ns/jrs#"
+        xmlns:oslc_auto="http://open-services.net/ns/auto#"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:bp="http://open-services.net/ns/basicProfile#"
+        xmlns:cmx="http://open-services.net/ns/cm-x#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+        xmlns:rqm_lm="http://jazz.net/ns/qm/rqm/labmanagement#"
+        xmlns:oslc="http://open-services.net/ns/core#"
+        xmlns:owl="http://www.w3.org/2002/07/owl#"
+        xmlns:rqm_process="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/"
+        xmlns:jazz="http://jazz.net/ns/jazz#"
+        xmlns:oslc_config="http://open-services.net/ns/config#"
+        xmlns:oslc_cm="http://open-services.net/ns/cm#"
+        xmlns:xml="http://www.w3.org/XML/1998/namespace"
+        xmlns:rqm_qm="http://jazz.net/ns/qm/rqm#"
+        xmlns:oslc_qm="http://open-services.net/ns/qm#"
+        xmlns:oslc_rm="http://open-services.net/ns/rm#"
+        xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    <oslc_qm:TestResult rdf:about="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_ALwOICkhEfGG4t7UU5gGkg">
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endtime=2026-03-26T14:35:06.122Z</rqm_qm:executionCustomProperty>
+     <rqm_qm:numberOfIterations rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</rqm_qm:numberOfIterations>
+     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">_ALwOICkhEfGG4t7UU5gGkg</dcterms:identifier>
+     <rqm_qm:pointsDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsDeferred>
+     <rqm_qm:scriptStepCountAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountAttempted>
+     <oslc:instanceShape rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult"/>
+     <rqm_qm:pointsAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsAttempted>
+     <rqm_qm:pointsBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsBlocked>
+     <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:35:14.822Z</dcterms:created>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=32026-03-26T14:35:05.840Z2026-03-26T14:35:06.014Zcom.ibm.rqm.execution.common.state.passedfill username with 'standard_user', fill password with 'secret_sauce', click Login buttoncom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPassed>
+     <rqm_qm:isCurrent rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrent>
+     <rqm_process:testcaseWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcase.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:totalPoints rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:totalPoints>
+     <rqm_qm:scriptStepCountFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountFailed>
+     <oslc_qm:reportsOnTestCase rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestCase/_VMrnEVwJEfCGYIoRgUkqqw"/>
+     <dcterms:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Positive Login Test - passed</dcterms:title>
+     <rqm_qm:shortIdentifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2863</rqm_qm:shortIdentifier>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">state=com.ibm.rqm.execution.common.state.passed</rqm_qm:executionCustomProperty>
+     <rqm_qm:startTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:35:14.827Z</rqm_qm:startTime>
+     <oslc:serviceProvider rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/services.xml"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">starttime=2026-03-26T14:35:04.649Z</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">testedby=studera
+    </rqm_qm:executionCustomProperty>
+     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:35:14.886Z</dcterms:modified>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=42026-03-26T14:35:06.014Z2026-03-26T14:35:06.347Zcom.ibm.rqm.execution.common.state.passedAfter Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <acp:accessControl rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/accessControl/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <oslc_qm:status rdf:datatype="http://www.w3.org/2001/XMLSchema#string">com.ibm.rqm.execution.common.state.inprogress</oslc_qm:status>
+     <rqm_qm:verdict rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult#com.ibm.rqm.execution.common.state.inprogress"/>
+     <rqm_qm:pointsSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsSkipped>
+     <rqm_qm:scriptStepCountPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPermFailed>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=22026-03-26T14:35:05.049Z2026-03-26T14:35:05.840Zcom.ibm.rqm.execution.common.state.passedNavigate to https://www.saucedemo.com/com.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountBlocked>
+     <rqm_qm:isCurrentForBuild rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrentForBuild>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">iterations=1</rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPassed>
+     <dcterms:creator rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:pointsInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsInconclusive>
+     <rqm_qm:pointsFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsFailed>
+     <rqm_qm:isRollup rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isRollup>
+     <rqm_qm:scriptStepCount rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCount>
+     <rqm_process:hasWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcaseresult.workflow/com.ibm.rqm.planning.common.new"/>
+     <dcterms:contributor rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <oslc:shortId rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2863</oslc:shortId>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">adapterId=playwright-ietm-reporter</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPermFailed>
+     <rqm_process:testplanWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testplan.workflow/com.ibm.rqm.planning.common.new"/>
+     <dcterms:relation rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/resources/_8_TkcFwFEfCGYIoRgUkqqw/executionresult/urn:com.ibm.rqm:executionresult:2863"/>
+     <rqm_qm:scriptStepCountDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountDeferred>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=12026-03-26T14:35:04.654Z2026-03-26T14:35:05.048Zcom.ibm.rqm.execution.common.state.passedBefore Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountSkipped>
+     <process:projectArea rdf:resource="https://jazz.net/sandbox01-qm/process/project-areas/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:scriptStepCountInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountInconclusive>
+     <oslc_qm:producedByTestExecutionRecord rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.TestcaseExecutionRecord/_fUv74CkgEfGG4t7UU5gGkg"/>
+     <rqm_qm:testedBy rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <acc:accessContext rdf:resource="https://jazz.net/sandbox01-qm/acclist#_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:isLocked rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isLocked>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">owner=studera</rqm_qm:executionCustomProperty>
+     <rqm_qm:stepResultsUpdateStatus rdf:resource="http://jazz.net/ns/qm/rqm#NOMODIFICATION"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">machine=localhost</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">weight=100</rqm_qm:executionCustomProperty>
+     <rqm_qm:weight rdf:datatype="http://www.w3.org/2001/XMLSchema#long">100</rqm_qm:weight>
+     <oslc_qm:reportsOnTestPlan rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestPlan/_LogiIVwJEfCGYIoRgUkqqw"/>
+    </oslc_qm:TestResult>
+   </rdf:RDF>
+  </content>
+ </entry>
+ <entry>
+  <id>https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_AU90gCkhEfGG4t7UU5gGkg</id>
+  <title>Login - should show error with invalid credentials - passed</title>
+  <updated>2026-03-26T14:35:15.851Z</updated>
+  <author>
+   <uri>https://jazz.net/sandbox01-jts/users/studera</uri>
+  </author>
+  <summary>Results of a QM V2 Test Result query.</summary>
+  <link rel="alternate" href="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_AU90gCkhEfGG4t7UU5gGkg"/>
+  <content src="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_AU90gCkhEfGG4t7UU5gGkg" type="application/xml">
+   <rdf:RDF
+        xmlns:rqm_auto="http://jazz.net/ns/auto/rqm#"
+        xmlns:lqe="http://jazz.net/ns/lqe#"
+        xmlns:acp="http://jazz.net/ns/acp#"
+        xmlns:calm="http://jazz.net/xmlns/prod/jazz/calm/1.0/"
+        xmlns:acc="http://open-services.net/ns/core/acc#"
+        xmlns:process="http://jazz.net/ns/process#"
+        xmlns:dcterms="http://purl.org/dc/terms/"
+        xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+        xmlns:jrs="http://jazz.net/ns/jrs#"
+        xmlns:oslc_auto="http://open-services.net/ns/auto#"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:bp="http://open-services.net/ns/basicProfile#"
+        xmlns:cmx="http://open-services.net/ns/cm-x#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+        xmlns:rqm_lm="http://jazz.net/ns/qm/rqm/labmanagement#"
+        xmlns:oslc="http://open-services.net/ns/core#"
+        xmlns:owl="http://www.w3.org/2002/07/owl#"
+        xmlns:rqm_process="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/"
+        xmlns:jazz="http://jazz.net/ns/jazz#"
+        xmlns:oslc_config="http://open-services.net/ns/config#"
+        xmlns:oslc_cm="http://open-services.net/ns/cm#"
+        xmlns:xml="http://www.w3.org/XML/1998/namespace"
+        xmlns:rqm_qm="http://jazz.net/ns/qm/rqm#"
+        xmlns:oslc_qm="http://open-services.net/ns/qm#"
+        xmlns:oslc_rm="http://open-services.net/ns/rm#"
+        xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    <oslc_qm:TestResult rdf:about="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_AU90gCkhEfGG4t7UU5gGkg">
+     <rqm_qm:pointsFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsFailed>
+     <oslc_qm:producedByTestExecutionRecord rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.TestcaseExecutionRecord/_f3SBMCkgEfGG4t7UU5gGkg"/>
+     <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:35:15.789Z</dcterms:created>
+     <oslc:shortId rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2864</oslc:shortId>
+     <rqm_qm:verdict rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult#com.ibm.rqm.execution.common.state.inprogress"/>
+     <rqm_qm:stepResultsUpdateStatus rdf:resource="http://jazz.net/ns/qm/rqm#NOMODIFICATION"/>
+     <rqm_qm:shortIdentifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2864</rqm_qm:shortIdentifier>
+     <rqm_qm:scriptStepCountSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountSkipped>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=22026-03-26T14:35:06.458Z2026-03-26T14:35:06.908Zcom.ibm.rqm.execution.common.state.passedNavigate to https://www.saucedemo.com/com.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountInconclusive>
+     <rqm_qm:isCurrentForBuild rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrentForBuild>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=32026-03-26T14:35:06.908Z2026-03-26T14:35:07.008Zcom.ibm.rqm.execution.common.state.passedfill username with 'standard_user', fill password with 'wrong_sauce', click Login buttoncom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <dcterms:creator rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_process:testcaseWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcase.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:pointsSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsSkipped>
+     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:35:15.851Z</dcterms:modified>
+     <rqm_qm:scriptStepCountPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPassed>
+     <oslc:serviceProvider rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/services.xml"/>
+     <dcterms:contributor rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">iterations=1</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsDeferred>
+     <rqm_qm:testedBy rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:isCurrent rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrent>
+     <rqm_qm:isLocked rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isLocked>
+     <rqm_qm:scriptStepCountDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountDeferred>
+     <oslc_qm:status rdf:datatype="http://www.w3.org/2001/XMLSchema#string">com.ibm.rqm.execution.common.state.inprogress</oslc_qm:status>
+     <rqm_qm:scriptStepCountBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountBlocked>
+     <rqm_qm:pointsAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsAttempted>
+     <oslc:instanceShape rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult"/>
+     <dcterms:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Login - should show error with invalid credentials - passed</dcterms:title>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">adapterId=playwright-ietm-reporter</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPassed>
+     <oslc_qm:reportsOnTestCase rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestCase/_XVcR8CguEfGG4t7UU5gGkg"/>
+     <rqm_qm:scriptStepCount rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCount>
+     <rqm_qm:totalPoints rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:totalPoints>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">state=com.ibm.rqm.execution.common.state.passed</rqm_qm:executionCustomProperty>
+     <rqm_qm:isRollup rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isRollup>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">starttime=2026-03-26T14:35:06.348Z</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=12026-03-26T14:35:06.349Z2026-03-26T14:35:06.457Zcom.ibm.rqm.execution.common.state.passedBefore Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endtime=2026-03-26T14:35:07.232Z</rqm_qm:executionCustomProperty>
+     <oslc_qm:reportsOnTestPlan rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestPlan/_LogiIVwJEfCGYIoRgUkqqw"/>
+     <acc:accessContext rdf:resource="https://jazz.net/sandbox01-qm/acclist#_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:pointsPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPermFailed>
+     <rqm_qm:scriptStepCountFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountFailed>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">machine=localhost</rqm_qm:executionCustomProperty>
+     <rqm_qm:startTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:35:15.794Z</rqm_qm:startTime>
+     <acp:accessControl rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/accessControl/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:numberOfIterations rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</rqm_qm:numberOfIterations>
+     <rqm_qm:scriptStepCountAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountAttempted>
+     <rqm_qm:scriptStepCountPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPermFailed>
+     <rqm_process:testplanWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testplan.workflow/com.ibm.rqm.planning.common.new"/>
+     <dcterms:relation rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/resources/_8_TkcFwFEfCGYIoRgUkqqw/executionresult/urn:com.ibm.rqm:executionresult:2864"/>
+     <rqm_qm:pointsInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsInconclusive>
+     <rqm_qm:weight rdf:datatype="http://www.w3.org/2001/XMLSchema#long">100</rqm_qm:weight>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">weight=100</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsBlocked>
+     <process:projectArea rdf:resource="https://jazz.net/sandbox01-qm/process/project-areas/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_process:hasWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcaseresult.workflow/com.ibm.rqm.planning.common.new"/>
+     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">_AU90gCkhEfGG4t7UU5gGkg</dcterms:identifier>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">owner=studera</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">testedby=studera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=42026-03-26T14:35:07.008Z2026-03-26T14:35:07.246Zcom.ibm.rqm.execution.common.state.passedAfter Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+    </oslc_qm:TestResult>
+   </rdf:RDF>
+  </content>
+ </entry>
+ <entry>
+  <id>https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_Uayd0CkiEfGG4t7UU5gGkg</id>
+  <title>Positive Login Test - passed</title>
+  <updated>2026-03-26T14:44:40.241Z</updated>
+  <author>
+   <uri>https://jazz.net/sandbox01-jts/users/studera</uri>
+  </author>
+  <summary>Results of a QM V2 Test Result query.</summary>
+  <link rel="alternate" href="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_Uayd0CkiEfGG4t7UU5gGkg"/>
+  <content src="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_Uayd0CkiEfGG4t7UU5gGkg" type="application/xml">
+   <rdf:RDF
+        xmlns:rqm_auto="http://jazz.net/ns/auto/rqm#"
+        xmlns:lqe="http://jazz.net/ns/lqe#"
+        xmlns:acp="http://jazz.net/ns/acp#"
+        xmlns:calm="http://jazz.net/xmlns/prod/jazz/calm/1.0/"
+        xmlns:acc="http://open-services.net/ns/core/acc#"
+        xmlns:process="http://jazz.net/ns/process#"
+        xmlns:dcterms="http://purl.org/dc/terms/"
+        xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+        xmlns:jrs="http://jazz.net/ns/jrs#"
+        xmlns:oslc_auto="http://open-services.net/ns/auto#"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:bp="http://open-services.net/ns/basicProfile#"
+        xmlns:cmx="http://open-services.net/ns/cm-x#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+        xmlns:rqm_lm="http://jazz.net/ns/qm/rqm/labmanagement#"
+        xmlns:oslc="http://open-services.net/ns/core#"
+        xmlns:owl="http://www.w3.org/2002/07/owl#"
+        xmlns:rqm_process="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/"
+        xmlns:jazz="http://jazz.net/ns/jazz#"
+        xmlns:oslc_config="http://open-services.net/ns/config#"
+        xmlns:oslc_cm="http://open-services.net/ns/cm#"
+        xmlns:xml="http://www.w3.org/XML/1998/namespace"
+        xmlns:rqm_qm="http://jazz.net/ns/qm/rqm#"
+        xmlns:oslc_qm="http://open-services.net/ns/qm#"
+        xmlns:oslc_rm="http://open-services.net/ns/rm#"
+        xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    <oslc_qm:TestResult rdf:about="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_Uayd0CkiEfGG4t7UU5gGkg">
+     <rqm_qm:isCurrentForBuild rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrentForBuild>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">weight=100</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsInconclusive>
+     <rqm_qm:scriptStepCountInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountInconclusive>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">adapterId=playwright-ietm-reporter</rqm_qm:executionCustomProperty>
+     <rqm_qm:shortIdentifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2865</rqm_qm:shortIdentifier>
+     <rqm_qm:pointsPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPassed>
+     <rqm_qm:verdict rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult#com.ibm.rqm.execution.common.state.inprogress"/>
+     <rqm_qm:scriptStepCountSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountSkipped>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">starttime=2026-03-26T14:44:27.024Z</rqm_qm:executionCustomProperty>
+     <oslc_qm:producedByTestExecutionRecord rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.TestcaseExecutionRecord/_fUv74CkgEfGG4t7UU5gGkg"/>
+     <dcterms:creator rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=42026-03-26T14:44:32.430Z2026-03-26T14:44:32.731Zcom.ibm.rqm.execution.common.state.passedAfter Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_process:testcaseWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcase.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:weight rdf:datatype="http://www.w3.org/2001/XMLSchema#long">100</rqm_qm:weight>
+     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:44:40.241Z</dcterms:modified>
+     <rqm_qm:scriptStepCountBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountBlocked>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endtime=2026-03-26T14:44:32.415Z</rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPassed>
+     <rqm_qm:pointsDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsDeferred>
+     <oslc_qm:status rdf:datatype="http://www.w3.org/2001/XMLSchema#string">com.ibm.rqm.execution.common.state.inprogress</oslc_qm:status>
+     <rqm_qm:isCurrent rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</rqm_qm:isCurrent>
+     <dcterms:contributor rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:testedBy rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">machine=localhost</rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPermFailed>
+     <dcterms:relation rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/resources/_8_TkcFwFEfCGYIoRgUkqqw/executionresult/urn:com.ibm.rqm:executionresult:2865"/>
+     <rqm_qm:isRollup rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isRollup>
+     <acp:accessControl rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/accessControl/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_process:testplanWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testplan.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:pointsSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsSkipped>
+     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">_Uayd0CkiEfGG4t7UU5gGkg</dcterms:identifier>
+     <rqm_qm:stepResultsUpdateStatus rdf:resource="http://jazz.net/ns/qm/rqm#NOMODIFICATION"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">state=com.ibm.rqm.execution.common.state.passed</rqm_qm:executionCustomProperty>
+     <process:projectArea rdf:resource="https://jazz.net/sandbox01-qm/process/project-areas/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:totalPoints rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:totalPoints>
+     <rqm_qm:pointsPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPermFailed>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=32026-03-26T14:44:32.221Z2026-03-26T14:44:32.429Zcom.ibm.rqm.execution.common.state.passedfill username with 'standard_user', fill password with 'secret_sauce', click Login buttoncom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountDeferred>
+     <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:44:40.112Z</dcterms:created>
+     <oslc:instanceShape rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult"/>
+     <rqm_qm:scriptStepCount rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCount>
+     <rqm_qm:numberOfIterations rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</rqm_qm:numberOfIterations>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">owner=studera</rqm_qm:executionCustomProperty>
+     <acc:accessContext rdf:resource="https://jazz.net/sandbox01-qm/acclist#_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <oslc:shortId rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2865</oslc:shortId>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">iterations=1</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">testedby=studera
+    </rqm_qm:executionCustomProperty>
+     <rqm_process:hasWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcaseresult.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">currentstate=com.ibm.rqm.execution.common.state.complete</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsBlocked>
+     <dcterms:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Positive Login Test - passed</dcterms:title>
+     <oslc_qm:reportsOnTestPlan rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestPlan/_LogiIVwJEfCGYIoRgUkqqw"/>
+     <rqm_qm:startTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:44:40.116Z</rqm_qm:startTime>
+     <rqm_qm:pointsFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsFailed>
+     <oslc_qm:reportsOnTestCase rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestCase/_VMrnEVwJEfCGYIoRgUkqqw"/>
+     <rqm_qm:pointsAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsAttempted>
+     <oslc:serviceProvider rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/services.xml"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=12026-03-26T14:44:27.031Z2026-03-26T14:44:27.517Zcom.ibm.rqm.execution.common.state.passedBefore Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountFailed>
+     <rqm_qm:isLocked rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isLocked>
+     <rqm_qm:scriptStepCountAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountAttempted>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=22026-03-26T14:44:27.519Z2026-03-26T14:44:32.220Zcom.ibm.rqm.execution.common.state.passedNavigate to https://www.saucedemo.com/com.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+    </oslc_qm:TestResult>
+   </rdf:RDF>
+  </content>
+ </entry>
+ <entry>
+  <id>https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_UkNfkCkiEfGG4t7UU5gGkg</id>
+  <title>Login - should show error with invalid credentials - passed</title>
+  <updated>2026-03-26T14:44:41.163Z</updated>
+  <author>
+   <uri>https://jazz.net/sandbox01-jts/users/studera</uri>
+  </author>
+  <summary>Results of a QM V2 Test Result query.</summary>
+  <link rel="alternate" href="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_UkNfkCkiEfGG4t7UU5gGkg"/>
+  <content src="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_UkNfkCkiEfGG4t7UU5gGkg" type="application/xml">
+   <rdf:RDF
+        xmlns:rqm_auto="http://jazz.net/ns/auto/rqm#"
+        xmlns:lqe="http://jazz.net/ns/lqe#"
+        xmlns:acp="http://jazz.net/ns/acp#"
+        xmlns:calm="http://jazz.net/xmlns/prod/jazz/calm/1.0/"
+        xmlns:acc="http://open-services.net/ns/core/acc#"
+        xmlns:process="http://jazz.net/ns/process#"
+        xmlns:dcterms="http://purl.org/dc/terms/"
+        xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+        xmlns:jrs="http://jazz.net/ns/jrs#"
+        xmlns:oslc_auto="http://open-services.net/ns/auto#"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:bp="http://open-services.net/ns/basicProfile#"
+        xmlns:cmx="http://open-services.net/ns/cm-x#"
+        xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+        xmlns:rqm_lm="http://jazz.net/ns/qm/rqm/labmanagement#"
+        xmlns:oslc="http://open-services.net/ns/core#"
+        xmlns:owl="http://www.w3.org/2002/07/owl#"
+        xmlns:rqm_process="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/"
+        xmlns:jazz="http://jazz.net/ns/jazz#"
+        xmlns:oslc_config="http://open-services.net/ns/config#"
+        xmlns:oslc_cm="http://open-services.net/ns/cm#"
+        xmlns:xml="http://www.w3.org/XML/1998/namespace"
+        xmlns:rqm_qm="http://jazz.net/ns/qm/rqm#"
+        xmlns:oslc_qm="http://open-services.net/ns/qm#"
+        xmlns:oslc_rm="http://open-services.net/ns/rm#"
+        xmlns:foaf="http://xmlns.com/foaf/0.1/">
+    <oslc_qm:TestResult rdf:about="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult/_UkNfkCkiEfGG4t7UU5gGkg">
+     <rqm_qm:scriptStepCountBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountBlocked>
+     <oslc:instanceShape rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult"/>
+     <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:44:41.163Z</dcterms:modified>
+     <oslc_qm:reportsOnTestPlan rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestPlan/_LogiIVwJEfCGYIoRgUkqqw"/>
+     <rqm_qm:pointsDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsDeferred>
+     <rqm_qm:stepResultsUpdateStatus rdf:resource="http://jazz.net/ns/qm/rqm#NOMODIFICATION"/>
+     <rqm_qm:pointsInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsInconclusive>
+     <oslc_qm:status rdf:datatype="http://www.w3.org/2001/XMLSchema#string">com.ibm.rqm.execution.common.state.inprogress</oslc_qm:status>
+     <rqm_qm:startTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:44:41.106Z</rqm_qm:startTime>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">weight=100</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=22026-03-26T14:44:32.855Z2026-03-26T14:44:33.373Zcom.ibm.rqm.execution.common.state.passedNavigate to https://www.saucedemo.com/com.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:verdict rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/shape/resource/com.ibm.rqm.execution.ExecutionResult#com.ibm.rqm.execution.common.state.inprogress"/>
+     <rqm_process:hasWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcaseresult.workflow/com.ibm.rqm.planning.common.new"/>
+     <dcterms:relation rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/resources/_8_TkcFwFEfCGYIoRgUkqqw/executionresult/urn:com.ibm.rqm:executionresult:2866"/>
+     <rqm_qm:numberOfIterations rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1</rqm_qm:numberOfIterations>
+     <dcterms:creator rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:scriptStepCountPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPassed>
+     <dcterms:created rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T14:44:41.101Z</dcterms:created>
+     <rqm_qm:scriptStepCountAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountAttempted>
+     <rqm_qm:shortIdentifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2866</rqm_qm:shortIdentifier>
+     <rqm_process:testplanWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testplan.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:pointsSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsSkipped>
+     <rqm_qm:scriptStepCount rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCount>
+     <rqm_qm:isCurrentForBuild rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isCurrentForBuild>
+     <process:projectArea rdf:resource="https://jazz.net/sandbox01-qm/process/project-areas/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_process:testcaseWorkflowState rdf:resource="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/process-info/_8_TkcFwFEfCGYIoRgUkqqw/workflowstate/com.ibm.rqm.process.testcase.workflow/com.ibm.rqm.planning.common.new"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">iterations=1</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=32026-03-26T14:44:33.374Z2026-03-26T14:44:33.584Zcom.ibm.rqm.execution.common.state.passedfill username with 'standard_user', fill password with 'wrong_sauce', click Login buttoncom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">testedby=studera
+    </rqm_qm:executionCustomProperty>
+     <oslc_qm:producedByTestExecutionRecord rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.TestcaseExecutionRecord/_f3SBMCkgEfGG4t7UU5gGkg"/>
+     <rqm_qm:scriptStepCountInconclusive rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountInconclusive>
+     <rqm_qm:pointsBlocked rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsBlocked>
+     <rqm_qm:isRollup rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isRollup>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=12026-03-26T14:44:32.733Z2026-03-26T14:44:32.854Zcom.ibm.rqm.execution.common.state.passedBefore Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endtime=2026-03-26T14:44:33.789Z</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsFailed>
+     <rqm_qm:scriptStepCountFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountFailed>
+     <dcterms:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Login - should show error with invalid credentials - passed</dcterms:title>
+     <rqm_qm:testedBy rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <rqm_qm:weight rdf:datatype="http://www.w3.org/2001/XMLSchema#long">100</rqm_qm:weight>
+     <rqm_qm:scriptStepCountPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountPermFailed>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">state=com.ibm.rqm.execution.common.state.passed</rqm_qm:executionCustomProperty>
+     <rqm_qm:isCurrent rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</rqm_qm:isCurrent>
+     <dcterms:contributor rdf:resource="https://jazz.net/sandbox01-jts/users/studera"/>
+     <oslc:serviceProvider rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/services.xml"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">stepResult=42026-03-26T14:44:33.584Z2026-03-26T14:44:33.805Zcom.ibm.rqm.execution.common.state.passedAfter Hookscom.ibm.rqm.execution.common.elementtype.executionstudera
+    </rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsAttempted rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsAttempted>
+     <rqm_qm:totalPoints rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:totalPoints>
+     <dcterms:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">_UkNfkCkiEfGG4t7UU5gGkg</dcterms:identifier>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">currentstate=com.ibm.rqm.execution.common.state.complete</rqm_qm:executionCustomProperty>
+     <oslc:shortId rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2866</oslc:shortId>
+     <rqm_qm:pointsPermFailed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPermFailed>
+     <acc:accessContext rdf:resource="https://jazz.net/sandbox01-qm/acclist#_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <acp:accessControl rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/accessControl/_8_TkcFwFEfCGYIoRgUkqqw"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">adapterId=playwright-ietm-reporter</rqm_qm:executionCustomProperty>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">starttime=2026-03-26T14:44:32.732Z</rqm_qm:executionCustomProperty>
+     <oslc_qm:reportsOnTestCase rdf:resource="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.planning.VersionedTestCase/_XVcR8CguEfGG4t7UU5gGkg"/>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">owner=studera</rqm_qm:executionCustomProperty>
+     <rqm_qm:scriptStepCountSkipped rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountSkipped>
+     <rqm_qm:isLocked rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</rqm_qm:isLocked>
+     <rqm_qm:executionCustomProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">machine=localhost</rqm_qm:executionCustomProperty>
+     <rqm_qm:pointsPassed rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:pointsPassed>
+     <rqm_qm:scriptStepCountDeferred rdf:datatype="http://www.w3.org/2001/XMLSchema#long">0</rqm_qm:scriptStepCountDeferred>
+    </oslc_qm:TestResult>
+   </rdf:RDF>
+  </content>
+ </entry>
+ <updated>2026-03-26T14:59:42.422Z</updated>
+ <author>
+  <name>ETM Client</name>
+ </author>
+ <summary>Results of a QM V2 Test Result query.</summary>
+ <link rel="self" href="https://jazz.net/sandbox01-qm/oslc_qm/contexts/_8_TkcFwFEfCGYIoRgUkqqw/resources/com.ibm.rqm.execution.ExecutionResult"/>
+ <rqm_qm:totalCount xmlns:rqm_qm="http://jazz.net/ns/qm/rqm#">6</rqm_qm:totalCount>
+</feed>

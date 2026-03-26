@@ -552,7 +552,7 @@ export class IETMClient {
 
   /**
    * Create execution result
-   * 
+   *
    * @param result Execution result details
    * @returns Created execution result ID
    */
@@ -568,7 +568,8 @@ export class IETMClient {
 
     console.log(`Creating execution result at: ${executionResultUrl}`);
 
-    // Post execution result
+    // STEP 1: POST to create execution result
+    // Note: IETM ignores the state on POST and sets it to "inprogress" by default
     const response = await this.authManager.executeRequest<string>({
       method: 'POST',
       url: executionResultUrl,
@@ -580,19 +581,75 @@ export class IETMClient {
       data: xml,
     });
 
-    // Extract created resource URL from response
+    // Extract created resource ID from response
     const parsed = parseXml(response);
-    const resultNode = findFirstNodeByTag(parsed, 'rqm:ExecutionResult') ||
-                       findFirstNodeByTag(parsed, 'ns2:ExecutionResult');
+    const resultIdNode = findFirstNodeByTag(parsed, 'ns2:resultId') ||
+                         findFirstNodeByTag(parsed, 'resultId');
     
-    if (!resultNode) {
-      throw new Error('Failed to parse execution result response');
+    if (!resultIdNode) {
+      throw new Error('Failed to extract execution result ID from response');
     }
 
-    const resourceUrl = resultNode['@_rdf:about'] || resultNode['@_about'] || '';
-    const resultId = resourceUrl.split('/').pop() || resourceUrl;
+    const resultId = getTextContent(resultIdNode);
+    const resultUrl = `${basePath}/executionresult/urn:com.ibm.rqm:executionresult:${resultId}`;
 
-    console.log(`✓ Execution result created: ${resultId}`);
+    console.log(`✓ Execution result created with ID: ${resultId}`);
+
+    // STEP 2: GET the created execution result back from IETM
+    console.log(`Fetching created execution result to update state...`);
+    const createdXml = await this.authManager.executeRequest<string>({
+      method: 'GET',
+      url: resultUrl,
+      headers: {
+        'Accept': 'application/rdf+xml',
+        'OSLC-Core-Version': '2.0',
+      },
+    });
+
+    // STEP 3: Modify the XML to set the correct state
+    // Parse the XML and update the state element
+    const createdParsed = parseXml(createdXml);
+    const createdResultNode = findFirstNodeByTag(createdParsed, 'ns2:executionresult') ||
+                              findFirstNodeByTag(createdParsed, 'executionresult');
+    
+    if (!createdResultNode) {
+      console.warn('Could not find execution result node in GET response, skipping state update');
+      return resultId;
+    }
+
+    // Find and update the state element
+    const stateNode = findFirstNodeByTag(createdResultNode, 'ns2:state') ||
+                      findFirstNodeByTag(createdResultNode, 'state');
+    
+    if (stateNode) {
+      // Update the state to the correct value
+      const desiredState = result.verdict === 'passed' ? 'com.ibm.rqm.execution.common.state.passed' :
+                          result.verdict === 'failed' ? 'com.ibm.rqm.execution.common.state.failed' :
+                          result.verdict === 'blocked' ? 'com.ibm.rqm.execution.common.state.blocked' :
+                          'com.ibm.rqm.execution.common.state.inconclusive';
+      
+      stateNode['#text'] = desiredState;
+      
+      // STEP 4: PUT the modified XML back to update the execution result
+      const updatedXml = buildXml(createdParsed);
+      
+      console.log(`Updating execution result state to: ${result.verdict}`);
+      await this.authManager.executeRequest<string>({
+        method: 'PUT',
+        url: resultUrl,
+        headers: {
+          'Content-Type': 'application/rdf+xml',
+          'Accept': 'application/rdf+xml',
+          'OSLC-Core-Version': '2.0',
+        },
+        data: updatedXml,
+      });
+      
+      console.log(`✓ Execution result state updated successfully`);
+    } else {
+      console.warn('Could not find state element in execution result, skipping state update');
+    }
+
     return resultId;
   }
 
