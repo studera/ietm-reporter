@@ -252,6 +252,26 @@ export class IETMReporter implements Reporter {
 
     console.log('[IETM Reporter] Results by status:', statusCounts);
 
+    // Now build execution results for tests with IETM mappings
+    // The client should be fully initialized by now
+    for (const collectedResult of this.results) {
+      if (collectedResult.testCaseId && !collectedResult.executionResult) {
+        try {
+          collectedResult.executionResult = await this.buildExecutionResult(
+            collectedResult.test,
+            collectedResult.result,
+            collectedResult.testCaseId,
+            collectedResult.artifacts
+          );
+        } catch (error) {
+          console.error(
+            `[IETM Reporter] Failed to build execution result for ${collectedResult.test.title}:`,
+            error
+          );
+        }
+      }
+    }
+
     // Save results to file
     await this.saveResultsToFile();
 
@@ -353,9 +373,9 @@ export class IETMReporter implements Reporter {
     const baseUrl = this.config?.server?.baseUrl || '';
     const testCaseUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/testcase/urn:com.ibm.rqm:testcase:${testCaseId}`;
 
-    // For now, use a placeholder for execution work item
-    // In a real implementation, this would be fetched or created
-    const executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:placeholder`;
+    // Use TCER ID 1829 for now
+    // TODO: Query the right TCER based on test case ID (see Java implementation)
+    const executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:1829`;
 
     const executionResult: ExecutionResult = {
       title: `${test.title} - ${result.status}`,
@@ -495,19 +515,26 @@ export class IETMReporter implements Reporter {
 
       for (const result of batch) {
         try {
-          // Build XML
+          // Build XML using ExecutionResultBuilder (proper IETM format)
           const builder = new ExecutionResultBuilder(result.executionResult!);
           const xml = builder.build();
 
-          // TODO: Upload to IETM using client
-          // For now, just save XML to file
+          // Save XML to file for debugging
           const xmlPath = path.join(
             this.options.outputDir,
             `execution-result-${result.testCaseId}.xml`
           );
           fs.writeFileSync(xmlPath, xml);
 
-          console.log(`[IETM Reporter] ✓ Uploaded result for test case ${result.testCaseId}`);
+          // Upload XML directly to IETM
+          const executionResultId = await this.uploadExecutionResultXml(
+            result.testCaseId!,
+            xml
+          );
+
+          console.log(
+            `[IETM Reporter] ✓ Uploaded result for test case ${result.testCaseId} - IETM Execution Result ID: ${executionResultId}`
+          );
           successCount++;
         } catch (error) {
           console.error(
@@ -522,6 +549,81 @@ export class IETMReporter implements Reporter {
     console.log(
       `[IETM Reporter] Upload complete: ${successCount} succeeded, ${failureCount} failed`
     );
+  }
+
+  /**
+   * Upload execution result XML directly to IETM
+   * This bypasses the IETMClient's simplified interface and posts the full XML
+   */
+  private async uploadExecutionResultXml(testCaseId: string, xml: string): Promise<string> {
+    if (!this.client) {
+      throw new Error('IETM client not initialized');
+    }
+
+    // Get the discovered services to build the URL
+    const services = this.client.getDiscoveredServices();
+    if (!services) {
+      throw new Error('Services not discovered');
+    }
+
+    const executionResultUrl = `${services.basePath}/executionresult`;
+    
+    console.log(`Creating execution result at: ${executionResultUrl}`);
+
+    // Post execution result XML directly
+    const response = await (this.client as any).authManager.executeRequest({
+      method: 'POST',
+      url: executionResultUrl,
+      headers: {
+        'Content-Type': 'application/rdf+xml',
+        'Accept': 'application/rdf+xml',
+        'OSLC-Core-Version': '2.0',
+      },
+      data: xml,
+    }) as string;
+
+    // Extract created resource URL from response
+    const { parseXml, findFirstNodeByTag } = require('../utils/XmlParser');
+    
+    try {
+      const parsed = parseXml(response);
+      
+      // IETM returns an Atom feed with resultId
+      const resultIdNode = findFirstNodeByTag(parsed, 'rqm:resultId') ||
+                           findFirstNodeByTag(parsed, 'resultId');
+      
+      if (resultIdNode) {
+        // Extract the text content of the resultId node
+        const resultId = typeof resultIdNode === 'object' && '#text' in resultIdNode
+          ? resultIdNode['#text']
+          : resultIdNode;
+        
+        console.log(`[IETM Reporter] ✓ Execution result created with ID: ${resultId}`);
+        return String(resultId);
+      }
+      
+      // Fallback: try RDF format
+      const resultNode = findFirstNodeByTag(parsed, 'executionresult') ||
+                         findFirstNodeByTag(parsed, 'ns2:executionresult') ||
+                         findFirstNodeByTag(parsed, 'rqm:executionresult') ||
+                         findFirstNodeByTag(parsed, 'ExecutionResult');
+      
+      if (resultNode) {
+        const resourceUrl = resultNode['@_rdf:about'] || resultNode['@_about'] || '';
+        if (resourceUrl) {
+          const resultId = resourceUrl.split('/').pop() || resourceUrl;
+          console.log(`[IETM Reporter] ✓ Execution result created with ID: ${resultId}`);
+          return resultId;
+        }
+      }
+      
+      console.log('[IETM Reporter] Response XML:', response.substring(0, 500));
+      throw new Error('Failed to parse execution result response - no resultId found');
+    } catch (error) {
+      console.error('[IETM Reporter] Failed to parse response:', error);
+      console.log('[IETM Reporter] Response (first 1000 chars):', response.substring(0, 1000));
+      throw error;
+    }
   }
 }
 
