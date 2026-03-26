@@ -1,5 +1,5 @@
 /**
- * Basic example Playwright tests with IETM reporter
+ * Example Playwright tests with IETM reporter annotations
  * Tests for https://www.saucedemo.com/
  */
 
@@ -62,6 +62,12 @@ test.describe('Login Tests', () => {
       await expect(errorMessage).toBeVisible();
       await expect(errorMessage).toContainText('Username and password do not match');
     });
+  });
+
+  test('test without IETM mapping', async ({ page }) => {
+    // This test will be collected but not uploaded to IETM
+    await page.goto('https://www.saucedemo.com/');
+    await expect(page).toHaveTitle(/Swag Labs/);
   });
 });
 
