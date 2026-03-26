@@ -373,9 +373,26 @@ export class IETMReporter implements Reporter {
     const baseUrl = this.config?.server?.baseUrl || '';
     const testCaseUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/testcase/urn:com.ibm.rqm:testcase:${testCaseId}`;
 
-    // Use TCER ID 1829 for now
-    // TODO: Query the right TCER based on test case ID (see Java implementation)
-    const executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:1829`;
+    // Query TCER (Test Case Execution Record) for this test case
+    let executionWorkItemUrl: string;
+    try {
+      const tcers = await this.client!.getTestExecutionRecords(testCaseId);
+      
+      if (tcers && tcers.length > 0 && tcers[0]) {
+        // Use the first TCER found (most recent or active)
+        const tcerId = tcers[0].id;
+        executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:${tcerId}`;
+        console.log(`[IETM Reporter] Found TCER ${tcerId} for test case ${testCaseId}`);
+      } else {
+        // Fallback to hardcoded TCER ID 1829 if no TCER found
+        console.warn(`[IETM Reporter] No TCER found for test case ${testCaseId}, using fallback TCER 1829`);
+        executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:1829`;
+      }
+    } catch (error) {
+      // OSLC query may fail due to server limitations or query format issues
+      console.warn(`[IETM Reporter] TCER query failed for test case ${testCaseId}, using fallback TCER 1829`);
+      executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:1829`;
+    }
 
     const executionResult: ExecutionResult = {
       title: `${test.title} - ${result.status}`,
