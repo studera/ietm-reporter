@@ -10,11 +10,20 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Login Tests - IETM Integration', () => {
+  // Configure test plan for this test suite
+  test.beforeAll(async () => {
+    // Test plan 987: IT1-System Test
+  });
+
   test('Positive Login Test', async ({ page }) => {
-    // Map to IETM test case 2218
+    // Map to IETM test case 2218 and test plan 987
     test.info().annotations.push({
       type: 'ietm-test-case',
       description: '2218',
+    });
+    test.info().annotations.push({
+      type: 'ietm-test-plan',
+      description: '987',
     });
 
     await test.step('Navigate to https://www.saucedemo.com/', async () => {
@@ -40,10 +49,14 @@ test.describe('Login Tests - IETM Integration', () => {
   });
 
   test('Login - should show error with invalid credentials', async ({ page }) => {
-    // Map to IETM test case 7117
+    // Map to IETM test case 7117 and test plan 987
     test.info().annotations.push({
       type: 'ietm-test-case',
       description: '7117',
+    });
+    test.info().annotations.push({
+      type: 'ietm-test-plan',
+      description: '987',
     });
 
     await test.step('Navigate to https://www.saucedemo.com/', async () => {

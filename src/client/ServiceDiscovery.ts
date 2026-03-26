@@ -256,6 +256,17 @@ export class ServiceDiscovery {
   }
 
   /**
+   * Build test plan URL
+   *
+   * @param testPlanId Test plan ID (numeric or URN)
+   * @returns Full test plan URL
+   */
+  buildTestPlanUrl(testPlanId: string): string {
+    const id = testPlanId.startsWith('urn:') ? testPlanId : `urn:com.ibm.rqm:testplan:${testPlanId}`;
+    return `${this.getBasePath()}/testplan/${id}`;
+  }
+
+  /**
    * Build execution work item URL
    *
    * @param executionWorkItemId Execution work item ID

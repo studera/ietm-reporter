@@ -74,6 +74,7 @@ export interface CollectedTestResult {
 export class IETMReporter implements Reporter {
   private options: Required<IETMReporterOptions>;
   private client?: IETMClient;
+  private clientInitialized: Promise<void> | null = null;
   private results: CollectedTestResult[] = [];
   private startTime?: Date;
   private config?: any;
@@ -96,23 +97,14 @@ export class IETMReporter implements Reporter {
    * Called once before running tests
    */
   async onBegin(config: FullConfig, suite: Suite): Promise<void> {
-    if (!this.options.enabled) {
-      console.log('[IETM Reporter] Disabled');
-      return;
-    }
+    if (!this.options.enabled) return;
 
     this.startTime = new Date();
-    const testCount = suite.allTests().length;
-    
-    console.log(`[IETM Reporter] Starting test run with ${testCount} tests`);
     
     // Load IETM configuration
     try {
       if (fs.existsSync(this.options.configPath)) {
         this.config = loadConfig(this.options.configPath);
-        console.log('[IETM Reporter] Configuration loaded');
-      } else {
-        console.warn(`[IETM Reporter] Config file not found: ${this.options.configPath}`);
       }
     } catch (error) {
       console.error('[IETM Reporter] Failed to load configuration:', error);
@@ -125,33 +117,35 @@ export class IETMReporter implements Reporter {
 
     // Initialize IETM client if config is available
     if (this.config) {
-      try {
-        // Map IETMConfig to IETMClientConfig
-        const clientConfig = {
-          qmServerUrl: this.config.server.baseUrl,
-          jtsServerUrl: this.config.server.jtsUrl || this.config.server.baseUrl.replace('-qm', '-jts'),
-          username: 'username' in this.config.auth ? this.config.auth.username : '',
-          password: 'password' in this.config.auth ? this.config.auth.password : '',
-          projectName: this.config.server.projectName || '',
-          contextId: this.config.server.contextId,
-        };
-        
-        console.log('[IETM Reporter] Creating IETM client with config:', {
-          qmServerUrl: clientConfig.qmServerUrl,
-          jtsServerUrl: clientConfig.jtsServerUrl,
-          username: clientConfig.username,
-          projectName: clientConfig.projectName,
-          contextId: clientConfig.contextId,
-        });
-        
-        this.client = new IETMClient(clientConfig);
-        await this.client.initialize();
-        console.log('[IETM Reporter] ✓ IETM client initialized successfully');
-      } catch (error) {
-        console.error('[IETM Reporter] ✗ Failed to initialize IETM client:', error);
-        console.error('[IETM Reporter] Reporter will continue without IETM integration');
-        // Don't throw - allow tests to continue
-      }
+      // Store the initialization promise so we can await it later
+      this.clientInitialized = (async () => {
+        try {
+          // Map IETMConfig to IETMClientConfig
+          const clientConfig = {
+            qmServerUrl: this.config.server.baseUrl,
+            jtsServerUrl: this.config.server.jtsUrl || this.config.server.baseUrl.replace('-qm', '-jts'),
+            username: 'username' in this.config.auth ? this.config.auth.username : '',
+            password: 'password' in this.config.auth ? this.config.auth.password : '',
+            projectName: this.config.server.projectName || '',
+            contextId: this.config.server.contextId,
+          };
+          
+          this.client = new IETMClient(clientConfig);
+          await this.client.initialize();
+        } catch (error) {
+          console.error('[IETM Reporter] Failed to initialize IETM client:', error);
+          // Don't throw - allow tests to continue
+        }
+      })();
+    }
+  }
+
+  /**
+   * Wait for client initialization to complete
+   */
+  private async ensureClientInitialized(): Promise<void> {
+    if (this.clientInitialized) {
+      await this.clientInitialized;
     }
   }
 
@@ -161,13 +155,9 @@ export class IETMReporter implements Reporter {
   async onTestBegin(test: TestCase, result: TestResult): Promise<void> {
     if (!this.options.enabled) return;
 
-    const testCaseId = this.options.testCaseIdExtractor(test);
-    
-    if (testCaseId) {
-      console.log(`[IETM Reporter] Test started: ${test.title} (IETM ID: ${testCaseId})`);
-    } else {
-      console.log(`[IETM Reporter] Test started: ${test.title} (no IETM mapping)`);
-    }
+    // Note: Don't extract test case ID here - annotations are added during test execution
+    // via test.info().annotations.push(), so they won't be available yet
+    console.log(`[IETM Reporter] Test started: ${test.title}`);
 
     // Call custom hook
     if (this.options.hooks.onTestStart) {
@@ -187,7 +177,7 @@ export class IETMReporter implements Reporter {
 
     const testCaseId = this.options.testCaseIdExtractor(test);
     
-    // Collect test result
+    // Just collect test result data - don't build execution results yet
     const collectedResult: CollectedTestResult = {
       test,
       result,
@@ -199,27 +189,7 @@ export class IETMReporter implements Reporter {
       },
     };
 
-    // Build execution result if test case ID is available
-    if (testCaseId && this.client) {
-      try {
-        collectedResult.executionResult = await this.buildExecutionResult(
-          test,
-          result,
-          testCaseId,
-          collectedResult.artifacts
-        );
-      } catch (error) {
-        console.error(`[IETM Reporter] Failed to build execution result for ${test.title}:`, error);
-      }
-    }
-
     this.results.push(collectedResult);
-
-    const status = result.status;
-    const duration = result.duration;
-    console.log(
-      `[IETM Reporter] Test ended: ${test.title} - ${status} (${duration}ms)`
-    );
 
     // Call custom hook
     if (this.options.hooks.onTestEnd) {
@@ -237,23 +207,16 @@ export class IETMReporter implements Reporter {
   async onEnd(result: FullResult): Promise<void> {
     if (!this.options.enabled) return;
 
+    // Wait for client initialization to complete
+    await this.ensureClientInitialized();
+
     const endTime = new Date();
     const duration = this.startTime ? endTime.getTime() - this.startTime.getTime() : 0;
 
-    console.log(`[IETM Reporter] Test run finished with status: ${result.status}`);
-    console.log(`[IETM Reporter] Duration: ${duration}ms`);
-    console.log(`[IETM Reporter] Total tests: ${this.results.length}`);
-
-    // Count results by status
-    const statusCounts = this.results.reduce((acc, r) => {
-      acc[r.result.status] = (acc[r.result.status] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-
-    console.log('[IETM Reporter] Results by status:', statusCounts);
+    // Wait for client initialization to complete
+    await this.ensureClientInitialized();
 
     // Now build execution results for tests with IETM mappings
-    // The client should be fully initialized by now
     for (const collectedResult of this.results) {
       if (collectedResult.testCaseId && !collectedResult.executionResult) {
         try {
@@ -278,8 +241,6 @@ export class IETMReporter implements Reporter {
     // Upload results to IETM
     if (this.client) {
       await this.uploadResultsToIETM();
-    } else {
-      console.log('[IETM Reporter] IETM client not initialized, skipping upload');
     }
 
     // Call custom hook
@@ -373,25 +334,41 @@ export class IETMReporter implements Reporter {
     const baseUrl = this.config?.server?.baseUrl || '';
     const testCaseUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/testcase/urn:com.ibm.rqm:testcase:${testCaseId}`;
 
-    // Query TCER (Test Case Execution Record) for this test case
-    let executionWorkItemUrl: string;
+    // Get test plan ID from test annotations (preferred) or fall back to config
+    let testPlanId = test.annotations.find(a => a.type === 'ietm-test-plan')?.description;
+    if (!testPlanId) {
+      testPlanId = this.config?.testPlan?.id;
+    }
+    if (!testPlanId) {
+      throw new Error('Test plan ID not found. Please add ietm-test-plan annotation to the test or set testPlan.id in ietm.config.json');
+    }
+
+    // Find or create TCER (Test Case Execution Record) for this test case and test plan
+    let tcerId: string;
     try {
-      const tcers = await this.client!.getTestExecutionRecords(testCaseId);
-      
-      if (tcers && tcers.length > 0 && tcers[0]) {
-        // Use the first TCER found (most recent or active)
-        const tcerId = tcers[0].id;
-        executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:${tcerId}`;
-        console.log(`[IETM Reporter] Found TCER ${tcerId} for test case ${testCaseId}`);
-      } else {
-        // Fallback to hardcoded TCER ID 1829 if no TCER found
-        console.warn(`[IETM Reporter] No TCER found for test case ${testCaseId}, using fallback TCER 1829`);
-        executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:1829`;
-      }
+      console.log(`[IETM Reporter] Finding/creating TCER for test case ${testCaseId} and test plan ${testPlanId}`);
+      tcerId = await this.client!.findOrCreateTCER(testCaseId, testPlanId);
+      console.log(`[IETM Reporter] ✓ Using TCER ${tcerId} for test case ${testCaseId} and test plan ${testPlanId}`);
     } catch (error) {
-      // OSLC query may fail due to server limitations or query format issues
-      console.warn(`[IETM Reporter] TCER query failed for test case ${testCaseId}, using fallback TCER 1829`);
-      executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:1829`;
+      console.error(`[IETM Reporter] Failed to find or create TCER for test case ${testCaseId}:`, error);
+      throw new Error(`Cannot create execution result without TCER: ${error}`);
+    }
+
+    // Build execution work item URL
+    // tcerId can be:
+    // 1. Full URN: "urn:com.ibm.rqm:executionworkitem:1829" - use as-is
+    // 2. Numeric ID: "1829" - add URN prefix
+    // 3. Slug: "slug__9F0HACkXEfGG4t7UU5gGkg" - use as-is without URN prefix
+    let executionWorkItemUrl: string;
+    if (tcerId.startsWith('urn:')) {
+      // Already a full URN
+      executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/${tcerId}`;
+    } else if (tcerId.startsWith('slug_')) {
+      // Slug format - use directly without URN prefix
+      executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/${tcerId}`;
+    } else {
+      // Numeric ID - add URN prefix
+      executionWorkItemUrl = `${baseUrl}/service/com.ibm.rqm.integration.service.IIntegrationService/resources/${contextId}/executionworkitem/urn:com.ibm.rqm:executionworkitem:${tcerId}`;
     }
 
     const executionResult: ExecutionResult = {

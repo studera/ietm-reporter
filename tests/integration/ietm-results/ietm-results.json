@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-03-26T13:11:42.501Z",
+  "timestamp": "2026-03-26T14:35:13.860Z",
   "totalTests": 2,
   "results": [
     {
       "title": "Positive Login Test",
       "file": "C:\\Users\\RobertStudera\\Documents\\DEVELOP\\bob\\mcp1\\tests\\integration\\specs\\login.spec.ts",
-      "line": 13,
+      "line": 18,
       "status": "passed",
-      "duration": 1363,
+      "duration": 1473,
       "testCaseId": "2218",
       "artifacts": {
         "screenshots": [],
@@ -18,9 +18,9 @@
     {
       "title": "Login - should show error with invalid credentials",
       "file": "C:\\Users\\RobertStudera\\Documents\\DEVELOP\\bob\\mcp1\\tests\\integration\\specs\\login.spec.ts",
-      "line": 42,
+      "line": 51,
       "status": "passed",
-      "duration": 1061,
+      "duration": 884,
       "testCaseId": "7117",
       "artifacts": {
         "screenshots": [],
