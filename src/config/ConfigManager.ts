@@ -6,39 +6,64 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as yaml from 'js-yaml';
+import { config as loadDotenv } from 'dotenv';
 import { IETMConfig } from '../types';
+
+// Load .env file if it exists
+loadDotenv();
 
 /**
  * Load configuration from file or environment variables
  */
 export function loadConfig(configPath?: string): IETMConfig {
-  // TODO: Implement configuration loading logic
-  // Priority: CLI args > Environment variables > Config file > Defaults
+  // Load from file first
+  let config: Partial<IETMConfig> = {};
   
-  const config: IETMConfig = {
-    server: {
-      baseUrl: process.env.IETM_BASE_URL || '',
-      projectId: process.env.IETM_PROJECT_ID || '',
-      contextId: process.env.IETM_CONTEXT_ID || '',
-    },
-    auth: {
-      consumerKey: process.env.IETM_CONSUMER_KEY || '',
-      consumerSecret: process.env.IETM_CONSUMER_SECRET || '',
-      accessToken: process.env.IETM_ACCESS_TOKEN || '',
-      accessTokenSecret: process.env.IETM_ACCESS_TOKEN_SECRET || '',
-    },
-  };
-
   if (configPath && fs.existsSync(configPath)) {
     const fileContent = fs.readFileSync(configPath, 'utf-8');
-    const fileConfig = configPath.endsWith('.json')
+    config = configPath.endsWith('.json')
       ? JSON.parse(fileContent)
-      : yaml.load(fileContent);
-    
-    Object.assign(config, fileConfig);
+      : yaml.load(fileContent) as IETMConfig;
   }
 
-  return config;
+  // Deep merge with environment variables (env vars take precedence)
+  const mergedConfig: IETMConfig = {
+    server: {
+      baseUrl: process.env.IETM_BASE_URL || config.server?.baseUrl || '',
+      jtsUrl: process.env.IETM_JTS_URL || config.server?.jtsUrl,
+      projectId: process.env.IETM_PROJECT_ID || config.server?.projectId,
+      projectName: process.env.IETM_PROJECT_NAME || config.server?.projectName,
+      contextId: process.env.IETM_CONTEXT_ID || config.server?.contextId,
+      autoDiscoverIds: config.server?.autoDiscoverIds !== undefined
+        ? config.server.autoDiscoverIds
+        : true,
+    },
+    auth: config.auth ? { ...config.auth } : {
+      type: 'basic',
+      username: process.env.IETM_USERNAME || '',
+      password: process.env.IETM_PASSWORD || '',
+    },
+    testPlan: config.testPlan,
+    mapping: config.mapping,
+    retry: config.retry,
+    logging: config.logging,
+    attachments: config.attachments,
+    reporting: config.reporting,
+  };
+
+  // Replace ${VAR} placeholders in auth credentials
+  if (mergedConfig.auth && 'username' in mergedConfig.auth) {
+    if (mergedConfig.auth.username?.startsWith('${') && mergedConfig.auth.username.endsWith('}')) {
+      const envVar = mergedConfig.auth.username.slice(2, -1);
+      mergedConfig.auth.username = process.env[envVar] || '';
+    }
+    if (mergedConfig.auth.password?.startsWith('${') && mergedConfig.auth.password.endsWith('}')) {
+      const envVar = mergedConfig.auth.password.slice(2, -1);
+      mergedConfig.auth.password = process.env[envVar] || '';
+    }
+  }
+
+  return mergedConfig;
 }
 
 /**

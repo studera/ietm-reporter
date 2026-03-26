@@ -5,30 +5,58 @@
 export interface IETMConfig {
   server: {
     baseUrl: string;
-    projectId: string;
-    contextId: string;
+    jtsUrl?: string;
+    projectId?: string;
+    projectName?: string;
+    contextId?: string;
+    autoDiscoverIds?: boolean;
   };
-  auth: {
-    consumerKey: string;
-    consumerSecret: string;
-    accessToken: string;
-    accessTokenSecret: string;
-  };
+  auth:
+    | {
+        type: 'oauth1';
+        consumerKey: string;
+        consumerSecret: string;
+        accessToken: string;
+        accessTokenSecret: string;
+      }
+    | {
+        type: 'basic';
+        username: string;
+        password: string;
+      };
   testPlan?: {
     id: string;
     name?: string;
   };
   mapping?: {
     strategy: 'title' | 'id' | 'tag';
+    annotationType?: string;
     mappings?: Record<string, string>;
   };
   retry?: {
     maxRetries: number;
     retryDelay: number;
+    backoffMultiplier?: number;
   };
   logging?: {
     level: 'error' | 'warn' | 'info' | 'debug' | 'trace';
     file?: string;
+    console?: boolean;
+    maxFiles?: number;
+    maxSize?: string;
+  };
+  attachments?: {
+    uploadScreenshots?: boolean;
+    uploadVideos?: boolean;
+    uploadLogs?: boolean;
+    maxFileSize?: number;
+    compressImages?: boolean;
+  };
+  reporting?: {
+    batchSize?: number;
+    reportOnlyMappedTests?: boolean;
+    createExecutionRecords?: boolean;
+    updateExistingResults?: boolean;
   };
 }
 
