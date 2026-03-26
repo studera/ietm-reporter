@@ -126,11 +126,31 @@ export class IETMReporter implements Reporter {
     // Initialize IETM client if config is available
     if (this.config) {
       try {
-        this.client = new IETMClient(this.config);
+        // Map IETMConfig to IETMClientConfig
+        const clientConfig = {
+          qmServerUrl: this.config.server.baseUrl,
+          jtsServerUrl: this.config.server.jtsUrl || this.config.server.baseUrl.replace('-qm', '-jts'),
+          username: 'username' in this.config.auth ? this.config.auth.username : '',
+          password: 'password' in this.config.auth ? this.config.auth.password : '',
+          projectName: this.config.server.projectName || '',
+          contextId: this.config.server.contextId,
+        };
+        
+        console.log('[IETM Reporter] Creating IETM client with config:', {
+          qmServerUrl: clientConfig.qmServerUrl,
+          jtsServerUrl: clientConfig.jtsServerUrl,
+          username: clientConfig.username,
+          projectName: clientConfig.projectName,
+          contextId: clientConfig.contextId,
+        });
+        
+        this.client = new IETMClient(clientConfig);
         await this.client.initialize();
-        console.log('[IETM Reporter] IETM client initialized');
+        console.log('[IETM Reporter] ✓ IETM client initialized successfully');
       } catch (error) {
-        console.error('[IETM Reporter] Failed to initialize IETM client:', error);
+        console.error('[IETM Reporter] ✗ Failed to initialize IETM client:', error);
+        console.error('[IETM Reporter] Reporter will continue without IETM integration');
+        // Don't throw - allow tests to continue
       }
     }
   }

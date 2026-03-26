@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-resources",
+    "copy-resources": "node -e \"const fs=require('fs'); const path=require('path'); const src='src/resources'; const dest='dist/src/resources'; if(!fs.existsSync(dest)){fs.mkdirSync(dest,{recursive:true})} fs.readdirSync(src).forEach(f=>fs.copyFileSync(path.join(src,f),path.join(dest,f)))\"",
     "build:watch": "tsc --watch",
     "clean": "rm -rf dist",
     "test": "jest",
