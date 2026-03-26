@@ -259,36 +259,74 @@ class IETMClient {
 - ✅ Example configuration provided
 - ✅ Complete documentation with usage examples
 
-#### Prompt 8: Implement Test Case Mapping
-**Status:** Pending
+#### ✅ Prompt 8: Implement Test Case Mapping (COMPLETED)
+**Status:** Complete
+**Completed:** 2026-03-26
 **Priority:** MEDIUM
-**Dependencies:** Prompt 7
+**Dependencies:** Prompt 7 (completed)
 
 **Task:** Create a mapping system that:
-- Links Playwright test cases to IETM test cases using annotations
-- Supports mapping by test case ID in annotations
-- Validates that mapped IETM test cases exist
-- Provides clear error messages for unmapped tests
-- Example: `test('Login', { annotation: { type: 'ietm-test-case', description: '2218' } })`
+- ✅ Links Playwright test cases to IETM test cases using annotations
+- ✅ Supports mapping by test case ID in annotations
+- ✅ Validates that mapped IETM test cases exist
+- ✅ Provides clear error messages for unmapped tests
+- ✅ Example: `test('Login', { annotation: { type: 'ietm-test-case', description: '2218' } })`
 
-**Key Files to Create:**
-- `src/mapper/TestCaseMapper.ts`
+**Key Files Created:**
+- ✅ `src/mapper/TestCaseMapper.ts` (330 lines) - Complete mapping implementation
+- ✅ `src/mapper/index.ts` (11 lines) - Module exports
+- ✅ `tests/unit/TestCaseMapper.test.ts` (390 lines) - 21 passing tests
+- ✅ `examples/test-case-mapper-example.ts` (175 lines) - Complete usage examples
 
-#### Prompt 9: Build Result Transformer
-**Status:** Pending
+**Implementation Details:**
+- Multiple extraction methods (annotations, title patterns, custom extractors)
+- IETM validation with caching for performance
+- Configurable error handling (failOnUnmapped, failOnNonExistent)
+- Mapping statistics and reporting
+- Support for alternative annotation types
+- Detailed error messages with file locations
+
+**Testing Results:**
+- ✅ 21 unit tests passing
+- ✅ Example runs successfully
+- ✅ TypeScript compilation successful
+
+#### ✅ Prompt 9: Build Result Transformer (COMPLETED)
+**Status:** Complete
+**Completed:** 2026-03-26
 **Priority:** MEDIUM
-**Dependencies:** Prompts 7-8
+**Dependencies:** Prompts 7-8 (completed)
 
 **Task:** Develop a transformer that converts Playwright test results to IETM format:
-- Maps Playwright status (passed/failed/skipped/timedout) to OSLC state values
-- Converts test duration to start/end times (ISO 8601 UTC format)
-- Formats error messages and stack traces
-- Handles test retries and flaky tests
-- Creates ExecutionResult objects with step results
-- Preserves test hierarchy and grouping
+- ✅ Maps Playwright status (passed/failed/skipped/timedout) to OSLC state values
+- ✅ Converts test duration to start/end times (ISO 8601 UTC format)
+- ✅ Formats error messages and stack traces
+- ✅ Handles test retries and flaky tests
+- ✅ Creates ExecutionResult objects with step results
+- ✅ Preserves test hierarchy and grouping
 
-**Key Files to Create:**
-- `src/transformer/ResultTransformer.ts`
+**Key Files Created:**
+- ✅ `src/transformer/ResultTransformer.ts` (375 lines) - Complete transformation implementation
+- ✅ `src/transformer/index.ts` (11 lines) - Module exports
+- ✅ `tests/unit/ResultTransformer.test.ts` (430 lines) - 19 passing tests
+- ✅ `examples/result-transformer-example.ts` (305 lines) - Complete usage examples
+
+**Implementation Details:**
+- Status mapping: passed→PASSED, failed→FAILED, skipped→INCOMPLETE, timedout→ERROR
+- ISO 8601 UTC time conversion with accurate duration calculation
+- Configurable error formatting with truncation and stack traces
+- Retry/flaky test detection with properties (retry_count, flaky)
+- Step transformation with timing and error preservation
+- Test hierarchy preservation in titles
+- Batch transformation support
+- Transformation statistics (total, passed, failed, flaky, etc.)
+- Custom formatters for errors and step titles
+- Step type detection (setup/execution/teardown)
+
+**Testing Results:**
+- ✅ 19 unit tests passing
+- ✅ Example runs successfully
+- ✅ TypeScript compilation successful
 
 ---
 
