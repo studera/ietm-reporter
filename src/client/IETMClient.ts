@@ -321,7 +321,7 @@ export class IETMClient {
 
   /**
    * Get test execution records for a test case
-   * 
+   *
    * @param testCaseId Test case ID
    * @returns Array of test execution records
    */
@@ -379,6 +379,175 @@ export class IETMClient {
     }
 
     return records;
+  }
+
+  /**
+   * Find or create TCER (Test Case Execution Record) for a test case and test plan
+   *
+   * @param testCaseId Test case ID
+   * @param testPlanId Test plan ID
+   * @returns TCER ID
+   */
+  async findOrCreateTCER(testCaseId: string, testPlanId: string): Promise<string> {
+    this.ensureInitialized();
+
+    // Query TCERs from feed API with pagination support
+    const basePath = this.discoveredServices!.basePath;
+    const testCaseUrl = this.serviceDiscovery.buildTestCaseUrl(testCaseId);
+    const testPlanUrl = this.serviceDiscovery.buildTestPlanUrl(testPlanId);
+
+    try {
+      // Start with first page
+      let feedUrl = `${basePath}/executionworkitem?fields=feed/entry/content/executionworkitem/(*|testcase[@href]|testplan[@href])&abbreviate=false`;
+      let pageNum = 1;
+      
+      // Paginate through all pages
+      while (feedUrl) {
+        const xml = await this.authManager.executeRequest<string>({
+          method: 'GET',
+          url: feedUrl,
+          headers: {
+            'Accept': 'application/xml',
+          },
+        });
+
+        // Parse feed and find TCER matching both test case and test plan
+        const parsed = parseXml(xml);
+        const entries = findFirstNodeByTag(parsed, 'entry') || [];
+        const entryArray = Array.isArray(entries) ? entries : [entries];
+
+        // Search for matching TCER in this page
+        for (const entry of entryArray) {
+          if (!entry) continue;
+
+          const content = findFirstNodeByTag(entry, 'content');
+          const executionWorkItem = findFirstNodeByTag(content, 'executionworkitem');
+          
+          if (executionWorkItem) {
+            const testCaseNode = findFirstNodeByTag(executionWorkItem, 'testcase');
+            const testPlanNode = findFirstNodeByTag(executionWorkItem, 'testplan');
+            
+            const tcHref = testCaseNode ? (testCaseNode['@_href'] || '') : '';
+            const tpHref = testPlanNode ? (testPlanNode['@_href'] || '') : '';
+
+            // Check if both test case and test plan match
+            if (tcHref.includes(testCaseId) && tpHref.includes(testPlanId)) {
+              const idNode = findFirstNodeByTag(entry, 'id');
+              const idText = getTextContent(idNode || '');
+              const tcerId = idText.split(':').pop() || '';
+              return tcerId;
+            }
+          }
+        }
+
+        // Look for next page link
+        const feed = findFirstNodeByTag(parsed, 'feed');
+        const links = findFirstNodeByTag(feed, 'link') || [];
+        const linkArray = Array.isArray(links) ? links : [links];
+        
+        // Find link with rel="next"
+        feedUrl = '';
+        for (const link of linkArray) {
+          if (link && link['@_rel'] === 'next') {
+            feedUrl = link['@_href'] || '';
+            break;
+          }
+        }
+        
+        if (feedUrl) {
+          pageNum++;
+        }
+      }
+
+      // No matching TCER found after searching all pages, create a new one
+      return await this.createTCER(testCaseId, testPlanId);
+
+    } catch (error) {
+      // Try to create a new TCER
+      return await this.createTCER(testCaseId, testPlanId);
+    }
+  }
+
+  /**
+   * Create a new TCER (Test Case Execution Record)
+   *
+   * @param testCaseId Test case ID
+   * @param testPlanId Test plan ID
+   * @returns Created TCER ID
+   */
+  async createTCER(testCaseId: string, testPlanId: string): Promise<string> {
+    this.ensureInitialized();
+
+    const basePath = this.discoveredServices!.basePath;
+    const testCaseUrl = this.serviceDiscovery.buildTestCaseUrl(testCaseId);
+    const testPlanUrl = this.serviceDiscovery.buildTestPlanUrl(testPlanId);
+
+    // Build TCER XML
+    const tcerXml = `<?xml version="1.0" encoding="UTF-8"?>
+<ns2:executionworkitem xmlns:ns2="http://jazz.net/xmlns/alm/qm/v0.1/" xmlns:ns1="http://schema.ibm.com/vega/2008/" xmlns:ns3="http://purl.org/dc/elements/1.1/" xmlns:ns4="http://jazz.net/xmlns/prod/jazz/process/0.6/" xmlns:ns5="http://jazz.net/xmlns/alm/v0.1/" xmlns:ns6="http://purl.org/dc/terms/" xmlns:ns7="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:ns8="http://jazz.net/xmlns/alm/qm/v0.1/executionworkitem/v0.1" xmlns:ns9="http://jazz.net/xmlns/alm/qm/v0.1/catalog/v0.1" xmlns:ns10="http://open-services.net/ns/core#" xmlns:ns11="http://open-services.net/ns/qm#" xmlns:ns12="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/" xmlns:ns13="http://www.w3.org/2000/01/rdf-schema#" xmlns:ns14="http://jazz.net/ns/qm/rqm#">
+    <ns2:testcase href="${testCaseUrl}"/>
+    <ns2:testplan href="${testPlanUrl}"/>
+</ns2:executionworkitem>`;
+
+    const createUrl = `${basePath}/executionworkitem`;
+
+    try {
+      // POST to create TCER
+      const response = await this.authManager.executeRequest<string>({
+        method: 'POST',
+        url: createUrl,
+        headers: {
+          'Content-Type': 'application/xml',
+          'Accept': 'application/xml',
+        },
+        data: tcerXml,
+      });
+
+      // Parse response to get created TCER ID
+      const parsed = parseXml(response);
+      
+      const executionWorkItem = findFirstNodeByTag(parsed, 'ns2:executionworkitem') ||
+                                 findFirstNodeByTag(parsed, 'executionworkitem');
+      
+      if (!executionWorkItem) {
+        throw new Error('Failed to parse TCER creation response');
+      }
+      
+      // Try to get resource URL from attributes first
+      let resourceUrl = executionWorkItem['@_ns7:about'] || executionWorkItem['@_rdf:about'] || executionWorkItem['@_ns1:about'] || '';
+      
+      // If not in attributes, try ns4:identifier element
+      if (!resourceUrl) {
+        const identifierNode = findFirstNodeByTag(executionWorkItem, 'ns4:identifier') ||
+                               findFirstNodeByTag(executionWorkItem, 'identifier') ||
+                               findFirstNodeByTag(executionWorkItem, 'dc:identifier');
+        resourceUrl = getTextContent(identifierNode || '');
+      }
+      
+      // Extract TCER ID from URL
+      // Format 1: urn:com.ibm.rqm:executionworkitem:1829 -> extract "1829"
+      // Format 2: //jazz.net/.../executionworkitem/slug__9F0HACkXEfGG4t7UU5gGkg -> extract "slug__9F0HACkXEfGG4t7UU5gGkg"
+      let tcerId = '';
+      
+      if (resourceUrl.includes('/executionworkitem/')) {
+        // Format 2: Extract from URL path
+        tcerId = resourceUrl.split('/executionworkitem/').pop() || '';
+      } else if (resourceUrl.startsWith('urn:')) {
+        // Format 1: Extract from URN (last part after colon)
+        tcerId = resourceUrl.split(':').pop() || '';
+      } else {
+        // Fallback: try last part after colon
+        tcerId = resourceUrl.split(':').pop() || '';
+      }
+
+      if (!tcerId) {
+        throw new Error(`Failed to extract TCER ID from response: ${resourceUrl}`);
+      }
+
+      return tcerId;
+    } catch (error) {
+      throw error;
+    }
   }
 
   /**
