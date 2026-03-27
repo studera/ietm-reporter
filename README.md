@@ -14,12 +14,14 @@ This package provides seamless integration between Playwright test automation an
 
 - ✅ Automatic test result reporting to IETM
 - ✅ Basic Authentication with form-based login (like IBM's Java client)
-- ✅ Screenshot and video attachment upload
+- ✅ Test execution output upload as text attachments
+- ✅ Screenshot and video artifact tracking
 - ✅ Flexible test case mapping strategies
 - ✅ Configurable retry logic with exponential backoff
 - ✅ Comprehensive logging
 - ✅ TypeScript support
 - ✅ Session management with cookie persistence
+- ✅ POST-GET-PUT workflow for execution result state updates
 
 ## Prerequisites
 

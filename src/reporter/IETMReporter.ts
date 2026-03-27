@@ -25,6 +25,7 @@ import {
   createResourceLink,
 } from '../models/ExecutionResult';
 import { ExecutionResultBuilder } from '../builders/ExecutionResultBuilder';
+import { AttachmentHandler } from '../attachments/AttachmentHandler';
 
 export interface IETMReporterOptions {
   /** Path to IETM configuration file */
@@ -97,6 +98,12 @@ export class IETMReporter implements Reporter {
    * Called once before running tests
    */
   async onBegin(config: FullConfig, suite: Suite): Promise<void> {
+    console.log('\n========================================');
+    console.log('[IETM Reporter] Starting IETM Reporter');
+    console.log('[IETM Reporter] Enabled:', this.options.enabled);
+    console.log('[IETM Reporter] Config path:', this.options.configPath);
+    console.log('========================================\n');
+    
     if (!this.options.enabled) return;
 
     this.startTime = new Date();
@@ -104,7 +111,11 @@ export class IETMReporter implements Reporter {
     // Load IETM configuration
     try {
       if (fs.existsSync(this.options.configPath)) {
+        console.log('[IETM Reporter] Loading configuration from:', this.options.configPath);
         this.config = loadConfig(this.options.configPath);
+        console.log('[IETM Reporter] Configuration loaded successfully');
+      } else {
+        console.warn('[IETM Reporter] Configuration file not found:', this.options.configPath);
       }
     } catch (error) {
       console.error('[IETM Reporter] Failed to load configuration:', error);
@@ -529,6 +540,10 @@ export class IETMReporter implements Reporter {
           console.log(
             `[IETM Reporter] ✓ Uploaded result for test case ${result.testCaseId} - IETM Execution Result ID: ${executionResultId}`
           );
+
+          // Upload attachments if any exist
+          await this.uploadAttachments(executionResultId, result);
+
           successCount++;
         } catch (error) {
           console.error(
@@ -698,6 +713,170 @@ export class IETMReporter implements Reporter {
       console.error('[IETM Reporter] Error in POST-GET-PUT workflow:', error);
       throw error;
     }
+  }
+
+  /**
+   * Upload test execution output as text attachment
+   * Based on Java reference implementation approach
+   */
+  private async uploadAttachments(
+    executionResultId: string,
+    result: CollectedTestResult
+  ): Promise<void> {
+    if (!this.client) {
+      throw new Error('IETM client not initialized');
+    }
+
+    // Build test execution output text
+    const testOutput = this.buildTestOutput(result);
+    
+    if (!testOutput || testOutput.trim().length === 0) {
+      console.log('[IETM Reporter] No test output to upload');
+      return;
+    }
+
+    console.log(
+      `[IETM Reporter] Uploading test execution output for ${result.test.title} (${testOutput.length} chars)...`
+    );
+
+    // Create AttachmentHandler instance
+    const attachmentHandler = new AttachmentHandler(this.client);
+
+    try {
+      // Upload test output as text attachment
+      const attachmentUrl = await attachmentHandler.uploadTestOutput(
+        testOutput,
+        result.test.title,
+        executionResultId
+      );
+
+      if (attachmentUrl) {
+        console.log(
+          `[IETM Reporter] ✓ Test output uploaded successfully: ${attachmentUrl}`
+        );
+      } else {
+        console.error(
+          `[IETM Reporter] ✗ Failed to upload test output for ${result.test.title}`
+        );
+      }
+    } catch (error) {
+      console.error(
+        `[IETM Reporter] ✗ Error uploading test output:`,
+        error
+      );
+    }
+  }
+
+  /**
+   * Build test execution output text from test result
+   */
+  private buildTestOutput(result: CollectedTestResult): string {
+    const lines: string[] = [];
+    
+    // Header
+    lines.push('='.repeat(80));
+    lines.push(`Test: ${result.test.title}`);
+    lines.push(`Status: ${result.result.status}`);
+    lines.push(`Duration: ${result.result.duration}ms`);
+    lines.push(`Started: ${result.result.startTime.toISOString()}`);
+    lines.push('='.repeat(80));
+    lines.push('');
+    
+    // Test location
+    if (result.test.location) {
+      lines.push(`Location: ${result.test.location.file}:${result.test.location.line}:${result.test.location.column}`);
+      lines.push('');
+    }
+    
+    // Error information if test failed
+    if (result.result.error) {
+      lines.push('ERROR:');
+      lines.push('-'.repeat(80));
+      lines.push(result.result.error.message || 'Unknown error');
+      if (result.result.error.stack) {
+        lines.push('');
+        lines.push('Stack Trace:');
+        lines.push(result.result.error.stack);
+      }
+      lines.push('-'.repeat(80));
+      lines.push('');
+    }
+    
+    // Test steps (if available)
+    if (result.result.steps && result.result.steps.length > 0) {
+      lines.push('STEPS:');
+      lines.push('-'.repeat(80));
+      result.result.steps.forEach((step, index) => {
+        lines.push(`${index + 1}. ${step.title}`);
+        lines.push(`   Duration: ${step.duration}ms`);
+        if (step.error) {
+          lines.push(`   Error: ${step.error.message}`);
+        }
+      });
+      lines.push('-'.repeat(80));
+      lines.push('');
+    }
+    
+    // Standard output
+    if (result.result.stdout && result.result.stdout.length > 0) {
+      lines.push('STDOUT:');
+      lines.push('-'.repeat(80));
+      result.result.stdout.forEach(output => {
+        lines.push(output.toString());
+      });
+      lines.push('-'.repeat(80));
+      lines.push('');
+    }
+    
+    // Standard error
+    if (result.result.stderr && result.result.stderr.length > 0) {
+      lines.push('STDERR:');
+      lines.push('-'.repeat(80));
+      result.result.stderr.forEach(output => {
+        lines.push(output.toString());
+      });
+      lines.push('-'.repeat(80));
+      lines.push('');
+    }
+    
+    // Artifacts information
+    if (result.artifacts.screenshots.length > 0 ||
+        result.artifacts.videos.length > 0 ||
+        result.artifacts.traces.length > 0) {
+      lines.push('ARTIFACTS:');
+      lines.push('-'.repeat(80));
+      
+      if (result.artifacts.screenshots.length > 0) {
+        lines.push(`Screenshots (${result.artifacts.screenshots.length}):`);
+        result.artifacts.screenshots.forEach(file => {
+          lines.push(`  - ${path.basename(file)}`);
+        });
+      }
+      
+      if (result.artifacts.videos.length > 0) {
+        lines.push(`Videos (${result.artifacts.videos.length}):`);
+        result.artifacts.videos.forEach(file => {
+          lines.push(`  - ${path.basename(file)}`);
+        });
+      }
+      
+      if (result.artifacts.traces.length > 0) {
+        lines.push(`Traces (${result.artifacts.traces.length}):`);
+        result.artifacts.traces.forEach(file => {
+          lines.push(`  - ${path.basename(file)}`);
+        });
+      }
+      
+      lines.push('-'.repeat(80));
+      lines.push('');
+    }
+    
+    // Footer
+    lines.push('='.repeat(80));
+    lines.push(`Generated by IETM Playwright Reporter at ${new Date().toISOString()}`);
+    lines.push('='.repeat(80));
+    
+    return lines.join('\n');
   }
 }
 
