@@ -1,6 +1,7 @@
 /**
  * Attachment Handler
- * Manages file uploads to IETM with proper MIME types and progress tracking
+ * Manages file uploads to IETM using multipart/form-data
+ * Based on Java reference implementation in RqmClient.createAttachment()
  */
 
 import { IETMClient } from '../client/IETMClient';
@@ -83,6 +84,7 @@ export interface UploadResult {
 export class AttachmentHandler {
   private client: IETMClient;
   private options: Required<AttachmentOptions>;
+  private logger: Console;
 
   // Default MIME types for common test artifacts
   private static readonly DEFAULT_MIME_TYPES: Record<string, string> = {
@@ -107,6 +109,7 @@ export class AttachmentHandler {
 
   constructor(client: IETMClient, options: AttachmentOptions = {}) {
     this.client = client;
+    this.logger = console;
     this.options = {
       maxFileSize: options.maxFileSize || 10 * 1024 * 1024, // 10MB default
       allowedExtensions: options.allowedExtensions || [],
@@ -114,6 +117,428 @@ export class AttachmentHandler {
       onProgress: options.onProgress || (() => {}),
       customMimeTypes: options.customMimeTypes || {},
     };
+  }
+
+  /**
+   * Upload test execution output as text attachment to IETM and link it to execution result
+   * Based on Java reference implementation in RqmClient.createAttachment()
+   *
+   * @param testOutput - The test execution output text
+   * @param testName - Name of the test for the attachment filename
+   * @param executionResultId - The execution result ID
+   * @returns The attachment URL if successful, null otherwise
+   */
+  async uploadTestOutput(
+    testOutput: string,
+    testName: string,
+    executionResultId: string
+  ): Promise<string | null> {
+    try {
+      const fileName = `${testName.replace(/[^a-zA-Z0-9]/g, '_')}_output.txt`;
+      const content = Buffer.from(testOutput, 'utf-8');
+      
+      this.logger.info(`[AttachmentHandler] Uploading test output for ${testName} (${content.length} bytes)`);
+      
+      const attachmentUrl = await this.uploadAttachmentFile(content, fileName, executionResultId);
+      
+      if (!attachmentUrl) {
+        return null;
+      }
+      
+      // Link the attachment to the execution result
+      const linked = await this.linkAttachmentToExecutionResult(executionResultId, attachmentUrl);
+      
+      if (!linked) {
+        this.logger.warn(`[AttachmentHandler] Attachment uploaded but failed to link to execution result ${executionResultId}`);
+        // Still return the URL as the upload was successful
+      }
+      
+      // Also add the test output to the Result Details section
+      const detailsAdded = await this.addTestOutputToResultDetails(executionResultId, testOutput, testName);
+      
+      if (!detailsAdded) {
+        this.logger.warn(`[AttachmentHandler] Failed to add test output to Result Details section`);
+      }
+      
+      return attachmentUrl;
+    } catch (error) {
+      this.logger.error(`[AttachmentHandler] Failed to upload test output for ${testName}:`, error);
+      return null;
+    }
+  }
+
+  /**
+   * Link an uploaded attachment to an execution result
+   * Uses POST-GET-PUT workflow similar to state updates
+   *
+   * @param executionResultId - The execution result ID (can be just the number or full URN)
+   * @param attachmentUrl - The attachment URL from upload
+   * @returns True if successfully linked, false otherwise
+   */
+  private async linkAttachmentToExecutionResult(
+    executionResultId: string,
+    attachmentUrl: string
+  ): Promise<boolean> {
+    try {
+      const clientAny = this.client as any;
+      const discoveredServices = clientAny.discoveredServices;
+      const authManager = clientAny.authManager;
+      const axiosInstance = (authManager as any).axiosInstance;
+
+      if (!discoveredServices || !axiosInstance) {
+        this.logger.error('[AttachmentHandler] Client not properly initialized for linking');
+        return false;
+      }
+
+      // Construct execution result URL with full URN format
+      // If executionResultId is just a number, add the URN prefix
+      const fullExecutionResultId = executionResultId.startsWith('urn:')
+        ? executionResultId
+        : `urn:com.ibm.rqm:executionresult:${executionResultId}`;
+      
+      const executionResultUrl = `${discoveredServices.basePath}/executionresult/${fullExecutionResultId}`;
+
+      this.logger.info(`[AttachmentHandler] Linking attachment to execution result ${fullExecutionResultId}...`);
+
+      // Step 1: GET the current execution result XML
+      const getResponse = await axiosInstance.request({
+        method: 'GET',
+        url: executionResultUrl,
+        headers: {
+          'Accept': 'application/xml',
+          'OSLC-Core-Version': '2.0',
+        },
+      });
+
+      const originalXml = getResponse.data;
+      this.logger.debug(`[AttachmentHandler] Retrieved execution result XML`);
+
+      // Step 2: Parse and add attachment reference
+      const { XMLParser, XMLBuilder } = require('fast-xml-parser');
+      
+      const parser = new XMLParser({
+        ignoreAttributes: false,
+        attributeNamePrefix: '@_',
+        parseTagValue: false,
+        trimValues: false,
+        parseAttributeValue: false,
+      });
+
+      const parsed = parser.parse(originalXml);
+      
+      // Find the execution result node
+      let executionResultNode = parsed['ns2:executionresult'] ||
+                                parsed['executionresult'] ||
+                                parsed['ns6:executionresult'];
+
+      if (!executionResultNode) {
+        this.logger.error('[AttachmentHandler] Could not find execution result node in XML');
+        return false;
+      }
+
+      // Add attachment element
+      // Check if attachments array exists
+      if (!executionResultNode['ns2:attachment']) {
+        executionResultNode['ns2:attachment'] = [];
+      }
+
+      // Ensure it's an array
+      if (!Array.isArray(executionResultNode['ns2:attachment'])) {
+        executionResultNode['ns2:attachment'] = [executionResultNode['ns2:attachment']];
+      }
+
+      // Add the new attachment
+      executionResultNode['ns2:attachment'].push({
+        '@_href': attachmentUrl
+      });
+
+      this.logger.info(`[AttachmentHandler] Added attachment reference to XML`);
+
+      // Step 3: Build updated XML
+      const builder = new XMLBuilder({
+        ignoreAttributes: false,
+        attributeNamePrefix: '@_',
+        format: true,
+        suppressEmptyNode: true,
+      });
+
+      const updatedXml = builder.build(parsed);
+
+      // Step 4: PUT the updated XML back
+      const putResponse = await axiosInstance.request({
+        method: 'PUT',
+        url: executionResultUrl,
+        headers: {
+          'Content-Type': 'application/xml',
+          'Accept': 'application/xml',
+          'OSLC-Core-Version': '2.0',
+        },
+        data: updatedXml,
+      });
+
+      if (putResponse.status >= 200 && putResponse.status < 300) {
+        this.logger.info(`[AttachmentHandler] ✓ Attachment successfully linked to execution result`);
+        return true;
+      } else {
+        this.logger.error(`[AttachmentHandler] Failed to link attachment: HTTP ${putResponse.status}`);
+        return false;
+      }
+
+    } catch (error: any) {
+      this.logger.error('[AttachmentHandler] Error linking attachment:', error.message);
+      if (error.response) {
+        this.logger.error(`[AttachmentHandler] Response status: ${error.response.status}`);
+        this.logger.error(`[AttachmentHandler] Response data:`, error.response.data);
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Add test output to the Result Details section of an execution result
+   * Uses POST-GET-PUT workflow to add <details> element with XHTML content
+   *
+   * @param executionResultId - The execution result ID
+   * @param testOutput - The test output text to add
+   * @param testName - The test name for the heading
+   * @returns True if successfully added, false otherwise
+   */
+  private async addTestOutputToResultDetails(
+    executionResultId: string,
+    testOutput: string,
+    testName: string
+  ): Promise<boolean> {
+    try {
+      const clientAny = this.client as any;
+      const discoveredServices = clientAny.discoveredServices;
+      const authManager = clientAny.authManager;
+      const axiosInstance = (authManager as any).axiosInstance;
+
+      if (!discoveredServices || !axiosInstance) {
+        this.logger.error('[AttachmentHandler] Client not properly initialized for adding details');
+        return false;
+      }
+
+      // Construct execution result URL with full URN format
+      const fullExecutionResultId = executionResultId.startsWith('urn:')
+        ? executionResultId
+        : `urn:com.ibm.rqm:executionresult:${executionResultId}`;
+      
+      const executionResultUrl = `${discoveredServices.basePath}/executionresult/${fullExecutionResultId}`;
+
+      this.logger.info(`[AttachmentHandler] Adding test output to Result Details for ${fullExecutionResultId}...`);
+
+      // Step 1: GET the current execution result XML
+      const getResponse = await axiosInstance.request({
+        method: 'GET',
+        url: executionResultUrl,
+        headers: {
+          'Accept': 'application/xml',
+          'OSLC-Core-Version': '2.0',
+        },
+      });
+
+      const originalXml = getResponse.data;
+      this.logger.debug(`[AttachmentHandler] Retrieved execution result XML`);
+
+      // Step 2: Parse and add/update details element
+      const { XMLParser, XMLBuilder } = require('fast-xml-parser');
+      
+      const parser = new XMLParser({
+        ignoreAttributes: false,
+        attributeNamePrefix: '@_',
+        parseTagValue: false,
+        trimValues: false,
+        parseAttributeValue: false,
+      });
+
+      const parsed = parser.parse(originalXml);
+      
+      // Find the execution result node
+      let executionResultNode = parsed['ns2:executionresult'] ||
+                                parsed['executionresult'] ||
+                                parsed['ns6:executionresult'];
+
+      if (!executionResultNode) {
+        this.logger.error('[AttachmentHandler] Could not find execution result node in XML');
+        return false;
+      }
+
+      // Convert test output to XHTML
+      // Escape HTML special characters and convert newlines to <br/>
+      const escapedOutput = testOutput
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+
+      
+      const lines = escapedOutput.split('\n');
+      const xhtmlContent = lines.map((line: string, index: number) =>
+        index < lines.length - 1 ? `${line}<br/>` : line
+      ).join('');
+
+      // Create or update the details element
+      executionResultNode['details'] = {
+        '@_xmlns': 'http://jazz.net/xmlns/alm/qm/v0.1/executionresult/v0.1',
+        'div': {
+          '@_xmlns': 'http://www.w3.org/1999/xhtml',
+          'h3': `Test Output: ${testName}`,
+          'pre': {
+            '@_style': 'font-family: monospace; white-space: pre-wrap; background-color: #f5f5f5; padding: 10px; border: 1px solid #ddd;',
+            '#text': testOutput
+          }
+        }
+      };
+
+      this.logger.info(`[AttachmentHandler] Added test output to details element`);
+
+      // Step 3: Build updated XML
+      const builder = new XMLBuilder({
+        ignoreAttributes: false,
+        attributeNamePrefix: '@_',
+        format: true,
+        suppressEmptyNode: true,
+      });
+
+      const updatedXml = builder.build(parsed);
+
+      // Step 4: PUT the updated XML back
+      const putResponse = await axiosInstance.request({
+        method: 'PUT',
+        url: executionResultUrl,
+        headers: {
+          'Content-Type': 'application/xml',
+          'Accept': 'application/xml',
+          'OSLC-Core-Version': '2.0',
+        },
+        data: updatedXml,
+      });
+
+      if (putResponse.status >= 200 && putResponse.status < 300) {
+        this.logger.info(`[AttachmentHandler] ✓ Test output successfully added to Result Details`);
+        return true;
+      } else {
+        this.logger.error(`[AttachmentHandler] Failed to add test output: HTTP ${putResponse.status}`);
+        return false;
+      }
+
+    } catch (error: any) {
+      this.logger.error('[AttachmentHandler] Error adding test output to Result Details:', error.message);
+      if (error.response) {
+        this.logger.error(`[AttachmentHandler] Response status: ${error.response.status}`);
+        this.logger.error(`[AttachmentHandler] Response data:`, error.response.data);
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Upload attachment file using multipart/form-data
+   * Matches Java implementation: MultipartEntityBuilder with BROWSER_COMPATIBLE mode
+   * Uses field name "upfile" as per RqmClient.createAttachment()
+   *
+   * @param content - File content as Buffer
+   * @param fileName - Name of the file
+   * @param executionResultId - The execution result ID (for logging)
+   * @returns The attachment URL from Location header, or null if failed
+   */
+  private async uploadAttachmentFile(
+    content: Buffer,
+    fileName: string,
+    executionResultId: string
+  ): Promise<string | null> {
+    // Get client internals
+    const clientAny = this.client as any;
+    const discoveredServices = clientAny.discoveredServices;
+    const authManager = clientAny.authManager;
+
+    if (!discoveredServices || !authManager) {
+      this.logger.error('[AttachmentHandler] Client not properly initialized');
+      return null;
+    }
+
+    const attachmentEndpoint = `${discoveredServices.basePath}/attachment/urn:com.ibm.rqm:attachment`;
+
+    try {
+      // Detect content type
+      const contentType = this.getContentType(fileName);
+      
+      // Create form data with field name "upfile" (as per Java reference)
+      const formData = new FormData();
+      formData.append('upfile', content, {
+        filename: fileName,
+        contentType: contentType
+      });
+
+      this.logger.info(`[AttachmentHandler] Uploading to: ${attachmentEndpoint}`);
+      this.logger.info(`[AttachmentHandler] File: ${fileName}, Content-Type: ${contentType}, Size: ${content.length} bytes`);
+      this.logger.info(`[AttachmentHandler] Execution Result ID: ${executionResultId}`);
+
+      // We need to access the axios instance directly to get response headers
+      // The executeRequest method only returns data, not headers
+      const axiosInstance = (authManager as any).axiosInstance;
+      
+      if (!axiosInstance) {
+        this.logger.error('[AttachmentHandler] Could not access axios instance');
+        return null;
+      }
+
+      const response = await axiosInstance.request({
+        method: 'POST',
+        url: attachmentEndpoint,
+        data: formData,
+        headers: {
+          ...formData.getHeaders(),
+          'Accept': 'application/xml'
+        },
+        maxRedirects: 0, // Don't follow redirects to capture Location header
+        validateStatus: (status: number) => status >= 200 && status < 400, // Accept 2xx and 3xx
+      });
+
+      this.logger.info(`[AttachmentHandler] Response status: ${response.status}`);
+      
+      // Get attachment URL from Location header (as per Java reference)
+      const locationHeader = response.headers['location'] || response.headers['Location'];
+      if (!locationHeader) {
+        this.logger.error('[AttachmentHandler] No Location header in response');
+        this.logger.info(`[AttachmentHandler] Response headers:`, JSON.stringify(response.headers, null, 2));
+        this.logger.info(`[AttachmentHandler] Response data:`, response.data);
+        return null;
+      }
+
+      this.logger.info(`[AttachmentHandler] ✓ Attachment uploaded successfully: ${locationHeader}`);
+      return locationHeader;
+
+    } catch (error: any) {
+      this.logger.error('[AttachmentHandler] Error uploading attachment:', error.message);
+      if (error.response) {
+        this.logger.error(`[AttachmentHandler] Response status: ${error.response.status}`);
+        this.logger.error(`[AttachmentHandler] Response data:`, error.response.data);
+      }
+      return null;
+    }
+  }
+
+  /**
+   * Get content type for a file based on extension
+   */
+  private getContentType(fileName: string): string {
+    const ext = path.extname(fileName).toLowerCase();
+    const contentTypes: Record<string, string> = {
+      '.png': 'image/png',
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.gif': 'image/gif',
+      '.txt': 'text/plain',
+      '.log': 'text/plain',
+      '.xml': 'application/xml',
+      '.json': 'application/json',
+      '.webm': 'video/webm',
+      '.mp4': 'video/mp4'
+    };
+    return contentTypes[ext] || 'application/octet-stream';
   }
 
   /**
@@ -133,36 +558,26 @@ export class AttachmentHandler {
         this.validateFile(metadata);
       }
 
-      // Read file
+      // Read file as buffer
       const fileBuffer = fs.readFileSync(filePath);
 
-      // Create form data
-      const formData = new FormData();
-      formData.append('file', fileBuffer, {
-        filename: metadata.fileName,
-        contentType: metadata.mimeType,
-      });
-
-      if (description) {
-        formData.append('description', description);
-      }
-
-      // Track progress
-      let lastProgress = 0;
-      formData.on('data', (chunk: Buffer) => {
-        lastProgress += chunk.length;
-        this.options.onProgress({
-          fileName: metadata.fileName,
-          bytesUploaded: lastProgress,
-          totalBytes: metadata.fileSize,
-          percentage: (lastProgress / metadata.fileSize) * 100,
-        });
-      });
-
-      // Upload to IETM
-      const url = await this.uploadToIETM(executionResultId, formData);
+      // Upload using multipart/form-data
+      const url = await this.uploadAttachmentFile(
+        fileBuffer,
+        metadata.fileName,
+        executionResultId
+      );
 
       const duration = Date.now() - startTime;
+
+      if (!url) {
+        return {
+          success: false,
+          error: 'Failed to upload file',
+          metadata,
+          duration,
+        };
+      }
 
       return {
         success: true,
@@ -340,18 +755,6 @@ export class AttachmentHandler {
         );
       }
     }
-  }
-
-  /**
-   * Upload form data to IETM
-   */
-  private async uploadToIETM(executionResultId: string, formData: FormData): Promise<string> {
-    // TODO: Implement actual IETM upload
-    // This would use the IETMClient to POST the form data to the attachment endpoint
-    // For now, return a mock URL
-    const mockUrl = `https://ietm.example.com/attachments/${executionResultId}/${Date.now()}`;
-    console.log(`[AttachmentHandler] Would upload to: ${mockUrl}`);
-    return mockUrl;
   }
 
   /**

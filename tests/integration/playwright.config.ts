@@ -31,7 +31,7 @@ export default defineConfig({
 
   use: {
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    screenshot: 'on', // Capture screenshots for all tests to validate attachments
     video: 'retain-on-failure',
     actionTimeout: 10000,
   },
