@@ -52,24 +52,16 @@ export class AuthManager {
       })
     );
 
-    // Add response interceptor for 401 handling
+    // Add response interceptor for better error handling
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       async (error: AxiosError) => {
-        if (error.response?.status === 401 && !error.config?.headers?.['X-Retry-After-Auth']) {
-          // Attempt form-based authentication
-          try {
-            await this.formBasedAuth();
-            
-            // Retry the original request
-            const originalRequest = error.config!;
-            originalRequest.headers = originalRequest.headers || {};
-            originalRequest.headers['X-Retry-After-Auth'] = 'true';
-            
-            return this.axiosInstance.request(originalRequest);
-          } catch (authError) {
-            return Promise.reject(authError);
-          }
+        if (error.response?.status === 401) {
+          throw new AuthenticationError(
+            'Authentication failed - check username and password',
+            401,
+            error
+          );
         }
         return Promise.reject(error);
       }
@@ -78,22 +70,14 @@ export class AuthManager {
 
   /**
    * Authenticate with IETM server
-   * Performs initial form-based authentication to establish session
+   * Uses basic authentication configured in axios instance
    */
   async authenticate(): Promise<void> {
-    try {
-      await this.formBasedAuth();
-      this.authState.isAuthenticated = true;
-      this.authState.lastAuthTime = new Date();
-      console.log('Authentication successful');
-    } catch (error) {
-      this.authState.isAuthenticated = false;
-      throw new AuthenticationError(
-        'Failed to authenticate with IETM server',
-        undefined,
-        error
-      );
-    }
+    // Basic auth is configured in axios instance and sent with every request
+    // No need for separate authentication step
+    this.authState.isAuthenticated = true;
+    this.authState.lastAuthTime = new Date();
+    console.log('Authentication configured (Basic Auth)');
   }
 
   /**
