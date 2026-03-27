@@ -131,6 +131,7 @@ export class IETMReporter implements Reporter {
       // Store the initialization promise so we can await it later
       this.clientInitialized = (async () => {
         try {
+          console.log('[IETM Reporter] Initializing IETM client...');
           // Map IETMConfig to IETMClientConfig
           const clientConfig = {
             qmServerUrl: this.config.server.baseUrl,
@@ -142,9 +143,18 @@ export class IETMReporter implements Reporter {
           };
           
           this.client = new IETMClient(clientConfig);
-          await this.client.initialize();
+          
+          // Add timeout to prevent hanging
+          const initPromise = this.client.initialize();
+          const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Client initialization timeout after 30s')), 30000)
+          );
+          
+          await Promise.race([initPromise, timeoutPromise]);
+          console.log('[IETM Reporter] IETM client initialized successfully');
         } catch (error) {
           console.error('[IETM Reporter] Failed to initialize IETM client:', error);
+          this.client = undefined;
           // Don't throw - allow tests to continue
         }
       })();
@@ -219,13 +229,23 @@ export class IETMReporter implements Reporter {
     if (!this.options.enabled) return;
 
     // Wait for client initialization to complete
-    await this.ensureClientInitialized();
+    try {
+      await this.ensureClientInitialized();
+    } catch (error) {
+      console.error('[IETM Reporter] Client initialization failed:', error);
+      console.log('[IETM Reporter] Skipping IETM upload due to initialization failure');
+      return;
+    }
 
     const endTime = new Date();
     const duration = this.startTime ? endTime.getTime() - this.startTime.getTime() : 0;
 
-    // Wait for client initialization to complete
-    await this.ensureClientInitialized();
+    // Check if client is available
+    if (!this.client) {
+      console.log('[IETM Reporter] IETM client not available - skipping result upload');
+      console.log('[IETM Reporter] Tests completed but results were not uploaded to IETM');
+      return;
+    }
 
     // Now build execution results for tests with IETM mappings
     for (const collectedResult of this.results) {
@@ -250,9 +270,7 @@ export class IETMReporter implements Reporter {
     await this.saveResultsToFile();
 
     // Upload results to IETM
-    if (this.client) {
-      await this.uploadResultsToIETM();
-    }
+    await this.uploadResultsToIETM();
 
     // Call custom hook
     if (this.options.hooks.onRunEnd) {

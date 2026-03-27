@@ -1,4 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 /**
  * Basic Playwright configuration with IETM reporter
@@ -14,7 +18,7 @@ export default defineConfig({
     ['list'],
     ['html'],
     // IETM Reporter configuration
-    ['../../dist/reporter/IETMReporter.js', {
+    ['../../dist/src/reporter/IETMReporter.js', {
       configPath: './ietm.config.json',
       enabled: true,
     }],
