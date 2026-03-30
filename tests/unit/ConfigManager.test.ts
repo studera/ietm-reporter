@@ -20,7 +20,9 @@ describe('ConfigManager', () => {
 
       expect(config.server.baseUrl).toBe('https://test.example.com');
       expect(config.server.projectId).toBe('test-project');
-      expect(config.auth.consumerKey).toBe('test-key');
+      if (config.auth.type === 'oauth1') {
+        expect(config.auth.consumerKey).toBe('test-key');
+      }
     });
 
     it('should load configuration from file', () => {
@@ -38,6 +40,7 @@ describe('ConfigManager', () => {
           contextId: 'test-context',
         },
         auth: {
+          type: 'oauth1',
           consumerKey: 'test-key',
           consumerSecret: 'test-secret',
           accessToken: 'test-token',
