@@ -119,7 +119,7 @@ export interface TestExecutionRecord {
 /**
  * Execution Result to create
  */
-export interface ExecutionResult {
+export interface ExecutionResultInput {
   /**
    * Test case ID or URN
    */
@@ -556,7 +556,7 @@ export class IETMClient {
    * @param result Execution result details
    * @returns Created execution result ID
    */
-  async createExecutionResult(result: ExecutionResult): Promise<string> {
+  async createExecutionResult(result: ExecutionResultInput): Promise<string> {
     this.ensureInitialized();
 
     // Build execution result XML
@@ -712,7 +712,7 @@ export class IETMClient {
    * @param result Execution result details
    * @returns XML string
    */
-  private buildExecutionResultXml(result: ExecutionResult): string {
+  private buildExecutionResultXml(result: ExecutionResultInput): string {
     const contextId = this.serviceDiscovery.getContextId();
     const testCaseUrl = this.serviceDiscovery.buildTestCaseUrl(result.testCaseId);
     

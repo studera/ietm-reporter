@@ -4,7 +4,7 @@
  * Demonstrates how to use the IETMClient to interact with IETM server.
  */
 
-import { IETMClient, IETMClientConfig, ExecutionResult } from '../src/client/IETMClient';
+import { IETMClient, IETMClientConfig, ExecutionResultInput } from '../src/client/IETMClient';
 import * as dotenv from 'dotenv';
 
 // Load environment variables
@@ -75,7 +75,7 @@ async function main() {
     // Example 3: Create execution result
     console.log('=== Example 3: Create Execution Result ===');
     
-    const executionResult: ExecutionResult = {
+    const executionResult: ExecutionResultInput = {
       testCaseId: testCaseId,
       verdict: 'passed',
       startTime: new Date(Date.now() - 5000).toISOString(),
