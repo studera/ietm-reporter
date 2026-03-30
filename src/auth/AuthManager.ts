@@ -145,62 +145,6 @@ export class AuthManager {
   }
 
   /**
-   * Perform form-based authentication at JTS server
-   * This sets the JSESSIONID cookie for subsequent requests
-   */
-  private async formBasedAuth(): Promise<void> {
-    this.authState.authAttempts++;
-    
-    const authUrl = `${this.config.jtsUrl}/jts/j_security_check`;
-    const params = new URLSearchParams({
-      j_username: this.config.username,
-      j_password: this.config.password,
-    });
-
-    try {
-      console.log(`Performing form-based authentication at ${authUrl}`);
-      
-      const response = await this.axiosInstance.post(authUrl, params.toString(), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        maxRedirects: 0, // Don't follow redirects
-        validateStatus: (status) => status >= 200 && status < 400, // Accept 2xx and 3xx
-      });
-
-      // Check if authentication was successful
-      // Successful auth typically returns 200 or 302
-      if (response.status === 200 || response.status === 302) {
-        console.log('Form-based authentication successful');
-        this.authState.isAuthenticated = true;
-        this.authState.lastAuthTime = new Date();
-      } else {
-        throw new AuthenticationError(
-          `Form-based authentication failed with status ${response.status}`,
-          response.status
-        );
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      
-      // If it's a redirect (302/303), that's actually success
-      if (axiosError.response?.status === 302 || axiosError.response?.status === 303) {
-        console.log('Form-based authentication successful (redirect)');
-        this.authState.isAuthenticated = true;
-        this.authState.lastAuthTime = new Date();
-        return;
-      }
-      
-      console.error('Form-based authentication failed:', axiosError.message);
-      throw new AuthenticationError(
-        'Form-based authentication failed',
-        axiosError.response?.status,
-        axiosError
-      );
-    }
-  }
-
-  /**
    * Determine if a request should be retried based on the error
    */
   private shouldRetry(error: AxiosError): boolean {
