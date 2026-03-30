@@ -6,23 +6,30 @@ import { loadConfig, validateConfig } from '../../src/config/ConfigManager';
 import { IETMConfig } from '../../src/types';
 
 describe('ConfigManager', () => {
+  afterEach(() => {
+    delete process.env.IETM_BASE_URL;
+    delete process.env.IETM_PROJECT_ID;
+    delete process.env.IETM_PROJECT_NAME;
+    delete process.env.IETM_CONTEXT_ID;
+    delete process.env.IETM_USERNAME;
+    delete process.env.IETM_PASSWORD;
+  });
+
   describe('loadConfig', () => {
     it('should load configuration from environment variables', () => {
       process.env.IETM_BASE_URL = 'https://test.example.com';
-      process.env.IETM_PROJECT_ID = 'test-project';
+      process.env.IETM_PROJECT_NAME = 'test-project';
       process.env.IETM_CONTEXT_ID = 'test-context';
-      process.env.IETM_CONSUMER_KEY = 'test-key';
-      process.env.IETM_CONSUMER_SECRET = 'test-secret';
-      process.env.IETM_ACCESS_TOKEN = 'test-token';
-      process.env.IETM_ACCESS_TOKEN_SECRET = 'test-token-secret';
+      process.env.IETM_USERNAME = 'test-user';
+      process.env.IETM_PASSWORD = 'test-password';
 
       const config = loadConfig();
 
       expect(config.server.baseUrl).toBe('https://test.example.com');
-      expect(config.server.projectId).toBe('test-project');
-      if (config.auth.type === 'oauth1') {
-        expect(config.auth.consumerKey).toBe('test-key');
-      }
+      expect(config.server.projectName).toBe('test-project');
+      expect(config.auth.type).toBe('basic');
+      expect(config.auth.username).toBe('test-user');
+      expect(config.auth.password).toBe('test-password');
     });
 
     it('should load configuration from file', () => {
@@ -36,15 +43,12 @@ describe('ConfigManager', () => {
       const config: IETMConfig = {
         server: {
           baseUrl: 'https://test.example.com',
-          projectId: 'test-project',
-          contextId: 'test-context',
+          projectName: 'test-project',
         },
         auth: {
-          type: 'oauth1',
-          consumerKey: 'test-key',
-          consumerSecret: 'test-secret',
-          accessToken: 'test-token',
-          accessTokenSecret: 'test-token-secret',
+          type: 'basic',
+          username: 'test-user',
+          password: 'test-password',
         },
       };
 
@@ -55,8 +59,12 @@ describe('ConfigManager', () => {
       const config: Partial<IETMConfig> = {
         server: {
           baseUrl: 'https://test.example.com',
-          projectId: '',
-          contextId: '',
+          projectName: '',
+        },
+        auth: {
+          type: 'basic',
+          username: '',
+          password: '',
         },
       };
 

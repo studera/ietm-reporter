@@ -8,7 +8,6 @@ ietm-playwright-client/
 ├── src/                            # Source code
 │   ├── client/                     # IETM API client
 │   │   ├── IETMClient.ts          # Main API client class
-│   │   ├── OAuthClient.ts         # OAuth 1.0a authentication (TODO)
 │   │   └── ResourceBuilder.ts     # OSLC resource builders (TODO)
 │   ├── config/                     # Configuration management
 │   │   ├── ConfigManager.ts       # Configuration loader and validator

@@ -45,7 +45,6 @@ This installs all required dependencies:
 - `axios` - HTTP client for API calls
 - `dotenv` - Environment variable management
 - `winston` - Logging framework
-- `oauth-1.0a` - OAuth 1.0a authentication
 - And more...
 
 ### 2. Build the Project

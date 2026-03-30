@@ -35,7 +35,6 @@ This will install:
 - **axios** - HTTP client for API calls
 - **dotenv** - Environment variable management
 - **winston** - Logging framework
-- **oauth-1.0a** - OAuth 1.0a authentication
 - **js-yaml** - YAML configuration support
 - **commander** - CLI framework
 - And all development dependencies (TypeScript, ESLint, Jest, etc.)
@@ -312,7 +311,7 @@ For installation issues:
 - [ ] Project builds successfully (`npm run build`)
 - [ ] Tests run successfully (`npm test`)
 - [ ] Configuration file created (`.env` or `ietm.config.json`)
-- [ ] OAuth credentials obtained from IETM server
+- [ ] IETM username and password configured
 - [ ] Code editor configured (VS Code recommended)
 
 ---

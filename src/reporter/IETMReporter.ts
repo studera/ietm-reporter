@@ -15,7 +15,7 @@ import type {
 import * as fs from 'fs';
 import * as path from 'path';
 import { IETMClient } from '../client/IETMClient';
-import { loadConfig } from '../config/ConfigManager';
+import { loadConfig, validateConfig } from '../config/ConfigManager';
 import {
   ExecutionResult,
   ExecutionState,
@@ -108,17 +108,21 @@ export class IETMReporter implements Reporter {
 
     this.startTime = new Date();
     
-    // Load IETM configuration
+    // Load and validate IETM configuration
     try {
       if (fs.existsSync(this.options.configPath)) {
         console.log('[IETM Reporter] Loading configuration from:', this.options.configPath);
         this.config = loadConfig(this.options.configPath);
-        console.log('[IETM Reporter] Configuration loaded successfully');
       } else {
-        console.warn('[IETM Reporter] Configuration file not found:', this.options.configPath);
+        console.warn('[IETM Reporter] Configuration file not found, falling back to environment variables:', this.options.configPath);
+        this.config = loadConfig();
       }
+
+      validateConfig(this.config);
+      console.log('[IETM Reporter] Configuration loaded and validated successfully');
     } catch (error) {
       console.error('[IETM Reporter] Failed to load configuration:', error);
+      this.config = undefined;
     }
 
     // Create output directory
@@ -136,8 +140,8 @@ export class IETMReporter implements Reporter {
           const clientConfig = {
             qmServerUrl: this.config.server.baseUrl,
             jtsServerUrl: this.config.server.jtsUrl || this.config.server.baseUrl.replace('-qm', '-jts'),
-            username: 'username' in this.config.auth ? this.config.auth.username : '',
-            password: 'password' in this.config.auth ? this.config.auth.password : '',
+            username: this.config.auth.username,
+            password: this.config.auth.password,
             projectName: this.config.server.projectName || '',
             contextId: this.config.server.contextId,
           };

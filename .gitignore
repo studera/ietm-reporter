@@ -111,3 +111,4 @@ playwright/.auth/
 # IETM execution results (generated files)
 ietm-results/
 **/ietm-results/
+docs/architecture-code-review-2026-03-30.md

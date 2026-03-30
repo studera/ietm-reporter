@@ -11,19 +11,11 @@ export interface IETMConfig {
     contextId?: string;
     autoDiscoverIds?: boolean;
   };
-  auth:
-    | {
-        type: 'oauth1';
-        consumerKey: string;
-        consumerSecret: string;
-        accessToken: string;
-        accessTokenSecret: string;
-      }
-    | {
-        type: 'basic';
-        username: string;
-        password: string;
-      };
+  auth: {
+    type: 'basic';
+    username: string;
+    password: string;
+  };
   testPlan?: {
     id: string;
     name?: string;

@@ -4,7 +4,6 @@
  */
 
 import * as fs from 'fs';
-import * as path from 'path';
 import * as yaml from 'js-yaml';
 import { config as loadDotenv } from 'dotenv';
 import { IETMConfig } from '../types';
@@ -38,10 +37,10 @@ export function loadConfig(configPath?: string): IETMConfig {
         ? config.server.autoDiscoverIds
         : true,
     },
-    auth: config.auth ? { ...config.auth } : {
+    auth: {
       type: 'basic',
-      username: process.env.IETM_USERNAME || '',
-      password: process.env.IETM_PASSWORD || '',
+      username: process.env.IETM_USERNAME || (config.auth?.username || ''),
+      password: process.env.IETM_PASSWORD || (config.auth?.password || ''),
     },
     testPlan: config.testPlan,
     mapping: config.mapping,
@@ -52,15 +51,13 @@ export function loadConfig(configPath?: string): IETMConfig {
   };
 
   // Replace ${VAR} placeholders in auth credentials
-  if (mergedConfig.auth && 'username' in mergedConfig.auth) {
-    if (mergedConfig.auth.username?.startsWith('${') && mergedConfig.auth.username.endsWith('}')) {
-      const envVar = mergedConfig.auth.username.slice(2, -1);
-      mergedConfig.auth.username = process.env[envVar] || '';
-    }
-    if (mergedConfig.auth.password?.startsWith('${') && mergedConfig.auth.password.endsWith('}')) {
-      const envVar = mergedConfig.auth.password.slice(2, -1);
-      mergedConfig.auth.password = process.env[envVar] || '';
-    }
+  if (mergedConfig.auth.username?.startsWith('${') && mergedConfig.auth.username.endsWith('}')) {
+    const envVar = mergedConfig.auth.username.slice(2, -1);
+    mergedConfig.auth.username = process.env[envVar] || '';
+  }
+  if (mergedConfig.auth.password?.startsWith('${') && mergedConfig.auth.password.endsWith('}')) {
+    const envVar = mergedConfig.auth.password.slice(2, -1);
+    mergedConfig.auth.password = process.env[envVar] || '';
   }
 
   return mergedConfig;
@@ -72,12 +69,10 @@ export function loadConfig(configPath?: string): IETMConfig {
 export function validateConfig(config: IETMConfig): void {
   const required = [
     'server.baseUrl',
-    'server.projectId',
-    'server.contextId',
-    'auth.consumerKey',
-    'auth.consumerSecret',
-    'auth.accessToken',
-    'auth.accessTokenSecret',
+    'server.projectName',
+    'auth.type',
+    'auth.username',
+    'auth.password',
   ];
 
   for (const field of required) {

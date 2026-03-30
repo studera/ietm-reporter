@@ -42,50 +42,21 @@
     "auth": {
       "type": "object",
       "description": "Authentication configuration",
-      "oneOf": [
-        {
-          "properties": {
-            "type": {
-              "type": "string",
-              "const": "basic"
-            },
-            "username": {
-              "type": "string",
-              "description": "Username for basic authentication"
-            },
-            "password": {
-              "type": "string",
-              "description": "Password for basic authentication"
-            }
-          },
-          "required": ["type", "username", "password"]
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "basic"
         },
-        {
-          "properties": {
-            "type": {
-              "type": "string",
-              "const": "oauth"
-            },
-            "consumerKey": {
-              "type": "string",
-              "description": "OAuth consumer key"
-            },
-            "consumerSecret": {
-              "type": "string",
-              "description": "OAuth consumer secret"
-            },
-            "accessToken": {
-              "type": "string",
-              "description": "OAuth access token"
-            },
-            "accessTokenSecret": {
-              "type": "string",
-              "description": "OAuth access token secret"
-            }
-          },
-          "required": ["consumerKey", "consumerSecret", "accessToken", "accessTokenSecret"]
+        "username": {
+          "type": "string",
+          "description": "Username for basic authentication"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password for basic authentication"
         }
-      ]
+      },
+      "required": ["type", "username", "password"]
     },
     "testPlan": {
       "type": "object",

@@ -2,14 +2,14 @@
   "$schema": "./ietm.config.schema.json",
   "server": {
     "baseUrl": "https://jazz.net/sandbox01-qm",
-    "projectId": "_8_TkcFwFEfCGYIoRgUkqqw",
-    "contextId": "__GEcoFwFEfCGYIoRgUkqqw"
+    "jtsUrl": "https://jazz.net/sandbox01-jts",
+    "projectName": "Your Project Name",
+    "autoDiscoverIds": true
   },
   "auth": {
-    "consumerKey": "your_consumer_key",
-    "consumerSecret": "your_consumer_secret",
-    "accessToken": "your_access_token",
-    "accessTokenSecret": "your_access_token_secret"
+    "type": "basic",
+    "username": "${IETM_USERNAME}",
+    "password": "${IETM_PASSWORD}"
   },
   "testPlan": {
     "id": "987",
