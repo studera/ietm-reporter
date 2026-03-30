@@ -107,3 +107,7 @@ public
 # Playwright
 test-results/
 playwright/.auth/
+
+# IETM execution results (generated files)
+ietm-results/
+**/ietm-results/
