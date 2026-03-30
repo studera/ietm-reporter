@@ -5,7 +5,6 @@
 import { AttachmentHandler } from '../../src/attachments/AttachmentHandler';
 import { IETMClient } from '../../src/client/IETMClient';
 import * as fs from 'fs';
-import * as path from 'path';
 
 // Mock fs module
 jest.mock('fs');
@@ -124,27 +123,6 @@ describe('AttachmentHandler', () => {
       mockFs.readFileSync.mockReturnValue(Buffer.from('test data'));
     });
 
-    it.skip('should upload file successfully', async () => {
-      // Skipped: Requires axios mock
-      const result = await handler.uploadFile('exec-1', '/path/to/screenshot.png');
-
-      expect(result.success).toBe(true);
-      expect(result.url).toBeDefined();
-      expect(result.metadata.fileName).toBe('screenshot.png');
-      expect(result.duration).toBeGreaterThanOrEqual(0);
-    });
-
-    it.skip('should include description in upload', async () => {
-      // Skipped: Requires axios mock
-      const result = await handler.uploadFile(
-        'exec-1',
-        '/path/to/screenshot.png',
-        'Test screenshot'
-      );
-
-      expect(result.success).toBe(true);
-    });
-
     it('should handle upload errors', async () => {
       mockFs.readFileSync.mockImplementation(() => {
         throw new Error('Read error');
@@ -167,67 +145,6 @@ describe('AttachmentHandler', () => {
       expect(result.success).toBe(false);
       expect(result.error).toContain('too large');
     });
-
-    it.skip('should skip validation when disabled', async () => {
-      // Skipped: Requires axios mock
-      const nonValidatingHandler = new AttachmentHandler(mockClient, {
-        validateBeforeUpload: false,
-      });
-
-      const result = await nonValidatingHandler.uploadFile('exec-1', '/path/to/screenshot.png');
-
-      expect(result.success).toBe(true);
-    });
-  });
-
-  describe('uploadFiles', () => {
-    beforeEach(() => {
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.statSync.mockReturnValue({ size: 1024 } as fs.Stats);
-      mockFs.readFileSync.mockReturnValue(Buffer.from('test data'));
-    });
-
-    it.skip('should upload multiple files', async () => {
-      // Skipped: Requires axios mock
-      const files = ['/path/to/file1.png', '/path/to/file2.png', '/path/to/file3.png'];
-
-      const results = await handler.uploadFiles('exec-1', files);
-
-      expect(results).toHaveLength(3);
-      expect(results.every((r) => r.success)).toBe(true);
-    });
-
-    it.skip('should use descriptions for files', async () => {
-      // Skipped: Requires axios mock
-      const files = ['/path/to/file1.png', '/path/to/file2.png'];
-      const descriptions = {
-        '/path/to/file1.png': 'First screenshot',
-        '/path/to/file2.png': 'Second screenshot',
-      };
-
-      const results = await handler.uploadFiles('exec-1', files, descriptions);
-
-      expect(results).toHaveLength(2);
-      expect(results.every((r) => r.success)).toBe(true);
-    });
-
-    it.skip('should continue on individual file errors', async () => {
-      // Skipped: Requires axios mock
-      mockFs.readFileSync.mockImplementation((filePath) => {
-        if (filePath === '/path/to/file2.png') {
-          throw new Error('Read error');
-        }
-        return Buffer.from('test data');
-      });
-
-      const files = ['/path/to/file1.png', '/path/to/file2.png', '/path/to/file3.png'];
-      const results = await handler.uploadFiles('exec-1', files);
-
-      expect(results).toHaveLength(3);
-      expect(results[0]?.success).toBe(true);
-      expect(results[1]?.success).toBe(false);
-      expect(results[2]?.success).toBe(true);
-    });
   });
 
   describe('uploadTestArtifacts', () => {
@@ -235,27 +152,6 @@ describe('AttachmentHandler', () => {
       mockFs.existsSync.mockReturnValue(true);
       mockFs.statSync.mockReturnValue({ size: 1024 } as fs.Stats);
       mockFs.readFileSync.mockReturnValue(Buffer.from('test data'));
-    });
-
-    it.skip('should upload all artifact types', async () => {
-      // Skipped: Requires axios mock
-      const artifacts = {
-        screenshots: ['/path/to/screenshot1.png', '/path/to/screenshot2.png'],
-        videos: ['/path/to/video.mp4'],
-        traces: ['/path/to/trace.zip'],
-        logs: ['/path/to/test.log'],
-      };
-
-      const results = await handler.uploadTestArtifacts('exec-1', artifacts);
-
-      expect(results.screenshots).toHaveLength(2);
-      expect(results.videos).toHaveLength(1);
-      expect(results.traces).toHaveLength(1);
-      expect(results.logs).toHaveLength(1);
-      expect(results.screenshots.every((r) => r.success)).toBe(true);
-      expect(results.videos.every((r) => r.success)).toBe(true);
-      expect(results.traces.every((r) => r.success)).toBe(true);
-      expect(results.logs.every((r) => r.success)).toBe(true);
     });
 
     it('should handle empty artifact lists', async () => {
@@ -407,41 +303,6 @@ describe('AttachmentHandler', () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toContain('not allowed');
-    });
-
-    it.skip('should allow files with permitted extensions', async () => {
-      // Skipped: Requires axios mock
-      const restrictedHandler = new AttachmentHandler(mockClient, {
-        allowedExtensions: ['.png', '.jpg'],
-      });
-
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.statSync.mockReturnValue({ size: 1024 } as fs.Stats);
-      mockFs.readFileSync.mockReturnValue(Buffer.from('test data'));
-
-      const result = await restrictedHandler.uploadFile('exec-1', '/path/to/file.png');
-
-      expect(result.success).toBe(true);
-    });
-  });
-
-  describe('progress tracking', () => {
-    it.skip('should accept progress callback in options', async () => {
-      // Skipped: Requires axios mock
-      const progressCallback = jest.fn();
-      const progressHandler = new AttachmentHandler(mockClient, {
-        onProgress: progressCallback,
-      });
-
-      mockFs.existsSync.mockReturnValue(true);
-      mockFs.statSync.mockReturnValue({ size: 1024 } as fs.Stats);
-      mockFs.readFileSync.mockReturnValue(Buffer.from('test data'));
-
-      const result = await progressHandler.uploadFile('exec-1', '/path/to/screenshot.png');
-
-      // Progress callback is configured (actual calls depend on FormData events in real environment)
-      expect(result.success).toBe(true);
-      expect(progressCallback).toBeDefined();
     });
   });
 });
