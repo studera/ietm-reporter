@@ -1,8 +1,19 @@
-# IETM Attachment Upload
+# IETM Test Output Integration
 
 ## Overview
 
-The IETM Playwright Client now supports uploading test execution output as text attachments to IETM execution results. This feature is based on the Java reference implementation and uses multipart/form-data for reliable file uploads.
+The IETM Playwright Client embeds test execution output directly in the **Result Details** section of IETM execution results. This provides immediate visibility of test results, steps, errors, and artifacts without requiring separate attachment downloads.
+
+## Current Implementation (2026-03-27)
+
+**Status:** ✅ COMPLETE
+
+Test output is now **embedded in the `<details>` element** of execution results using XHTML content. This approach:
+- ✅ Displays test output directly in IETM UI's "Result Details" section
+- ✅ Includes formatted test steps, timing, and error details
+- ✅ Shows browser information and test metadata
+- ✅ No separate attachment files needed
+- ✅ Verified working in IETM (execution results 2895, 2896)
 
 ## Implementation Details
 
@@ -285,23 +296,73 @@ const attachmentHandler = new AttachmentHandler(client);
 // - [AttachmentHandler] ✓ Attachment uploaded successfully: <url>
 ```
 
+## Implementation Details
+
+### XHTML Content Structure
+
+Test output is embedded in the execution result XML as XHTML content:
+
+```xml
+<executionresult>
+  <details>
+    <div xmlns="http://www.w3.org/1999/xhtml">
+      <h2>Test: Login with valid credentials</h2>
+      <p><strong>Status:</strong> passed</p>
+      <p><strong>Duration:</strong> 1234ms</p>
+      <h3>Steps:</h3>
+      <ol>
+        <li>Navigate to login page (234ms)</li>
+        <li>Enter username (123ms)</li>
+        <li>Click login button (456ms)</li>
+      </ol>
+      <h3>Browser Info:</h3>
+      <p>chromium 1280x720</p>
+    </div>
+  </details>
+</executionresult>
+```
+
+### Key Features
+
+1. **Formatted Output**: HTML formatting with headers, lists, and emphasis
+2. **Monospace Font**: Code blocks use monospace for readability
+3. **Line Breaks**: Proper line break handling for multi-line output
+4. **Error Details**: Stack traces and error messages clearly displayed
+5. **Artifact Lists**: Screenshots, videos, and traces listed with paths
+
+### Display in IETM UI
+
+The embedded content appears in the **Result Details** section with:
+- Clean, readable formatting
+- Proper HTML rendering
+- Monospace font for technical output
+- Collapsible sections for long content
+
+## Advantages Over Attachments
+
+| Feature | Embedded Output | Separate Attachments |
+|---------|----------------|---------------------|
+| Visibility | Immediate in UI | Requires download |
+| Formatting | HTML formatted | Plain text |
+| Loading Speed | Instant | Download delay |
+| IETM Integration | Native | External files |
+| Maintenance | Simple | File management |
+
 ## Limitations
 
-1. **Text Only**: Currently supports text attachments only (not binary files like images)
-2. **Size Limit**: Default maximum file size is 10MB
-3. **No Direct Linking**: Attachments are uploaded but not automatically linked to execution results in the XML
-4. **Step Results**: IETM typically links attachments to step results, not execution results directly
+1. **Size Limit**: Very large outputs may impact XML size (typically not an issue)
+2. **Binary Files**: Screenshots/videos still need separate handling
+3. **Formatting**: Limited to XHTML capabilities
 
 ## Future Enhancements
 
 Potential improvements for future versions:
 
-1. Support for binary file uploads (screenshots, videos)
-2. Automatic linking of attachments to execution results
-3. Batch upload optimization
-4. Progress tracking for large files
-5. Retry logic for failed uploads
-6. Attachment metadata customization
+1. Binary file upload support (screenshots, videos) as separate attachments
+2. Configurable output format (detailed vs. summary)
+3. Custom CSS styling for embedded content
+4. Collapsible sections for very long outputs
+5. Syntax highlighting for code snippets
 
 ## References
 

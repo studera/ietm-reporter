@@ -2,27 +2,39 @@
 
 ## Overview
 
-The IETM Playwright Client uses **Basic Authentication** with form-based login, similar to the IBM RQM Java client implementation. This is simpler and more reliable than OAuth 1.0a for IETM/RQM systems.
+The IETM Playwright Client uses **Basic Authentication** - a simplified approach that sends credentials with every request. This is simpler and more reliable than OAuth 1.0a for IETM/RQM systems.
 
 ## Authentication Flow
 
 ### 1. Basic Authentication
-The client uses HTTP Basic Authentication with your IETM username and password.
-
-### 2. Form-Based Authentication (on 401)
-When a request returns a 401 Unauthorized status, the client automatically performs form-based authentication:
+The client uses HTTP Basic Authentication with your IETM username and password:
 
 ```
-POST https://jazz.net/sandbox01-jts/jts/j_security_check
-Content-Type: application/x-www-form-urlencoded
-
-j_username=your_username&j_password=your_password
+Authorization: Basic <base64-encoded-credentials>
 ```
 
-This sets a `JSESSIONID` cookie that is used for subsequent requests.
+The axios HTTP client is configured with basic auth credentials, which are automatically sent with every request.
 
-### 3. Cookie Management
-The client maintains cookies across requests using a cookie jar. Once authenticated, the session cookie is automatically included in all subsequent API calls.
+### 2. Simplified Approach
+**Important:** The current implementation does **NOT** use form-based authentication or session cookies. This simplification was made after discovering that:
+- Basic auth credentials work for all IETM API calls
+- Form-based auth added unnecessary complexity
+- The 401 interceptor caused infinite authentication loops
+- Basic auth is sufficient and more reliable
+
+### 3. How It Works
+```typescript
+// Axios instance configured with basic auth
+const axiosInstance = axios.create({
+  auth: {
+    username: config.username,
+    password: config.password
+  }
+});
+
+// Credentials automatically sent with every request
+await axiosInstance.get('/qm/rootservices');
+```
 
 ## Configuration
 
@@ -100,8 +112,8 @@ Change your IETM password periodically and update the configuration.
 3. **Network access**: Verify you can access the IETM server from your network
 4. **Account status**: Ensure your IETM account is active and not locked
 
-### Session Expires
-The client automatically handles session expiration by re-authenticating when it receives a 401 response.
+### Authentication Failures
+If authentication fails, the client will retry up to 3 times with exponential backoff. After that, it will throw an error. Check your credentials and ensure your account is not locked.
 
 ### SSL/TLS Issues
 If you encounter SSL certificate errors in development:
@@ -119,7 +131,6 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 ```typescript
 const client = new IETMClient({
   baseUrl: 'https://jazz.net/sandbox01-qm',
-  jtsUrl: process.env.IETM_JTS_URL || 'https://jazz.net/sandbox01-jts',
   username: process.env.IETM_USERNAME || '',
   password: process.env.IETM_PASSWORD || ''
 });
@@ -127,41 +138,38 @@ const client = new IETMClient({
 
 ### 2. Axios Configuration
 The client uses axios with:
-- Cookie jar for session management
-- Basic auth credentials
-- Request interceptor for 401 handling
+- Basic auth credentials configured in axios instance
 - Retry logic with exponential backoff
+- Timeout handling (30 seconds)
 
 ### 3. Request Flow
 ```
-1. Make API request with Basic Auth
-2. If 401 received:
-   a. POST to /jts/j_security_check with credentials
-   b. Store JSESSIONID cookie
-   c. Retry original request
-3. If success: Continue
-4. If other error: Retry with backoff (max 3 times)
+1. Make API request with Basic Auth header
+2. If success: Continue
+3. If error: Retry with backoff (max 3 times)
+4. If timeout: Fail with clear error message
 ```
 
-### 4. Cookie Persistence
-Cookies are maintained in memory for the lifetime of the client instance. Each test run creates a new client instance with a fresh session.
+### 4. Authentication State
+Authentication is configured once during client initialization. The same credentials are used for all subsequent requests throughout the client's lifetime.
 
 ## Comparison with OAuth 1.0a
 
-| Feature | Basic Auth + Form Login | OAuth 1.0a |
-|---------|------------------------|------------|
-| Setup Complexity | Low | High |
+| Feature | Basic Auth | OAuth 1.0a |
+|---------|------------|------------|
+| Setup Complexity | Very Low | High |
 | Credential Management | Username/Password | Consumer Key, Secret, Tokens |
-| Session Management | Cookie-based | Token-based |
-| Expiration Handling | Automatic re-auth | Token refresh required |
+| Session Management | Stateless | Token-based |
+| Expiration Handling | N/A (credentials sent each time) | Token refresh required |
 | IETM/RQM Support | Native | Requires configuration |
 | Security | Good (with HTTPS) | Excellent |
 
-For IETM/RQM systems, Basic Authentication with form-based login is the recommended approach as it's:
-- Simpler to configure
-- More reliable
+For IETM/RQM systems, Basic Authentication is the recommended approach as it's:
+- Simplest to configure
+- Most reliable
 - Natively supported by IBM Jazz products
-- Used by IBM's own Java clients
+- No session management complexity
+- No authentication loops
 
 ## Additional Resources
 

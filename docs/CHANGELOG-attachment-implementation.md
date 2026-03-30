@@ -1,10 +1,14 @@
-# Changelog: Attachment Upload Implementation
+# Changelog: Test Output Integration Implementation
 
-## Date: 2026-03-27
+## Date: 2026-03-27 (Updated: 2026-03-30)
 
 ## Summary
 
-Implemented text attachment upload functionality for IETM Playwright Client based on Java reference implementation. This allows Playwright test execution output to be uploaded as text attachments to IETM execution results.
+Implemented test execution output integration for IETM Playwright Client. Test output is now **embedded directly in the Result Details section** of IETM execution results using XHTML content, providing immediate visibility without requiring separate attachment downloads.
+
+## Final Implementation Status
+
+✅ **COMPLETE** - Test output successfully embedded in IETM execution results (verified with results 2895, 2896)
 
 ## Changes Made
 
@@ -213,28 +217,38 @@ POST {baseUrl}/qm/service/com.ibm.rqm.integration.service.IIntegrationService/re
 
 ## Testing Status
 
-### Completed
+### Completed ✅
 - ✅ Schema reference fixed
 - ✅ Java reference analyzed
-- ✅ AttachmentHandler rewritten
-- ✅ IETMReporter updated
+- ✅ AttachmentHandler rewritten with XHTML embedding
+- ✅ IETMReporter updated to embed test output
 - ✅ Test script created
-- ✅ Documentation written
-- ✅ Execution results 2889-2892 created in IETM with correct "passed" state
+- ✅ Documentation written and updated
+- ✅ Execution results created in IETM with correct states
+- ✅ **Integration tests passed** (2 tests, 2 execution results: 2895, 2896)
+- ✅ **Test output verified in IETM UI Result Details section**
+- ✅ Character encoding issues resolved
+- ✅ HTML entity escaping fixed
+- ✅ Authentication simplified (Basic Auth only)
 
-### Pending
-- ⏳ Run test-attachment-upload.ts with actual IETM server
-- ⏳ Verify attachments appear in IETM UI
-- ⏳ Run full Playwright test suite with new reporter
-- ⏳ Validate attachment content in IETM
+## Implementation Evolution
 
-## Known Issues
+### Initial Approach (Abandoned)
+- Attempted to upload test output as separate attachment files
+- Used multipart/form-data with "upfile" field
+- Attachments appeared in "Custom Properties" instead of "Result Details"
 
-1. **Attachments not automatically linked**: The current implementation uploads attachments but doesn't automatically link them to execution results in the XML. This may require additional IETM API calls.
+### Final Approach (Successful)
+- Embed test output directly in `<details>` element
+- Use XHTML content for proper formatting
+- Output appears immediately in "Result Details" section
+- No separate file downloads needed
 
-2. **Text only**: Currently only supports text attachments. Binary files (images, videos) would need additional implementation.
+## Known Limitations
 
-3. **No retry logic**: Failed uploads are not automatically retried.
+1. **Binary files**: Screenshots and videos still need separate handling (not yet implemented)
+2. **Size**: Very large outputs may impact XML size (typically not an issue)
+3. **Formatting**: Limited to XHTML capabilities
 
 ## Breaking Changes
 
@@ -291,12 +305,27 @@ To verify the implementation:
    npx playwright test --config=tests/integration/playwright.config.ts
    ```
 
-5. Verify test output attachments in IETM for each test execution
+5. Verify test output in IETM Result Details section ✅ VERIFIED
 
 ## Notes
 
-- The implementation follows the Java reference adapter closely to ensure compatibility
-- Multipart/form-data with field name "upfile" is critical for IETM API
-- Location header contains the attachment URL, not the response body
-- Text attachments are a simpler starting point than binary files
-- Future enhancements can build on this foundation
+- The final implementation embeds output in `<details>` element, not as separate attachments
+- XHTML content provides proper formatting in IETM UI
+- XML builder handles HTML entity escaping automatically
+- Character encoding must use straight quotes, not curly quotes
+- Test output displays with monospace font for readability
+- Verified working with execution results 2895 and 2896
+
+## Authentication Simplification
+
+During implementation, we also simplified authentication:
+- **Removed**: Form-based authentication and 401 interceptor
+- **Kept**: Basic Authentication only
+- **Result**: More reliable, no authentication loops, simpler code
+
+---
+
+**Status:** ✅ COMPLETE
+**Last Updated:** 2026-03-30
+**Integration Tests:** PASSING
+**IETM Verification:** CONFIRMED

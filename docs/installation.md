@@ -12,7 +12,7 @@ Before starting, ensure you have:
 - **npm** >= 8.0.0
 - **Git** (for version control)
 - Access to an **IBM Engineering Test Management** server (version 7.x or later)
-- OAuth credentials for IETM API access
+- IETM username and password for Basic Authentication
 
 ## Development Setup
 
@@ -78,12 +78,11 @@ cp .env.example .env
 2. Edit `.env` with your IETM server details:
 ```env
 IETM_BASE_URL=https://your-ietm-server.com/qm
-IETM_PROJECT_ID=_your_project_id
-IETM_CONTEXT_ID=_your_context_id
-IETM_CONSUMER_KEY=your_consumer_key
-IETM_CONSUMER_SECRET=your_consumer_secret
-IETM_ACCESS_TOKEN=your_access_token
-IETM_ACCESS_TOKEN_SECRET=your_access_token_secret
+IETM_JTS_URL=https://your-ietm-server.com/jts
+IETM_PROJECT_NAME=Your Project Name
+IETM_USERNAME=your_username
+IETM_PASSWORD=your_password
+IETM_TEST_PLAN_ID=123
 ```
 
 ### Option 2: Configuration File
@@ -95,20 +94,18 @@ cp config/ietm.config.example.json config/ietm.config.json
 
 2. Edit `config/ietm.config.json` with your settings.
 
-## Getting OAuth Credentials
+## Getting IETM Credentials
 
-To use the IETM API, you need OAuth 1.0a credentials:
+To use the IETM API, you need your IETM username and password:
 
-1. Log in to your IETM server
-2. Navigate to **Administration** → **Manage This Application Server**
-3. Go to **OAuth** → **Consumers**
-4. Click **Add Consumer**
-5. Fill in the details:
-   - Name: "Playwright Test Reporter"
-   - Consumer Key: (auto-generated or custom)
-   - Consumer Secret: (auto-generated)
-6. Save and note down the credentials
-7. Generate access tokens for your user account
+1. Use your existing IETM account credentials
+2. Ensure your account has permissions to:
+   - Read test cases
+   - Create execution results
+   - Upload attachments
+3. Store credentials securely in `.env` file (never commit to git)
+
+**Note:** The client uses Basic Authentication - no OAuth setup required.
 
 ## Development Workflow
 
