@@ -180,7 +180,7 @@ Results will be automatically reported to IETM!
 ## Project Structure
 
 ```
-ietm-playwright-client/
+ietm-reporter/
 ├── src/                    # Source code
 │   ├── client/            # IETM API client
 │   ├── config/            # Configuration management

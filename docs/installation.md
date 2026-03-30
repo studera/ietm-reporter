@@ -19,7 +19,7 @@ Before starting, ensure you have:
 ### 1. Navigate to Project Directory
 
 ```bash
-cd c:/Users/RobertStudera/Documents/DEVELOP/bob/mcp1
+cd c:/Users/RobertStudera/Documents/DEVELOP/bob/ietm-reporter
 ```
 
 ### 2. Install Dependencies
