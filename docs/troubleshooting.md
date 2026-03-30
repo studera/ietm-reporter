@@ -539,7 +539,7 @@ If you can't resolve the issue:
    - Run example scripts to verify setup
 
 3. **Check implementation plan:**
-   - [IETM-Playwright-Implementation-Plan.md](../IETM-Playwright-Implementation-Plan.md)
+   - [IETM-Playwright-Implementation-Plan.md](./IETM-Playwright-Implementation-Plan.md)
 
 4. **Enable debug logging** and review output
 
