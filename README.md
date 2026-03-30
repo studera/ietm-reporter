@@ -199,7 +199,7 @@ ietm-playwright-client/
 
 ## Implementation Progress
 
-Follow the implementation plan in `IETM-Playwright-Implementation-Plan.md`:
+Follow the implementation plan in [docs/IETM-Playwright-Implementation-Plan.md](./docs/IETM-Playwright-Implementation-Plan.md):
 
 - [x] Phase 1: Project Setup & Architecture ✅ COMPLETE
 - [x] Phase 2: IETM API Client Implementation ✅ COMPLETE
@@ -218,11 +218,11 @@ Follow the implementation plan in `IETM-Playwright-Implementation-Plan.md`:
 - [Installation Guide](./docs/installation.md) - Setup and installation
 - [Authentication Setup](./docs/authentication-setup.md) - Authentication configuration
 - [Java Implementation Analysis](./docs/java-implementation-analysis.md) - Analysis of IBM's Java client
-- [Implementation Plan](./IETM-Playwright-Implementation-Plan.md) - Detailed implementation prompts
-- [Project Structure](./PROJECT_STRUCTURE.md) - Complete project layout
-- [Configuration Guide](./docs/configuration.md) - Configuration options (TODO)
-- [API Reference](./docs/api-reference.md) - API documentation (TODO)
-- [Troubleshooting](./docs/troubleshooting.md) - Common issues (TODO)
+- [Implementation Plan](./docs/IETM-Playwright-Implementation-Plan.md) - Detailed implementation prompts
+- [Project Structure](./docs/PROJECT_STRUCTURE.md) - Complete project layout
+- [Configuration Guide](./docs/configuration.md) - Configuration options
+- [API Reference](./docs/api-reference.md) - API documentation
+- [Troubleshooting](./docs/troubleshooting.md) - Common issues and solutions
 
 ## Examples
 
@@ -319,9 +319,10 @@ MIT
 ## Support
 
 For issues and questions:
-- Check the [Implementation Plan](./IETM-Playwright-Implementation-Plan.md)
-- Review [Project Structure](./PROJECT_STRUCTURE.md)
+- Check the [Implementation Plan](./docs/IETM-Playwright-Implementation-Plan.md)
+- Review [Project Structure](./docs/PROJECT_STRUCTURE.md)
 - See [Installation Guide](./docs/installation.md)
+- See [Troubleshooting Guide](./docs/troubleshooting.md)
 
 ## Changelog
 

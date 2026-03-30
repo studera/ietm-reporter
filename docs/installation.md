@@ -275,8 +275,8 @@ npm install --save-dev @types/node
 After installation:
 
 1. ✅ Review [README.md](../README.md) for project overview
-2. ✅ Check [Implementation Plan](../IETM-Playwright-Implementation-Plan.md) for development roadmap
-3. ✅ Explore [Project Structure](../PROJECT_STRUCTURE.md) to understand the codebase
+2. ✅ Check [Implementation Plan](./IETM-Playwright-Implementation-Plan.md) for development roadmap
+3. ✅ Explore [Project Structure](./PROJECT_STRUCTURE.md) to understand the codebase
 4. ✅ Review [examples](../examples) for usage patterns
 5. ✅ Start implementing features following the prompts
 
@@ -299,8 +299,8 @@ rm package-lock.json
 
 For installation issues:
 - Check this guide first
-- Review [Project Structure](../PROJECT_STRUCTURE.md)
-- Check [Implementation Plan](../IETM-Playwright-Implementation-Plan.md)
+- Review [Project Structure](./PROJECT_STRUCTURE.md)
+- Check [Implementation Plan](./IETM-Playwright-Implementation-Plan.md)
 - Review error messages carefully
 
 ## Development Environment Checklist

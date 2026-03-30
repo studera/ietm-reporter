@@ -67,8 +67,7 @@ ietm-playwright-client/
 ├── CHANGELOG.md                   # Version history (TODO)
 ├── CONTRIBUTING.md                # Contribution guidelines (TODO)
 ├── LICENSE                        # License file (TODO)
-├── IETM-Playwright-Implementation-Plan.md  # Implementation plan
-└── PROJECT_STRUCTURE.md           # This file
+└── README.md                      # Main project documentation
 
 ```
 

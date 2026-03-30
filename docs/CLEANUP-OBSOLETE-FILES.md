@@ -91,8 +91,8 @@ rm execution-result-*.xml execution-results-feed.xml rootservices.* fix-*.js
 
 ### Documentation Files (Keep)
 - ✅ `README.md` - Main project documentation
-- ✅ `PROJECT_STRUCTURE.md` - Project structure documentation
-- ✅ `IETM-Playwright-Implementation-Plan.md` - Implementation plan
+- ✅ `docs/PROJECT_STRUCTURE.md` - Project structure documentation
+- ✅ `docs/IETM-Playwright-Implementation-Plan.md` - Implementation plan
 
 ### Directories (Keep)
 - ✅ `.bob/` - Bob AI assistant data
@@ -116,11 +116,9 @@ ls -la
 # .eslintrc.json
 # .gitignore
 # .prettierrc.json
-# IETM-Playwright-Implementation-Plan.md
 # jest.config.js
 # package.json
 # package-lock.json
-# PROJECT_STRUCTURE.md
 # README.md
 # tsconfig.json
 # + directories
