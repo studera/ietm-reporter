@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns2:executionresult xmlns:ns2="http://jazz.net/xmlns/alm/qm/v0.1/" 
+                     xmlns:ns1="http://schema.ibm.com/vega/2008/" 
+                     xmlns:ns3="http://purl.org/dc/elements/1.1/" 
+                     xmlns:ns4="http://jazz.net/xmlns/prod/jazz/process/0.6/" 
+                     xmlns:ns5="http://jazz.net/xmlns/alm/v0.1/" 
+                     xmlns:ns6="http://purl.org/dc/terms/" 
+                     xmlns:ns7="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+                     xmlns:ns8="http://jazz.net/xmlns/alm/qm/v0.1/executionresult/v0.1" 
+                     xmlns:ns9="http://jazz.net/xmlns/alm/qm/v0.1/catalog/v0.1" 
+                     xmlns:ns10="http://jazz.net/xmlns/alm/qm/v0.1/tsl/v0.1/" 
+                     xmlns:ns11="http://open-services.net/ns/core#" 
+                     xmlns:ns12="http://open-services.net/ns/qm#" 
+                     xmlns:ns13="http://jazz.net/xmlns/prod/jazz/rqm/process/1.0/" 
+                     xmlns:ns14="http://www.w3.org/2002/07/owl#" 
+                     xmlns:ns15="http://jazz.net/xmlns/prod/jazz/calm/1.0/" 
+                     xmlns:ns16="http://purl.org/dc/terms/" 
+                     xmlns:ns17="http://www.w3.org/1999/XSL/Transform">
+    <ns3:title>Login - should show error with invalid credentials - passed</ns3:title>
+    <ns3:creator>studera</ns3:creator>
+    <ns3:description></ns3:description>
+    <ns2:owner>studera</ns2:owner>
+    <ns2:state>com.ibm.rqm.execution.common.state.passed</ns2:state>
+    <ns2:machine>localhost</ns2:machine>
+    <ns2:iterations>1</ns2:iterations>
+    <ns2:starttime>2026-03-30T08:26:22.758Z</ns2:starttime>
+    <ns2:endtime>2026-03-30T08:26:26.990Z</ns2:endtime>
+    <ns2:weight>100</ns2:weight>
+    <ns2:testedby>
+        <ns2:tester>studera</ns2:tester>
+    </ns2:testedby>
+    
+    <ns2:testcase href="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/resources/_8_TkcFwFEfCGYIoRgUkqqw/testcase/urn:com.ibm.rqm:testcase:7117" />
+    <ns2:executionworkitem href="https://jazz.net/sandbox01-qm/service/com.ibm.rqm.integration.service.IIntegrationService/resources/_8_TkcFwFEfCGYIoRgUkqqw/executionworkitem/slug__sx0P0CniEfGG4t7UU5gGkg" />
+    
+    <ns8:adapterId>playwright-ietm-reporter</ns8:adapterId>
+    <ns2:stepResult>
+        <ns2:stepIndex>1</ns2:stepIndex>
+        <ns2:startTime>2026-03-30T08:26:22.762Z</ns2:startTime>
+        <ns2:endTime>2026-03-30T08:26:23.222Z</ns2:endTime>
+        <ns2:result>com.ibm.rqm.execution.common.state.passed</ns2:result>
+        <ns2:description>Before Hooks</ns2:description>
+        <ns2:stepType>com.ibm.rqm.execution.common.elementtype.execution</ns2:stepType>
+        <ns2:tester>studera</ns2:tester>
+    </ns2:stepResult>
+    <ns2:stepResult>
+        <ns2:stepIndex>2</ns2:stepIndex>
+        <ns2:startTime>2026-03-30T08:26:23.224Z</ns2:startTime>
+        <ns2:endTime>2026-03-30T08:26:26.634Z</ns2:endTime>
+        <ns2:result>com.ibm.rqm.execution.common.state.passed</ns2:result>
+        <ns2:description>Navigate to https://www.saucedemo.com/</ns2:description>
+        <ns2:stepType>com.ibm.rqm.execution.common.elementtype.execution</ns2:stepType>
+        <ns2:tester>studera</ns2:tester>
+    </ns2:stepResult>
+    <ns2:stepResult>
+        <ns2:stepIndex>3</ns2:stepIndex>
+        <ns2:startTime>2026-03-30T08:26:26.635Z</ns2:startTime>
+        <ns2:endTime>2026-03-30T08:26:26.886Z</ns2:endTime>
+        <ns2:result>com.ibm.rqm.execution.common.state.passed</ns2:result>
+        <ns2:description>fill username with &apos;standard_user&apos;, fill password with &apos;wrong_sauce&apos;, click Login button</ns2:description>
+        <ns2:stepType>com.ibm.rqm.execution.common.elementtype.execution</ns2:stepType>
+        <ns2:tester>studera</ns2:tester>
+    </ns2:stepResult>
+    <ns2:stepResult>
+        <ns2:stepIndex>4</ns2:stepIndex>
+        <ns2:startTime>2026-03-30T08:26:26.887Z</ns2:startTime>
+        <ns2:endTime>2026-03-30T08:26:27.295Z</ns2:endTime>
+        <ns2:result>com.ibm.rqm.execution.common.state.passed</ns2:result>
+        <ns2:description>After Hooks</ns2:description>
+        <ns2:stepType>com.ibm.rqm.execution.common.elementtype.execution</ns2:stepType>
+        <ns2:tester>studera</ns2:tester>
+    </ns2:stepResult>
+</ns2:executionresult>
+
+<!-- Made with Bob -->
