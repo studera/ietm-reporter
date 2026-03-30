@@ -1,0 +1,34 @@
+{
+  "$schema": "../../config/ietm.config.schema.json",
+  "server": {
+    "baseUrl": "${IETM_BASE_URL}",
+    "projectName": "${IETM_PROJECT_NAME}",
+    "autoDiscoverIds": true,
+    "timeout": 30000
+  },
+  "auth": {
+    "type": "basic",
+    "username": "${IETM_USERNAME}",
+    "password": "${IETM_PASSWORD}"
+  },
+  "testPlan": {
+    "id": "${IETM_TEST_PLAN_ID}",
+    "name": "Advanced Example Test Plan"
+  },
+  "mapping": {
+    "strategy": "annotation",
+    "annotationType": "ietm-test-case"
+  },
+  "reporter": {
+    "enabled": true,
+    "uploadScreenshots": true,
+    "uploadVideos": true,
+    "uploadTraces": true,
+    "verbose": false
+  },
+  "retry": {
+    "maxRetries": 3,
+    "retryDelay": 1000,
+    "backoffMultiplier": 2
+  }
+}

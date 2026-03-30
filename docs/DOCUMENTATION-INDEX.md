@@ -40,9 +40,18 @@ Complete index of all documentation for the IETM Playwright Client project.
    - Advanced options
    - CI/CD examples
 
+### Integration & Usage
+
+5. **[integration-guide.md](./integration-guide.md)** - Integration guide for new projects
+   - Integration methods (npm link, git submodule, direct copy)
+   - Step-by-step setup
+   - Project structure
+   - CI/CD integration
+   - Best practices
+
 ### Core Documentation
 
-5. **[api-reference.md](./api-reference.md)** - Complete API documentation
+6. **[api-reference.md](./api-reference.md)** - Complete API documentation
    - IETMClient API
    - IETMReporter API
    - AttachmentHandler API
@@ -50,7 +59,7 @@ Complete index of all documentation for the IETM Playwright Client project.
    - Error handling
    - Best practices
 
-6. **[troubleshooting.md](./troubleshooting.md)** - Problem solving guide
+7. **[troubleshooting.md](./troubleshooting.md)** - Problem solving guide
    - Authentication issues
    - Connection problems
    - Configuration errors
@@ -60,28 +69,28 @@ Complete index of all documentation for the IETM Playwright Client project.
 
 ### Implementation Details
 
-7. **[IETM-Playwright-Implementation-Plan.md](./IETM-Playwright-Implementation-Plan.md)** - Implementation roadmap
+8. **[IETM-Playwright-Implementation-Plan.md](./IETM-Playwright-Implementation-Plan.md)** - Implementation roadmap
    - Phase-by-phase implementation
    - Completed prompts
    - Current status
    - Technical decisions
    - Implementation notes
 
-8. **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Project structure
+9. **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Project structure
    - Directory layout
    - File organization
    - Module descriptions
 
 ### Technical Documentation
 
-9. **[java-implementation-analysis.md](./java-implementation-analysis.md)** - Java client analysis
+10. **[java-implementation-analysis.md](./java-implementation-analysis.md)** - Java client analysis
    - IBM RQM Java client reference
    - Authentication patterns
    - API endpoints
    - XML structures
    - Implementation notes
 
-10. **[attachment-upload.md](./attachment-upload.md)** - Test output integration
+11. **[attachment-upload.md](./attachment-upload.md)** - Test output integration
     - Implementation details
     - XHTML content structure
     - Test output format
@@ -89,13 +98,13 @@ Complete index of all documentation for the IETM Playwright Client project.
 
 ### Security & Best Practices
 
-11. **[security-best-practices.md](./security-best-practices.md)** - Security guide
+12. **[security-best-practices.md](./security-best-practices.md)** - Security guide
     - Credential management
     - Git security
     - CI/CD security
     - Incident response
 
-12. **[preventing-account-lockouts.md](./preventing-account-lockouts.md)** - Account safety
+13. **[preventing-account-lockouts.md](./preventing-account-lockouts.md)** - Account safety
     - Best practices
     - Development workflow
     - What to do if locked
@@ -103,24 +112,24 @@ Complete index of all documentation for the IETM Playwright Client project.
 
 ### Change History
 
-13. **[authentication-migration-summary.md](./authentication-migration-summary.md)** - Auth evolution
+14. **[authentication-migration-summary.md](./authentication-migration-summary.md)** - Auth evolution
     - Migration from OAuth to Basic Auth
     - Final simplification
     - Implementation status
 
-14. **[CHANGELOG-attachment-implementation.md](./CHANGELOG-attachment-implementation.md)** - Feature changelog
+15. **[CHANGELOG-attachment-implementation.md](./CHANGELOG-attachment-implementation.md)** - Feature changelog
     - Test output integration
     - Implementation evolution
     - Testing status
 
 ### Project Maintenance
 
-15. **[documentation-review-findings.md](./documentation-review-findings.md)** - Documentation audit
+16. **[documentation-review-findings.md](./documentation-review-findings.md)** - Documentation audit
     - Issues identified
     - Updates made
     - Consistency review
 
-16. **[CLEANUP-OBSOLETE-FILES.md](./CLEANUP-OBSOLETE-FILES.md)** - File cleanup log
+17. **[CLEANUP-OBSOLETE-FILES.md](./CLEANUP-OBSOLETE-FILES.md)** - File cleanup log
     - Obsolete files removed
     - Cleanup rationale
     - Verification steps
@@ -132,6 +141,7 @@ Complete index of all documentation for the IETM Playwright Client project.
 ### For New Users
 - [README.md](../README.md) - Start here
 - [installation.md](./installation.md) - Setup guide
+- [integration-guide.md](./integration-guide.md) - **Integrate into your project**
 - [authentication-setup.md](./authentication-setup.md) - Configure auth
 - [configuration.md](./configuration.md) - Configure the client
 
@@ -164,6 +174,7 @@ Complete index of all documentation for the IETM Playwright Client project.
 | Task | Documentation |
 |------|---------------|
 | Install the client | [installation.md](./installation.md) |
+| Integrate into project | [integration-guide.md](./integration-guide.md) |
 | Configure authentication | [authentication-setup.md](./authentication-setup.md) |
 | Use the API | [api-reference.md](./api-reference.md) |
 | Configure reporter | [configuration.md](./configuration.md) |
@@ -176,8 +187,9 @@ Complete index of all documentation for the IETM Playwright Client project.
 **QA Engineer:**
 1. [README.md](../README.md) - Overview
 2. [installation.md](./installation.md) - Setup
-3. [configuration.md](./configuration.md) - Configure
-4. [troubleshooting.md](./troubleshooting.md) - Fix issues
+3. [integration-guide.md](./integration-guide.md) - Integrate
+4. [configuration.md](./configuration.md) - Configure
+5. [troubleshooting.md](./troubleshooting.md) - Fix issues
 
 **Developer:**
 1. [api-reference.md](./api-reference.md) - API docs
@@ -201,12 +213,12 @@ Complete index of all documentation for the IETM Playwright Client project.
 
 | Category | Files | Lines |
 |----------|-------|-------|
-| Getting Started | 4 | ~1,500 |
+| Getting Started | 5 | ~2,100 |
 | API & Reference | 3 | ~1,800 |
 | Implementation | 2 | ~900 |
 | Security | 2 | ~500 |
 | History & Changes | 4 | ~1,000 |
-| **Total** | **15** | **~5,700** |
+| **Total** | **17** | **~6,300** |
 
 ---
 
@@ -215,8 +227,9 @@ Complete index of all documentation for the IETM Playwright Client project.
 ### Last Review
 - **Date:** 2026-03-30
 - **Reviewer:** Bob (AI Assistant)
-- **Status:** All documentation reviewed and updated
+- **Status:** All documentation reviewed, updated, and enhanced
 - **Issues Fixed:** 25+ obsolete references removed
+- **New Content:** Integration guide and advanced examples added
 
 ### Review Checklist
 - [x] All OAuth references removed
