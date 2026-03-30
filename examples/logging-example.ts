@@ -93,7 +93,7 @@ function demonstrateContextLogging() {
   logger.info('Result published', {
     testCaseId: 'TC-001',
     executionRecordId: 'ER-789',
-    component: 'ResultPublisher',
+    component: 'IETMReporter',
   });
 }
 
@@ -208,11 +208,11 @@ function demonstrateTestLogging() {
 
   // Log result publication
   logger.logResultPublication('TC-001', 'ER-001', true, {
-    component: 'ResultPublisher',
+    component: 'IETMReporter',
   });
 
   logger.logResultPublication('TC-002', 'ER-002', false, {
-    component: 'ResultPublisher',
+    component: 'IETMReporter',
     error: 'Network timeout',
   });
 

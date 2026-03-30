@@ -11,7 +11,6 @@ export * from './models';
 export * from './builders';
 export * from './mapper';
 export * from './transformer';
-export * from './publisher';
 export * from './attachments';
 export * from './errors';
 export * from './logging';

@@ -15,7 +15,6 @@ ietm-playwright-client/
 │   ├── reporter/                   # Playwright reporter
 │   │   ├── IETMReporter.ts        # Main reporter implementation
 │   │   ├── ResultTransformer.ts   # Transform Playwright results (TODO)
-│   │   └── ResultPublisher.ts     # Publish results to IETM (TODO)
 │   ├── utils/                      # Utility functions (TODO)
 │   │   ├── logger.ts              # Winston logger setup
 │   │   ├── retry.ts               # Retry logic

@@ -369,10 +369,7 @@ class IETMClient {
 - ✅ Implements idempotency to prevent duplicate results
 
 **Key Files Created:**
-- ✅ `src/publisher/ResultPublisher.ts` (470 lines) - Complete publisher implementation
-- ✅ `src/publisher/index.ts` (13 lines) - Module exports
-- ✅ `tests/unit/ResultPublisher.test.ts` (335 lines) - 13 passing tests
-- ✅ `examples/result-publisher-example.ts` (289 lines) - 8 comprehensive examples
+- Removed during 2026-03-30 cleanup: publisher module and examples were deleted after architecture decision to keep publishing orchestration in IETMReporter.
 
 **Implementation Details:**
 - Batch processing with configurable batch size
@@ -629,7 +626,6 @@ class IETMClient {
 - ✅ `tests/unit/errors.test.ts` (607 lines) - 54 passing tests
 - ✅ `tests/unit/ExecutionResultBuilder.test.ts` (290 lines) - 16 passing tests
 - ✅ `tests/unit/Logger.test.ts` (434 lines) - 53 passing tests
-- ✅ `tests/unit/ResultPublisher.test.ts` (335 lines) - 13 passing tests
 - ✅ `tests/unit/ResultTransformer.test.ts` (430 lines) - 19 passing tests
 - ✅ `tests/unit/TestCaseMapper.test.ts` (390 lines) - 21 passing tests
 - ✅ `tests/unit/XmlParser.test.ts` (390 lines) - 38 passing tests
@@ -648,7 +644,6 @@ class IETMClient {
 - Logger: 89.65% ✅
 - TestCaseMapper: 92.37% ✅
 - Models: 100% ✅
-- ResultPublisher: 61.94% ⚠️ (acceptable - complex HTTP mocking)
 - ResultTransformer: 93.82% ✅
 - XmlParser: 97.61% ✅
 
