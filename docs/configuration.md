@@ -57,8 +57,7 @@ IETM_PROJECT_NAME=Your Project Name
 IETM_TEST_PLAN_ID=987
 IETM_TEST_PLAN_NAME=IT1-System Test
 
-# Timeouts (milliseconds)
-IETM_TIMEOUT=30000
+# Retry settings
 IETM_RETRY_DELAY=1000
 IETM_MAX_RETRIES=3
 
@@ -117,8 +116,7 @@ reporter: [
     "baseUrl": "https://jazz.net/sandbox01-qm",
     "jtsUrl": "https://jazz.net/sandbox01-jts",
     "projectName": "Your Project Name",
-    "autoDiscoverIds": true,
-    "timeout": 30000
+    "autoDiscoverIds": true
   },
   "auth": {
     "type": "basic",
@@ -130,16 +128,8 @@ reporter: [
     "name": "IT1-System Test"
   },
   "mapping": {
-    "strategy": "annotation",
-    "annotationType": "ietm-test-case",
-    "defaultTestCaseId": null
-  },
-  "reporter": {
-    "enabled": true,
-    "uploadScreenshots": true,
-    "uploadVideos": true,
-    "uploadTraces": true,
-    "verbose": false
+    "strategy": "tag",
+    "annotationType": "ietm-test-case"
   },
   "retry": {
     "maxRetries": 3,
@@ -159,8 +149,7 @@ reporter: [
     "baseUrl": "https://jazz.net/sandbox01-qm",
     "jtsUrl": "https://jazz.net/sandbox01-jts",
     "projectName": "Your Project Name",
-    "autoDiscoverIds": true,
-    "timeout": 30000
+    "autoDiscoverIds": true
   }
 }
 ```
@@ -168,9 +157,10 @@ reporter: [
 **Options:**
 - `baseUrl` (string, required): IETM QM server URL
 - `jtsUrl` (string, optional): JTS server URL (for authentication)
-- `projectName` (string, required): IETM project name
-- `autoDiscoverIds` (boolean, default: true): Auto-discover project IDs
-- `timeout` (number, default: 30000): Request timeout in milliseconds
+- `projectId` (string, optional): Project ID (alternative to `projectName`)
+- `projectName` (string, optional): IETM project name
+- `contextId` (string, optional): Pre-configured context ID (skips service discovery)
+- `autoDiscoverIds` (boolean, default: false): Auto-discover project IDs
 
 #### Authentication Configuration
 
@@ -217,24 +207,20 @@ reporter: [
 ```json
 {
   "mapping": {
-    "strategy": "annotation",
-    "annotationType": "ietm-test-case",
-    "defaultTestCaseId": null
+    "strategy": "tag",
+    "annotationType": "ietm-test-case"
   }
 }
 ```
 
 **Options:**
-- `strategy` (string): Mapping strategy
-  - `"annotation"`: Use test annotations (recommended)
-  - `"id"`: Use test ID
-  - `"title"`: Use test title
-- `annotationType` (string, default: "ietm-test-case"): Annotation type to look for
-- `defaultTestCaseId` (string, optional): Default test case ID if mapping fails
+- `strategy` (string): Mapping strategy — `"id"`, `"title"`, or `"tag"`
+- `annotationType` (string, default: `"ietm-test-case"`): Playwright annotation type used to identify the IETM test case ID
+- `mappings` (object, optional): Explicit mapping of Playwright test IDs to IETM test case IDs
 
 **Mapping Strategies:**
 
-1. **Annotation Strategy** (Recommended):
+1. **Tag Strategy** (Recommended) — reads an `annotation` on the test:
    ```typescript
    test('Login test', {
      annotation: { type: 'ietm-test-case', description: '2218' }
@@ -243,40 +229,24 @@ reporter: [
    });
    ```
 
-2. **ID Strategy**:
+2. **Title Strategy** — extracts the test case ID from the test title using the pattern `[TC-<id>]`:
    ```typescript
-   test('2218', async ({ page }) => {
-     // test code - uses test ID as test case ID
+   test('[TC-2218] Login with valid credentials', async ({ page }) => {
+     // test code
    });
    ```
 
-3. **Title Strategy**:
-   ```typescript
-   test('Login with valid credentials', async ({ page }) => {
-     // test code - matches IETM test case by title
-   });
+3. **ID Strategy** — uses a static `mappings` lookup keyed by test title:
+   ```json
+   {
+     "mapping": {
+       "strategy": "id",
+       "mappings": {
+         "Login with valid credentials": "2218"
+       }
+     }
+   }
    ```
-
-#### Reporter Configuration
-
-```json
-{
-  "reporter": {
-    "enabled": true,
-    "uploadScreenshots": true,
-    "uploadVideos": true,
-    "uploadTraces": true,
-    "verbose": false
-  }
-}
-```
-
-**Options:**
-- `enabled` (boolean, default: true): Enable/disable reporter
-- `uploadScreenshots` (boolean, default: true): Include screenshot info in output
-- `uploadVideos` (boolean, default: true): Include video info in output
-- `uploadTraces` (boolean, default: true): Include trace info in output
-- `verbose` (boolean, default: false): Enable verbose logging
 
 #### Retry Configuration
 
@@ -336,14 +306,23 @@ export default defineConfig({
 
 ### Reporter Options
 
+Reporter options are passed directly in `playwright.config.ts`, **not** in the `ietm.config.json` file:
+
 ```typescript
 interface IETMReporterOptions {
-  configPath?: string;        // Path to config file
-  enabled?: boolean;          // Enable/disable reporter
-  uploadScreenshots?: boolean; // Include screenshot info
-  uploadVideos?: boolean;     // Include video info
-  uploadTraces?: boolean;     // Include trace info
-  verbose?: boolean;          // Verbose logging
+  configPath?: string;         // Path to IETM config file (default: 'config/ietm.config.json')
+  enabled?: boolean;           // Enable/disable reporter (default: true)
+  outputDir?: string;          // Directory for local result artifacts (default: 'ietm-results')
+  uploadScreenshots?: boolean; // Include screenshot info in output (default: true)
+  uploadVideos?: boolean;      // Include video info in output (default: true)
+  uploadTraces?: boolean;      // Include trace info in output (default: true)
+  batchSize?: number;          // Concurrent upload batch size (default: 10)
+  testCaseIdExtractor?: (test: TestCase) => string | null; // Custom ID extractor
+  hooks?: {
+    onTestStart?: (test: TestCase, result: TestResult) => Promise<void>;
+    onTestEnd?: (test: TestCase, result: TestResult) => Promise<void>;
+    onRunEnd?: (result: FullResult) => Promise<void>;
+  };
 }
 ```
 
@@ -366,43 +345,27 @@ export default defineConfig({
 
 ## Advanced Options
 
-### Custom Timeout
-
-```typescript
-const client = new IETMClient({
-  baseUrl: process.env.IETM_BASE_URL!,
-  username: process.env.IETM_USERNAME!,
-  password: process.env.IETM_PASSWORD!,
-  timeout: 60000  // 60 seconds
-});
-```
-
-### Custom Retry Logic
-
-```typescript
-const client = new IETMClient({
-  ...config,
-  maxRetries: 5,
-  retryDelay: 2000,
-  backoffMultiplier: 1.5
-});
-```
-
 ### Programmatic Configuration
 
+Use `loadConfig` and pass the result to `IETMClient` or `IETMReporter`:
+
 ```typescript
-import { IETMClient } from 'ietm-playwright-client';
+import { IETMClient, loadConfig } from 'ietm-playwright-client';
+
+const config = loadConfig('./config/ietm.config.json');
 
 const client = new IETMClient({
-  baseUrl: 'https://jazz.net/sandbox01-qm',
-  username: process.env.IETM_USERNAME!,
-  password: process.env.IETM_PASSWORD!,
-  projectName: 'My Project',
-  timeout: 30000
+  qmServerUrl: config.server.baseUrl,
+  jtsServerUrl: config.server.jtsUrl!,
+  username: config.auth.username,
+  password: config.auth.password,
+  projectName: config.server.projectName!
 });
 
 await client.initialize();
 ```
+
+Retry behaviour is controlled via `ietm.config.json` under the `retry` section, not via constructor parameters.
 
 ---
 
@@ -453,8 +416,7 @@ IETM_TEST_PLAN_ID=987
     "baseUrl": "${IETM_BASE_URL}",
     "jtsUrl": "${IETM_JTS_URL}",
     "projectName": "${IETM_PROJECT_NAME}",
-    "autoDiscoverIds": true,
-    "timeout": 30000
+    "autoDiscoverIds": true
   },
   "auth": {
     "type": "basic",
@@ -466,15 +428,8 @@ IETM_TEST_PLAN_ID=987
     "name": "IT1-System Test"
   },
   "mapping": {
-    "strategy": "annotation",
+    "strategy": "tag",
     "annotationType": "ietm-test-case"
-  },
-  "reporter": {
-    "enabled": true,
-    "uploadScreenshots": true,
-    "uploadVideos": true,
-    "uploadTraces": true,
-    "verbose": false
   },
   "retry": {
     "maxRetries": 3,
@@ -523,13 +478,12 @@ test:
 ### Validate Configuration
 
 ```typescript
-import { ConfigManager } from 'ietm-playwright-client';
+import { loadConfig, validateConfig } from 'ietm-playwright-client';
 
-const configManager = new ConfigManager('./ietm.config.json');
-const config = await configManager.loadConfig();
+const config = loadConfig('./config/ietm.config.json');
 
-// Throws ValidationError if invalid
-configManager.validateConfig(config);
+// Throws ValidationError if required fields are missing
+validateConfig(config);
 ```
 
 ### Check Required Fields

@@ -26,16 +26,18 @@ new IETMClient(config: IETMClientConfig)
 ```
 
 **Parameters:**
-- `config.baseUrl` (string, required): IETM QM server URL
+- `config.qmServerUrl` (string, required): IETM QM server URL
+- `config.jtsServerUrl` (string, required): IETM JTS server URL
 - `config.username` (string, required): IETM username
 - `config.password` (string, required): IETM password
-- `config.projectName` (string, optional): Project name for auto-discovery
-- `config.timeout` (number, optional): Request timeout in ms (default: 30000)
+- `config.projectName` (string, required): Project name for service discovery
+- `config.contextId` (string, optional): Pre-configured context ID (skips discovery)
 
 **Example:**
 ```typescript
 const client = new IETMClient({
-  baseUrl: 'https://jazz.net/sandbox01-qm',
+  qmServerUrl: 'https://jazz.net/sandbox01-qm',
+  jtsServerUrl: 'https://jazz.net/sandbox01-jts',
   username: process.env.IETM_USERNAME,
   password: process.env.IETM_PASSWORD,
   projectName: 'My Project'
@@ -79,14 +81,14 @@ const testCase = await client.getTestCase('2218');
 
 #### createExecutionResult()
 
-Create a new execution result in IETM.
+Create a new execution result in IETM using the POST-GET-PUT workflow.
 
 ```typescript
-async createExecutionResult(result: ExecutionResultData): Promise<string>
+async createExecutionResult(result: ExecutionResultInput): Promise<string>
 ```
 
 **Parameters:**
-- `result` (ExecutionResultData): Execution result data
+- `result` (ExecutionResultInput): Execution result data
 
 **Returns:** Execution result ID
 
@@ -94,33 +96,10 @@ async createExecutionResult(result: ExecutionResultData): Promise<string>
 ```typescript
 const resultId = await client.createExecutionResult({
   testCaseId: '2218',
-  state: 'passed',
-  startTime: new Date(),
-  endTime: new Date(),
-  testOutput: 'Test passed successfully'
-});
-```
-
-#### updateExecutionResult()
-
-Update an existing execution result.
-
-```typescript
-async updateExecutionResult(
-  resultId: string,
-  updates: Partial<ExecutionResultData>
-): Promise<void>
-```
-
-**Parameters:**
-- `resultId` (string): Execution result ID
-- `updates` (Partial<ExecutionResultData>): Fields to update
-
-**Example:**
-```typescript
-await client.updateExecutionResult('2895', {
-  state: 'failed',
-  endTime: new Date()
+  verdict: 'passed',
+  startTime: new Date().toISOString(),
+  endTime: new Date().toISOString(),
+  details: 'Test passed successfully'
 });
 ```
 
@@ -152,11 +131,19 @@ export default defineConfig({
 
 ```typescript
 interface IETMReporterOptions {
-  configPath?: string;        // Path to config file (default: './ietm.config.json')
-  enabled?: boolean;          // Enable/disable reporter (default: true)
-  uploadScreenshots?: boolean; // Include screenshot info (default: true)
-  uploadVideos?: boolean;     // Include video info (default: true)
-  uploadTraces?: boolean;     // Include trace info (default: true)
+  configPath?: string;         // Path to IETM config file (default: 'config/ietm.config.json')
+  enabled?: boolean;           // Enable/disable reporter (default: true)
+  outputDir?: string;          // Directory for local result artifacts (default: 'ietm-results')
+  uploadScreenshots?: boolean; // Include screenshot info in output (default: true)
+  uploadVideos?: boolean;      // Include video info in output (default: true)
+  uploadTraces?: boolean;      // Include trace info in output (default: true)
+  batchSize?: number;          // Number of results to upload concurrently (default: 10)
+  testCaseIdExtractor?: (test: TestCase) => string | null; // Custom extractor function
+  hooks?: {
+    onTestStart?: (test: TestCase, result: TestResult) => Promise<void>;
+    onTestEnd?: (test: TestCase, result: TestResult) => Promise<void>;
+    onRunEnd?: (result: FullResult) => Promise<void>;
+  };
 }
 ```
 
@@ -211,91 +198,75 @@ const url = await handler.uploadTestOutput(
 );
 ```
 
-#### buildTestOutput()
-
-Build formatted test output string.
-
-```typescript
-buildTestOutput(result: TestResult): string
-```
-
-**Parameters:**
-- `result` (TestResult): Playwright test result
-
-**Returns:** Formatted test output string
-
 ---
 
 ## ConfigManager
 
-Manages IETM configuration.
+Provides standalone functions for loading and validating IETM configuration. Supports JSON and YAML files, environment variable substitution (`${VAR}`), and deep-merges with environment variables.
 
-### Constructor
+### loadConfig()
 
-```typescript
-new ConfigManager(configPath?: string)
-```
-
-### Methods
-
-#### loadConfig()
-
-Load configuration from file and environment.
+Load configuration from file and environment variables.
 
 ```typescript
-async loadConfig(): Promise<IETMConfig>
+function loadConfig(configPath?: string): IETMConfig
 ```
 
-**Returns:** Merged configuration object
+**Parameters:**
+- `configPath` (string, optional): Path to config file (default: searches common locations)
+
+**Returns:** Merged `IETMConfig` object (synchronous)
 
 **Example:**
 ```typescript
-const configManager = new ConfigManager('./ietm.config.json');
-const config = await configManager.loadConfig();
+import { loadConfig } from 'ietm-playwright-client';
+
+const config = loadConfig('./config/ietm.config.json');
 ```
 
-#### validateConfig()
+### validateConfig()
 
 Validate configuration completeness.
 
 ```typescript
-validateConfig(config: IETMConfig): void
+function validateConfig(config: IETMConfig): void
 ```
 
-**Throws:** `ValidationError` if config is invalid
+**Throws:** `ValidationError` if required fields are missing or invalid
 
 ---
 
 ## ServiceDiscovery
 
-Discovers IETM service URLs using OSLC pattern.
+Discovers IETM service URLs using the OSLC root services pattern.
 
 ### Constructor
 
 ```typescript
-new ServiceDiscovery(authManager: AuthManager, baseUrl: string)
+new ServiceDiscovery(config: ServiceDiscoveryConfig, authManager: AuthManager)
 ```
+
+**Parameters:**
+- `config` (ServiceDiscoveryConfig): Discovery configuration including `qmServerUrl`, `jtsServerUrl`, `projectName`, and optional `contextId`
+- `authManager` (AuthManager): Authenticated request manager
 
 ### Methods
 
-#### discoverServices()
+#### discover()
 
 Discover all IETM service URLs.
 
 ```typescript
-async discoverServices(projectName: string): Promise<ServiceURLs>
+async discover(): Promise<DiscoveredServices>
 ```
 
-**Parameters:**
-- `projectName` (string): IETM project name
-
-**Returns:** Object containing discovered service URLs
+**Returns:** `DiscoveredServices` object containing `contextId`, `queryUrls`, `basePath`, and related URLs
 
 **Example:**
 ```typescript
-const discovery = new ServiceDiscovery(authManager, baseUrl);
-const services = await discovery.discoverServices('My Project');
-console.log(services.testCaseQuery);
+const discovery = new ServiceDiscovery(config, authManager);
+const services = await discovery.discover();
+console.log(services.contextId);
 ```
 
 ---
@@ -306,26 +277,28 @@ console.log(services.testCaseQuery);
 
 ```typescript
 interface IETMClientConfig {
-  baseUrl: string;
+  qmServerUrl: string;      // IETM QM server URL
+  jtsServerUrl: string;     // IETM JTS server URL
   username: string;
   password: string;
-  projectName?: string;
-  timeout?: number;
+  projectName: string;
+  contextId?: string;       // Optional: pre-configured context ID, skips discovery
 }
 ```
 
-### ExecutionResultData
+### ExecutionResultInput
 
 ```typescript
-interface ExecutionResultData {
+interface ExecutionResultInput {
   testCaseId: string;
-  state: 'passed' | 'failed' | 'incomplete' | 'blocked';
-  startTime: Date;
-  endTime: Date;
-  testOutput?: string;
+  executionRecordId?: string;
+  verdict: 'passed' | 'failed' | 'blocked' | 'inconclusive' | 'error' | 'incomplete';
+  startTime: string;        // ISO 8601 format
+  endTime: string;          // ISO 8601 format
   duration?: number;
-  errorMessage?: string;
-  stackTrace?: string;
+  details?: string;
+  machine?: string;
+  build?: string;
 }
 ```
 
@@ -337,20 +310,21 @@ interface TestCase {
   title: string;
   description?: string;
   webId: string;
-  href: string;
+  resourceUrl: string;
+  state?: string;
+  owner?: string;
 }
 ```
 
-### ServiceURLs
+### DiscoveredServices
 
 ```typescript
-interface ServiceURLs {
+interface DiscoveredServices {
+  rootServicesUrl: string;
   catalogUrl: string;
-  contextId: string;
   servicesUrl: string;
-  testCaseQuery: string;
-  testResultQuery: string;
-  executionWorkItemQuery: string;
+  contextId: string;
+  queryUrls: Map<string, string>;
   basePath: string;
 }
 ```
@@ -362,7 +336,9 @@ interface IETMConfig {
   server: {
     baseUrl: string;
     jtsUrl?: string;
-    projectName: string;
+    projectId?: string;
+    projectName?: string;
+    contextId?: string;
     autoDiscoverIds?: boolean;
   };
   auth: {
@@ -375,8 +351,19 @@ interface IETMConfig {
     name?: string;
   };
   mapping?: {
-    strategy: 'id' | 'title' | 'annotation';
+    strategy: 'id' | 'title' | 'tag';
     annotationType?: string;
+    mappings?: Record<string, string>;
+  };
+  retry?: {
+    maxRetries?: number;
+    retryDelay?: number;
+    backoffMultiplier?: number;
+  };
+  logging?: {
+    level?: 'error' | 'warn' | 'info' | 'debug' | 'trace';
+    file?: string;
+    console?: boolean;
   };
 }
 ```
@@ -389,41 +376,60 @@ interface IETMConfig {
 
 #### IETMError
 
-Base error class for IETM-related errors.
+Base error class for all IETM-related errors. Includes structured context, troubleshooting hints, and retry information.
 
 ```typescript
 class IETMError extends Error {
-  constructor(message: string, cause?: Error)
+  readonly code: string;
+  readonly isRetryable: boolean;
+  getDetailedMessage(): string
+  canRetry(): boolean
+  getStatusCode(): number | undefined
+  isClientError(): boolean
+  isServerError(): boolean
 }
 ```
 
 #### AuthenticationError
 
-Authentication-specific errors.
+Authentication-specific errors. Use static factories:
 
 ```typescript
 class AuthenticationError extends IETMError {
-  constructor(message: string, cause?: Error)
+  static invalidCredentials(): AuthenticationError
+  static sessionExpired(): AuthenticationError
+  static missingCredentials(): AuthenticationError
+  static forbidden(resource: string): AuthenticationError
+  static accountLocked(): AuthenticationError
 }
 ```
 
 #### ValidationError
 
-Configuration validation errors.
+Configuration or input validation errors.
 
 ```typescript
 class ValidationError extends IETMError {
-  constructor(message: string, cause?: Error)
+  readonly field?: string;
+  readonly value?: unknown;
+  readonly constraint?: string;
+  static missingField(field: string): ValidationError
+  static invalidValue(field: string, value: unknown): ValidationError
+  static invalidFormat(field: string): ValidationError
 }
 ```
 
 #### NetworkError
 
-Network and HTTP errors.
+Network and HTTP errors. Use static factories:
 
 ```typescript
 class NetworkError extends IETMError {
-  constructor(message: string, statusCode?: number, cause?: Error)
+  static timeout(url: string, ms: number): NetworkError
+  static connectionRefused(url: string): NetworkError
+  static dnsFailure(hostname: string): NetworkError
+  static sslError(url: string): NetworkError
+  static rateLimited(url: string): NetworkError
 }
 ```
 
@@ -451,17 +457,22 @@ try {
 
 ```typescript
 // ✅ Good: Use environment variables
-const config = {
-  baseUrl: process.env.IETM_BASE_URL,
-  username: process.env.IETM_USERNAME,
-  password: process.env.IETM_PASSWORD
-};
+const client = new IETMClient({
+  qmServerUrl: process.env.IETM_BASE_URL!,
+  jtsServerUrl: process.env.IETM_JTS_URL!,
+  username: process.env.IETM_USERNAME!,
+  password: process.env.IETM_PASSWORD!,
+  projectName: process.env.IETM_PROJECT_NAME!
+});
 
 // ❌ Bad: Hardcode credentials
-const config = {
+const client = new IETMClient({
+  qmServerUrl: 'https://jazz.net/sandbox01-qm',
+  jtsServerUrl: 'https://jazz.net/sandbox01-jts',
   username: 'myuser',
-  password: 'mypassword'
-};
+  password: 'mypassword',
+  projectName: 'My Project'
+});
 ```
 
 ### 2. Client Lifecycle

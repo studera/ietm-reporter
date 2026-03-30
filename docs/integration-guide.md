@@ -280,7 +280,7 @@ cp /path/to/ietm-playwright-client/.env.example .env
     "id": "${IETM_TEST_PLAN_ID}"
   },
   "mapping": {
-    "strategy": "annotation",
+    "strategy": "tag",
     "annotationType": "ietm-test-case"
   }
 }

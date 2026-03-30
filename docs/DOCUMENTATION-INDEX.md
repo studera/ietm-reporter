@@ -104,36 +104,6 @@ Complete index of all documentation for the IETM Playwright Client project.
     - CI/CD security
     - Incident response
 
-13. **[preventing-account-lockouts.md](./preventing-account-lockouts.md)** - Account safety
-    - Best practices
-    - Development workflow
-    - What to do if locked
-    - Automated testing considerations
-
-### Change History
-
-14. **[authentication-migration-summary.md](./authentication-migration-summary.md)** - Auth evolution
-    - Migration from OAuth to Basic Auth
-    - Final simplification
-    - Implementation status
-
-15. **[CHANGELOG-attachment-implementation.md](./CHANGELOG-attachment-implementation.md)** - Feature changelog
-    - Test output integration
-    - Implementation evolution
-    - Testing status
-
-### Project Maintenance
-
-16. **[documentation-review-findings.md](./documentation-review-findings.md)** - Documentation audit
-    - Issues identified
-    - Updates made
-    - Consistency review
-
-17. **[CLEANUP-OBSOLETE-FILES.md](./CLEANUP-OBSOLETE-FILES.md)** - File cleanup log
-    - Obsolete files removed
-    - Cleanup rationale
-    - Verification steps
-
 ---
 
 ## 📁 Documentation by Category
@@ -153,7 +123,6 @@ Complete index of all documentation for the IETM Playwright Client project.
 
 ### For Troubleshooting
 - [troubleshooting.md](./troubleshooting.md) - Common issues
-- [preventing-account-lockouts.md](./preventing-account-lockouts.md) - Account safety
 - [authentication-setup.md](./authentication-setup.md) - Auth issues
 
 ### For Security
@@ -161,9 +130,8 @@ Complete index of all documentation for the IETM Playwright Client project.
 - [authentication-setup.md](./authentication-setup.md) - Secure auth setup
 
 ### For Project History
-- [authentication-migration-summary.md](./authentication-migration-summary.md) - Auth evolution
-- [CHANGELOG-attachment-implementation.md](./CHANGELOG-attachment-implementation.md) - Feature history
-- [documentation-review-findings.md](./documentation-review-findings.md) - Doc updates
+- [IETM-Playwright-Implementation-Plan.md](./IETM-Playwright-Implementation-Plan.md) - Implementation roadmap
+- [java-implementation-analysis.md](./java-implementation-analysis.md) - Reference client analysis
 
 ---
 
@@ -205,7 +173,6 @@ Complete index of all documentation for the IETM Playwright Client project.
 **Project Manager:**
 1. [README.md](../README.md) - Project overview
 2. [IETM-Playwright-Implementation-Plan.md](./IETM-Playwright-Implementation-Plan.md) - Status
-3. [CHANGELOG-attachment-implementation.md](./CHANGELOG-attachment-implementation.md) - Changes
 
 ---
 
@@ -216,9 +183,8 @@ Complete index of all documentation for the IETM Playwright Client project.
 | Getting Started | 5 | ~2,100 |
 | API & Reference | 3 | ~1,800 |
 | Implementation | 2 | ~900 |
-| Security | 2 | ~500 |
-| History & Changes | 4 | ~1,000 |
-| **Total** | **17** | **~6,300** |
+| Security | 1 | ~300 |
+| **Total** | **12** | **~5,100 |
 
 ---
 

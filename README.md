@@ -78,10 +78,10 @@ npm run format
 
 ### Environment Variables
 
-Create a `.env` file in the project root (copy from `.env.example`):
+Create a `.env` file in the project root:
 
 ```bash
-cp .env.example .env
+touch .env
 ```
 
 Edit `.env` with your IETM server details:
@@ -142,7 +142,7 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   reporter: [
     ['list'],
-    ['./dist/reporter/IETMReporter.js', {
+    ['./dist/src/reporter/IETMReporter.js', {
       configPath: './ietm.config.json'
     }]
   ],
@@ -181,15 +181,24 @@ Results will be automatically reported to IETM!
 ```
 ietm-reporter/
 ├── src/                    # Source code
-│   ├── client/            # IETM API client
+│   ├── client/            # IETM API client (IETMClient, ServiceDiscovery)
+│   ├── auth/              # Authentication (AuthManager)
 │   ├── config/            # Configuration management
 │   ├── reporter/          # Playwright reporter
+│   ├── builders/          # XML builders
+│   ├── models/            # Domain models and helpers
+│   ├── mapper/            # Test case mapping
+│   ├── transformer/       # Result transformation
+│   ├── attachments/       # Attachment handling
+│   ├── errors/            # Error classes
+│   ├── logging/           # Logger
+│   ├── utils/             # Utilities
 │   ├── types/             # TypeScript types
 │   └── index.ts           # Main entry point
 ├── tests/                  # Test files
 │   ├── unit/              # Unit tests
 │   └── integration/       # Integration tests
-├── config/                 # Configuration examples
+├── config/                 # Configuration examples and schema
 ├── docs/                   # Documentation
 ├── examples/               # Example projects
 ├── dist/                   # Compiled output (generated)

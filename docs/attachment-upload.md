@@ -58,15 +58,6 @@ class AttachmentHandler {
     testName: string,
     executionResultId: string
   ): Promise<string | null>
-
-  /**
-   * Upload a file to IETM
-   */
-  async uploadFile(
-    executionResultId: string,
-    filePath: string,
-    description?: string
-  ): Promise<UploadResult>
 }
 ```
 
@@ -172,8 +163,7 @@ export default {
 You can also upload attachments manually:
 
 ```typescript
-import { IETMClient } from 'ietm-playwright-client';
-import { AttachmentHandler } from 'ietm-playwright-client/attachments';
+import { IETMClient, AttachmentHandler } from 'ietm-playwright-client';
 
 // Initialize client
 const client = new IETMClient(config);

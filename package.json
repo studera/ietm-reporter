@@ -2,8 +2,8 @@
   "name": "ietm-playwright-client",
   "version": "1.0.0",
   "description": "IBM Engineering Test Management client for reporting Playwright test results",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc && npm run copy-resources",
     "copy-resources": "node -e \"const fs=require('fs'); const path=require('path'); const src='src/resources'; const dest='dist/src/resources'; if(!fs.existsSync(dest)){fs.mkdirSync(dest,{recursive:true})} fs.readdirSync(src).forEach(f=>fs.copyFileSync(path.join(src,f),path.join(dest,f)))\"",

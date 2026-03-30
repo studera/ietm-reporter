@@ -19,7 +19,7 @@ Before starting, ensure you have:
 ### 1. Navigate to Project Directory
 
 ```bash
-cd c:/Users/RobertStudera/Documents/DEVELOP/bob/ietm-reporter
+cd path/to/ietm-reporter
 ```
 
 ### 2. Install Dependencies
@@ -69,9 +69,9 @@ npm test
 
 ### Option 1: Environment Variables
 
-1. Copy the example environment file:
+1. Create a `.env` file in the project root:
 ```bash
-cp .env.example .env
+touch .env
 ```
 
 2. Edit `.env` with your IETM server details:

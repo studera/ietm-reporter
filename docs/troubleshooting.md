@@ -90,7 +90,6 @@ AuthenticationError: Failed to authenticate with IETM server
    - Run one test at a time
    - Don't run multiple examples simultaneously
    - Use correct credentials in `.env` file
-   - See [Preventing Account Lockouts](./preventing-account-lockouts.md)
 
 ---
 
