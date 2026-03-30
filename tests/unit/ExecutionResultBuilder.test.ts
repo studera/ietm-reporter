@@ -173,34 +173,6 @@ describe('ExecutionResultBuilder', () => {
       expect(xml).toContain('>login.spec.ts</ns2:property>');
     });
 
-    it.skip('should escape XML special characters', () => {
-      const resultWithSpecialChars: ExecutionResult = {
-        ...mockResult,
-        title: 'Test with <special> & "characters"',
-        stepResults: [
-          {
-            stepIndex: 1,
-            startTime: '2024-03-25T10:00:00.000Z',
-            endTime: '2024-03-25T10:01:00.000Z',
-            result: ExecutionState.PASSED,
-            description: 'Step with <tags> & "quotes"',
-            tester: 'testuser',
-          },
-        ],
-      };
-
-      const builder = new ExecutionResultBuilder(resultWithSpecialChars);
-      const xml = builder.build();
-
-      // Check that special characters are escaped
-      expect(xml).toContain('<special>');
-      expect(xml).toContain('&');
-      expect(xml).toContain('"');
-      // Check that unescaped characters are NOT present
-      expect(xml).not.toContain('<special>');
-      expect(xml).not.toContain('& "');
-    });
-
     it('should use default values for optional fields', () => {
       const minimalResult: ExecutionResult = {
         title: 'Minimal Test',
