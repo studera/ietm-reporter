@@ -54,6 +54,7 @@ Desktop.ini
 tmp/
 temp/
 *.tmp
+basic-example.txt
 
 # Debug
 .vscode-test/
